@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/sheet";
 import { authClient, useSession } from "@/lib/auth-client";
 import Image from "next/image";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -63,6 +64,7 @@ export default function Navbar() {
 
         {/* Desktop Auth */}
         <div className="hidden md:flex items-center gap-2">
+          <ThemeToggle />
           {isPending ? null : user ? (
             <DropdownMenu>
               <DropdownMenuTrigger className="flex size-8 items-center justify-center overflow-hidden rounded-full border outline-none focus-visible:ring-2 focus-visible:ring-ring">
@@ -82,7 +84,9 @@ export default function Navbar() {
                 <DropdownMenuGroup>
                   <DropdownMenuLabel className="font-normal">
                     <div className="text-sm font-medium">{user.name}</div>
-                    <div className="text-xs text-muted-foreground">{user.email}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {user.email}
+                    </div>
                   </DropdownMenuLabel>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
@@ -107,11 +111,16 @@ export default function Navbar() {
         {/* Mobile Menu */}
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger
-            render={<Button variant="ghost" size="icon-sm" className="md:hidden" />}
+            render={
+              <Button variant="ghost" size="icon" className="md:hidden" />
+            }
           >
             <Menu className="h-5 w-5" />
             <span className="sr-only">Toggle menu</span>
           </SheetTrigger>
+          <div className="md:hidden">
+            <ThemeToggle />
+          </div>
           <SheetContent side="right" className="w-72">
             <SheetHeader>
               <SheetTitle className="flex items-center gap-2">
@@ -150,13 +159,18 @@ export default function Navbar() {
                     </div>
                     <div className="text-sm">
                       <div className="font-medium">{user.name}</div>
-                      <div className="text-xs text-muted-foreground">{user.email}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {user.email}
+                      </div>
                     </div>
                   </div>
                   <Button
                     variant="outline"
                     className="w-full"
-                    onClick={() => { handleLogout(); setOpen(false); }}
+                    onClick={() => {
+                      handleLogout();
+                      setOpen(false);
+                    }}
                   >
                     <LogOut size={16} />
                     Log out
@@ -164,7 +178,11 @@ export default function Navbar() {
                 </>
               ) : (
                 <>
-                  <Button variant="outline" className="w-full" onClick={() => setOpen(false)}>
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => setOpen(false)}
+                  >
                     <Link href="/login">Login</Link>
                   </Button>
                   <Button className="w-full" onClick={() => setOpen(false)}>

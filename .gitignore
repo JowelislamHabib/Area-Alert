@@ -25,7 +25,8 @@
 *.pem
 PLAN.md
 GUIDE.md
-
+F-SKILLS.md
+SHADCN.md
 # debug
 npm-debug.log*
 yarn-debug.log*
