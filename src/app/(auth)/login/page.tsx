@@ -15,6 +15,19 @@ import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
+
+function validateEmail(email: string): string | null {
+  if (!email) return "Email is required";
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return "Enter a valid email address";
+  return null;
+}
+
+function validatePassword(password: string): string | null {
+  if (!password) return "Password is required";
+  if (password.length < 6) return "Password must be at least 6 characters";
+  return null;
+}
 
 export default function LoginPage() {
   const router = useRouter();
@@ -24,9 +37,21 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({});
+
+  const validate = () => {
+    const emailErr = validateEmail(email);
+    const passwordErr = validatePassword(password);
+    setFieldErrors({ email: emailErr ?? undefined, password: passwordErr ?? undefined });
+    return !emailErr && !passwordErr;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    if (!validate()) return;
+
     setLoading(true);
 
     const { error } = await signIn.email({ email, password });
@@ -38,6 +63,7 @@ export default function LoginPage() {
       return;
     }
 
+    toast.success("Logged in successfully");
     router.push("/");
   };
 
@@ -55,7 +81,7 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
             <div className="flex flex-col gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -63,9 +89,16 @@ export default function LoginPage() {
                 type="email"
                 placeholder="m@example.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (fieldErrors.email) setFieldErrors((p) => ({ ...p, email: undefined }));
+                }}
+                aria-invalid={!!fieldErrors.email}
                 required
               />
+              {fieldErrors.email && (
+                <p className="text-xs text-destructive">{fieldErrors.email}</p>
+              )}
             </div>
 
             <div className="flex flex-col gap-2">
@@ -76,7 +109,11 @@ export default function LoginPage() {
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    if (fieldErrors.password) setFieldErrors((p) => ({ ...p, password: undefined }));
+                  }}
+                  aria-invalid={!!fieldErrors.password}
                   required
                 />
                 <button
@@ -88,6 +125,9 @@ export default function LoginPage() {
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
+              {fieldErrors.password && (
+                <p className="text-xs text-destructive">{fieldErrors.password}</p>
+              )}
             </div>
 
             {error && <p className="text-xs text-destructive">{error}</p>}

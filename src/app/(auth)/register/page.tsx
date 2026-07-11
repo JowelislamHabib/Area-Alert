@@ -12,11 +12,37 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { isValidImageUrl, uploadImage } from "@/lib/api/uploadImage";
 import { signIn, signUp } from "@/lib/auth-client";
-import { Camera, Eye, EyeOff, ImageIcon, Link2, X } from "lucide-react";
+import { Camera, Check, Eye, EyeOff, ImageIcon, Link2, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
+
+type PasswordRule = {
+  key: string;
+  label: string;
+  test: (v: string) => boolean;
+};
+
+const PASSWORD_RULES: PasswordRule[] = [
+  { key: "min", label: "At least 6 characters", test: (v) => v.length >= 6 },
+  { key: "upper", label: "One uppercase letter", test: (v) => /[A-Z]/.test(v) },
+  { key: "number", label: "One number", test: (v) => /\d/.test(v) },
+  { key: "special", label: "One special character", test: (v) => /[^A-Za-z0-9]/.test(v) },
+];
+
+function validateEmail(email: string): string | null {
+  if (!email) return "Email is required";
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return "Enter a valid email address";
+  return null;
+}
+
+function validateName(name: string): string | null {
+  if (!name.trim()) return "Name is required";
+  if (name.trim().length < 2) return "Name must be at least 2 characters";
+  return null;
+}
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -32,6 +58,15 @@ export default function RegisterPage() {
   const [submitting, setSubmitting] = useState(false);
   const [urlError, setUrlError] = useState("");
   const [submitError, setSubmitError] = useState("");
+
+  const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string }>({});
+
+  const passwordRules = PASSWORD_RULES.map((rule) => ({
+    ...rule,
+    met: password ? rule.test(password) : false,
+  }));
+
+  const passwordValid = passwordRules.every((r) => r.met);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -51,12 +86,18 @@ export default function RegisterPage() {
     e.preventDefault();
     setSubmitError("");
 
-    let finalImageUrl = imageUrl;
+    const nameErr = validateName(name);
+    const emailErr = validateEmail(email);
+    setFieldErrors({ name: nameErr ?? undefined, email: emailErr ?? undefined });
+
+    if (nameErr || emailErr || !passwordValid) return;
 
     if (imageMode === "url" && imageUrl && !isValidImageUrl(imageUrl)) {
       setUrlError("URL must end with an image extension (png, jpg, jpeg, gif, webp, svg)");
       return;
     }
+
+    let finalImageUrl = imageUrl;
 
     setSubmitting(true);
 
@@ -84,6 +125,7 @@ export default function RegisterPage() {
       return;
     }
 
+    toast.success("Account created successfully");
     router.push("/login");
   };
 
@@ -101,7 +143,7 @@ export default function RegisterPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
             <div className="flex flex-col gap-2">
               <Label htmlFor="name">Full Name</Label>
               <Input
@@ -109,9 +151,16 @@ export default function RegisterPage() {
                 type="text"
                 placeholder="John Doe"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  if (fieldErrors.name) setFieldErrors((p) => ({ ...p, name: undefined }));
+                }}
+                aria-invalid={!!fieldErrors.name}
                 required
               />
+              {fieldErrors.name && (
+                <p className="text-xs text-destructive">{fieldErrors.name}</p>
+              )}
             </div>
 
             <div className="flex flex-col gap-2">
@@ -121,9 +170,16 @@ export default function RegisterPage() {
                 type="email"
                 placeholder="m@example.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (fieldErrors.email) setFieldErrors((p) => ({ ...p, email: undefined }));
+                }}
+                aria-invalid={!!fieldErrors.email}
                 required
               />
+              {fieldErrors.email && (
+                <p className="text-xs text-destructive">{fieldErrors.email}</p>
+              )}
             </div>
 
             <div className="flex flex-col gap-2">
@@ -147,6 +203,21 @@ export default function RegisterPage() {
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
+              {password && (
+                <ul className="flex flex-col gap-1">
+                  {passwordRules.map((rule) => (
+                    <li
+                      key={rule.key}
+                      className={`flex items-center gap-1.5 text-xs ${
+                        rule.met ? "text-emerald-600" : "text-muted-foreground"
+                      }`}
+                    >
+                      {rule.met ? <Check size={12} /> : <X size={12} />}
+                      {rule.label}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
 
             {/* Image */}
@@ -237,7 +308,7 @@ export default function RegisterPage() {
               <p className="text-xs text-destructive">{submitError}</p>
             )}
 
-            <Button type="submit" disabled={submitting}>
+            <Button type="submit" disabled={submitting || !passwordValid}>
               {submitting ? "Creating account..." : "Register"}
             </Button>
 
