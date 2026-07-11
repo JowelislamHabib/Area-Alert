@@ -14,7 +14,7 @@ import { signIn } from "@/lib/auth-client";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useActionState, useState } from "react";
 import { toast } from "sonner";
 
 function validateEmail(email: string): string | null {
@@ -34,9 +34,6 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({});
 
   const validate = () => {
@@ -46,26 +43,22 @@ export default function LoginPage() {
     return !emailErr && !passwordErr;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
+  const [error, submitAction, isPending] = useActionState(
+    async (prevState: string | null, formData: FormData) => {
+      if (!validate()) return null;
 
-    if (!validate()) return;
+      const { error: signInError } = await signIn.email({ email, password });
 
-    setLoading(true);
+      if (signInError) {
+        return signInError.message || "Invalid credentials";
+      }
 
-    const { error } = await signIn.email({ email, password });
-
-    setLoading(false);
-
-    if (error) {
-      setError(error.message || "Invalid credentials");
-      return;
-    }
-
-    toast.success("Logged in successfully");
-    router.push("/");
-  };
+      toast.success("Logged in successfully");
+      router.push("/");
+      return null;
+    },
+    null
+  );
 
   const handleGoogle = async () => {
     await signIn.social({ provider: "google" });
@@ -81,7 +74,7 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
+          <form action={submitAction} className="flex flex-col gap-5" noValidate>
             <div className="flex flex-col gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -132,8 +125,8 @@ export default function LoginPage() {
 
             {error && <p className="text-xs text-destructive">{error}</p>}
 
-            <Button type="submit" disabled={loading}>
-              {loading ? "Logging in..." : "Log in"}
+            <Button type="submit" disabled={isPending}>
+              {isPending ? "Logging in..." : "Log in"}
             </Button>
 
             <div className="relative flex items-center gap-2">

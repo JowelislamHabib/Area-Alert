@@ -1,46 +1,60 @@
-<!-- BEGIN:nextjs-agent-rules -->
-# This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
-<!-- END:nextjs-agent-rules -->
-
 # AreaAlert
-
-Community utility outage platform (Bangladesh). Next.js 16.2.10, Tailwind CSS v4, shadcn/ui (base-nova).
 
 ## Commands
 
 ```sh
-npm run dev      # Next.js dev server (Turbopack)
-npm run build    # Production build + TypeScript check
-npm run lint     # ESLint (core-web-vitals + typescript presets)
+npm run dev      # Next.js 16 dev server with Turbopack
+npm run build    # Production build (compiles + TS check)
+npm run lint     # ESLint (flat config, eslint.config.mjs)
 ```
 
-## Stack quirks
+## Architecture
 
-- **shadcn/ui style is `base-nova`** — all primitives come from `@base-ui/react`, NOT `@radix-ui/react`. No `asChild`/`Slot` pattern; use `render` prop instead (see `src/components/ui/sheet.tsx:65` for the pattern).
-- **Tailwind CSS v4** — uses `@import "tailwindcss"` (not v3 `@tailwind` directives). Uses `@tailwindcss/postcss` plugin. Theme vars use `oklch()` colors. No `tailwind.config.js` — theme is in `globals.css` via `@theme`.
-- **React 19** — no `React.FC`, no `defaultProps` on components.
-- **Add components**: `npx shadcn@latest add <component> -y`
-- **cn() utility**: `tailwind-merge` + `clsx` at `src/lib/utils.ts`
-- **Icons**: `lucide-react`
-- **Fonts**: Geist Sans / Geist Mono via `next/font/google`
-- **Path alias**: `@/*` → `./src/*`
+- **Next.js 16 App Router** (React 19). Server components by default; add `"use client"` for interactivity.
+- **Tailwind CSS v4** — uses `@import`, `@theme inline {}`, `oklch()` colors. PostCSS plugin `@tailwindcss/postcss`.
+- **`@/` path alias** maps to `./src/*`.
 
-## Auth
+## Auth (Better Auth)
 
-Not implemented yet. Login/register pages are shells. `betterAuth` planned. Do not add auth middleware or API routes.
+- **Server config**: `src/lib/auth.ts` — `betterAuth()` with `mongodbAdapter` (MongoDB, DB `AreaAlert`). Email/password + Google OAuth. Schema auto-managed.
+- **Client**: `src/lib/auth-client.ts` — exports `signIn`, `signUp`, `useSession` via `createAuthClient`.
+- **API catch-all**: `src/app/api/auth/[...all]/route.ts` handles all auth endpoints via `toNextJsHandler(auth)`.
+- **Env required**: `MONGODB_URI`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`.
 
-## Project state
+## UI / Components
 
-Early scaffold. Source structure:
-- `src/app/page.tsx` — default Next.js starter (unused)
-- `src/app/(auth)/login/` — shell page, `/register/` is empty
-- `src/components/shared/Navbar/Navbar.tsx` — client component, sticky nav
-- `src/components/ui/` — shadcn/components (only button, sheet installed)
+- **shadcn/ui style `base-nova`** — uses `@base-ui/react` primitives (NOT Radix UI). Components use `data-slot` attributes.
+- **All UI components** in `src/components/ui/` use `cn()` from `@/lib/utils` (`clsx` + `tailwind-merge`).
+- **Toast**: Sonner `<Toaster position="top-center" richColors />` in root layout. Import `toast` from `sonner`.
+- **Icons**: `lucide-react`.
+- **Form patterns**: Use `useState` for controlled inputs + `useActionState` for form pending states. `noValidate` on forms to suppress browser defaults in favor of custom validation.
 
-## PLAN.md
+## Directory Layout
 
-Full PRD in repo root. Navigation structure:
-- **Logged out**: Home, Explore Reports, About, Contact, Login, Register
-- **Logged in**: adds Add Report, My Reports, replaces Login/Register with Logout
+```
+src/
+  app/            # Next.js App Router pages + API routes
+    (auth)/       # Route group — /login, /register
+    api/auth/[...all]/  # Better Auth handler
+  components/
+    ui/           # shadcn primitives
+    shared/       # Shared layout (Navbar)
+    pages/        # Page-specific components (mostly empty)
+  lib/
+    auth.ts       # Server auth config
+    auth-client.ts # Client auth client
+    utils.ts      # cn() helper
+    api/          # API utility functions (uploadImage)
+```
+
+## Project State
+
+- Auth system is functional (login, register, Google OAuth, session).
+- Everything else (Report CRUD, Explore, Dashboard, About, Contact) is **not implemented**.
+- `PLAN.md` contains full product spec for remaining work.
+
+## Conventions
+
+- Image upload: ImgBB API via `src/lib/api/uploadImage.ts`. Key from `NEXT_PUBLIC_IMAGE_UPLOAD_API`.
+- Password validation (registration): 6+ chars, 1 uppercase, 1 number, 1 special char — show rule checklist inline.
+- `useSession` from `better-auth/react` is available but not yet used for UI gating.

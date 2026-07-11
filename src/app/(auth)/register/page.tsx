@@ -16,7 +16,7 @@ import { Camera, Check, Eye, EyeOff, ImageIcon, Link2, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useActionState, useState } from "react";
 import { toast } from "sonner";
 
 type PasswordRule = {
@@ -55,9 +55,7 @@ export default function RegisterPage() {
   const [imageUrl, setImageUrl] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
-  const [submitting, setSubmitting] = useState(false);
   const [urlError, setUrlError] = useState("");
-  const [submitError, setSubmitError] = useState("");
 
   const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string }>({});
 
@@ -82,52 +80,46 @@ export default function RegisterPage() {
     setUrlError("");
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitError("");
+  const [submitError, submitAction, submitting] = useActionState(
+    async (prevState: string | null, formData: FormData) => {
+      const nameErr = validateName(name);
+      const emailErr = validateEmail(email);
+      setFieldErrors({ name: nameErr ?? undefined, email: emailErr ?? undefined });
 
-    const nameErr = validateName(name);
-    const emailErr = validateEmail(email);
-    setFieldErrors({ name: nameErr ?? undefined, email: emailErr ?? undefined });
+      if (nameErr || emailErr || !passwordValid) return null;
 
-    if (nameErr || emailErr || !passwordValid) return;
-
-    if (imageMode === "url" && imageUrl && !isValidImageUrl(imageUrl)) {
-      setUrlError("URL must end with an image extension (png, jpg, jpeg, gif, webp, svg)");
-      return;
-    }
-
-    let finalImageUrl = imageUrl;
-
-    setSubmitting(true);
-
-    if (imageMode === "file" && imageFile) {
-      try {
-        finalImageUrl = await uploadImage(imageFile);
-      } catch {
-        setSubmitError("Image upload failed. Please try again.");
-        setSubmitting(false);
-        return;
+      if (imageMode === "url" && imageUrl && !isValidImageUrl(imageUrl)) {
+        setUrlError("URL must end with an image extension (png, jpg, jpeg, gif, webp, svg)");
+        return null;
       }
-    }
 
-    const { error } = await signUp.email({
-      name,
-      email,
-      password,
-      image: finalImageUrl || undefined,
-    });
+      let finalImageUrl = imageUrl;
 
-    setSubmitting(false);
+      if (imageMode === "file" && imageFile) {
+        try {
+          finalImageUrl = await uploadImage(imageFile);
+        } catch {
+          return "Image upload failed. Please try again.";
+        }
+      }
 
-    if (error) {
-      setSubmitError(error.message || "Registration failed");
-      return;
-    }
+      const { error } = await signUp.email({
+        name,
+        email,
+        password,
+        image: finalImageUrl || undefined,
+      });
 
-    toast.success("Account created successfully");
-    router.push("/login");
-  };
+      if (error) {
+        return error.message || "Registration failed";
+      }
+
+      toast.success("Account created successfully");
+      router.push("/login");
+      return null;
+    },
+    null
+  );
 
   const handleGoogle = async () => {
     await signIn.social({ provider: "google" });
@@ -143,7 +135,7 @@ export default function RegisterPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
+          <form action={submitAction} className="flex flex-col gap-5" noValidate>
             <div className="flex flex-col gap-2">
               <Label htmlFor="name">Full Name</Label>
               <Input
