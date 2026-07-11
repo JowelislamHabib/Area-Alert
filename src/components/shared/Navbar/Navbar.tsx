@@ -2,8 +2,17 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { AlertTriangle, Menu } from "lucide-react";
+import { AlertTriangle, LogOut, Menu, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Sheet,
   SheetContent,
@@ -11,6 +20,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { authClient, useSession } from "@/lib/auth-client";
+import Image from "next/image";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -21,6 +32,12 @@ const navLinks = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const { data: session, isPending } = useSession();
+  const user = session?.user;
+
+  const handleLogout = async () => {
+    await authClient.signOut();
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
@@ -46,12 +63,45 @@ export default function Navbar() {
 
         {/* Desktop Auth */}
         <div className="hidden md:flex items-center gap-2">
-          <Button variant="ghost" size="sm">
-            <Link href="/login">Login</Link>
-          </Button>
-          <Button size="sm">
-            <Link href="/register">Register</Link>
-          </Button>
+          {isPending ? null : user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex size-8 items-center justify-center overflow-hidden rounded-full border outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                {user.image ? (
+                  <Image
+                    src={user.image}
+                    alt={user.name || ""}
+                    width={32}
+                    height={32}
+                    className="size-full object-cover"
+                  />
+                ) : (
+                  <User size={16} className="text-muted-foreground" />
+                )}
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" sideOffset={8}>
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="text-sm font-medium">{user.name}</div>
+                    <div className="text-xs text-muted-foreground">{user.email}</div>
+                  </DropdownMenuLabel>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout} variant="destructive">
+                  <LogOut size={16} />
+                  Log out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <>
+              <Button variant="ghost" size="sm">
+                <Link href="/login">Login</Link>
+              </Button>
+              <Button size="sm">
+                <Link href="/register">Register</Link>
+              </Button>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu */}
@@ -82,12 +132,46 @@ export default function Navbar() {
               ))}
             </nav>
             <div className="flex flex-col gap-2 px-4 mt-6 pt-4 border-t">
-              <Button variant="outline" className="w-full" onClick={() => setOpen(false)}>
-                <Link href="/login">Login</Link>
-              </Button>
-              <Button className="w-full" onClick={() => setOpen(false)}>
-                <Link href="/register">Register</Link>
-              </Button>
+              {user ? (
+                <>
+                  <div className="flex items-center gap-3 px-3 py-2">
+                    <div className="flex size-8 items-center justify-center overflow-hidden rounded-full bg-muted">
+                      {user.image ? (
+                        <Image
+                          src={user.image}
+                          alt={user.name || ""}
+                          width={32}
+                          height={32}
+                          className="size-full object-cover"
+                        />
+                      ) : (
+                        <User size={16} className="text-muted-foreground" />
+                      )}
+                    </div>
+                    <div className="text-sm">
+                      <div className="font-medium">{user.name}</div>
+                      <div className="text-xs text-muted-foreground">{user.email}</div>
+                    </div>
+                  </div>
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => { handleLogout(); setOpen(false); }}
+                  >
+                    <LogOut size={16} />
+                    Log out
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button variant="outline" className="w-full" onClick={() => setOpen(false)}>
+                    <Link href="/login">Login</Link>
+                  </Button>
+                  <Button className="w-full" onClick={() => setOpen(false)}>
+                    <Link href="/register">Register</Link>
+                  </Button>
+                </>
+              )}
             </div>
           </SheetContent>
         </Sheet>

@@ -10,12 +10,86 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff } from "lucide-react";
+import { isValidImageUrl, uploadImage } from "@/lib/api/uploadImage";
+import { signIn, signUp } from "@/lib/auth-client";
+import { Camera, Eye, EyeOff, ImageIcon, Link2, X } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [imageMode, setImageMode] = useState<"url" | "file">("url");
+  const [imageUrl, setImageUrl] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [urlError, setUrlError] = useState("");
+  const [submitError, setSubmitError] = useState("");
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setImageFile(file);
+    setPreview(URL.createObjectURL(file));
+  };
+
+  const clearImage = () => {
+    setImageUrl("");
+    setImageFile(null);
+    setPreview("");
+    setUrlError("");
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitError("");
+
+    let finalImageUrl = imageUrl;
+
+    if (imageMode === "url" && imageUrl && !isValidImageUrl(imageUrl)) {
+      setUrlError("URL must end with an image extension (png, jpg, jpeg, gif, webp, svg)");
+      return;
+    }
+
+    setSubmitting(true);
+
+    if (imageMode === "file" && imageFile) {
+      try {
+        finalImageUrl = await uploadImage(imageFile);
+      } catch {
+        setSubmitError("Image upload failed. Please try again.");
+        setSubmitting(false);
+        return;
+      }
+    }
+
+    const { error } = await signUp.email({
+      name,
+      email,
+      password,
+      image: finalImageUrl || undefined,
+    });
+
+    setSubmitting(false);
+
+    if (error) {
+      setSubmitError(error.message || "Registration failed");
+      return;
+    }
+
+    router.push("/login");
+  };
+
+  const handleGoogle = async () => {
+    await signIn.social({ provider: "google" });
+  };
 
   return (
     <main className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center bg-muted/30 p-4">
@@ -27,13 +101,15 @@ export default function RegisterPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-5">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             <div className="flex flex-col gap-2">
               <Label htmlFor="name">Full Name</Label>
               <Input
                 id="name"
                 type="text"
                 placeholder="John Doe"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 required
               />
             </div>
@@ -44,6 +120,8 @@ export default function RegisterPage() {
                 id="email"
                 type="email"
                 placeholder="m@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
@@ -55,6 +133,8 @@ export default function RegisterPage() {
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                   minLength={6}
                 />
@@ -69,7 +149,108 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            <Button type="submit">Register</Button>
+            {/* Image */}
+            <div className="flex flex-col gap-2">
+              <Label>Profile Image (optional)</Label>
+
+              <div className="flex items-center gap-2 rounded-lg border p-1">
+                <button
+                  type="button"
+                  onClick={() => { setImageMode("url"); clearImage(); }}
+                  className={`flex flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+                    imageMode === "url" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <Link2 size={14} />
+                  URL
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setImageMode("file"); clearImage(); }}
+                  className={`flex flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+                    imageMode === "file" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <Camera size={14} />
+                  Upload
+                </button>
+              </div>
+
+              {imageMode === "url" ? (
+                <div className="relative">
+                  <Input
+                    type="url"
+                    placeholder="https://example.com/avatar.jpg"
+                    value={imageUrl}
+                    onChange={(e) => {
+                      setImageUrl(e.target.value);
+                      setUrlError("");
+                      if (e.target.value && isValidImageUrl(e.target.value)) {
+                        setPreview(e.target.value);
+                      } else {
+                        setPreview("");
+                      }
+                    }}
+                  />
+                  {urlError && (
+                    <p className="mt-1 text-xs text-destructive">{urlError}</p>
+                  )}
+                </div>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  <label className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed px-3 py-2 text-xs text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground">
+                    <ImageIcon size={16} />
+                    {imageFile ? imageFile.name : "Choose file"}
+                    <input
+                      type="file"
+                      accept="image/png,image/jpg,image/jpeg,image/gif,image/webp,image/svg+xml"
+                      className="sr-only"
+                      onChange={handleFileChange}
+                    />
+                  </label>
+                  {imageFile && (
+                    <button
+                      type="button"
+                      onClick={clearImage}
+                      className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+                    >
+                      <X size={14} />
+                      Remove
+                    </button>
+                  )}
+                </div>
+              )}
+
+              {preview && (
+                <div className="relative mt-1 aspect-square w-20 overflow-hidden rounded-lg border">
+                  <Image
+                    src={preview}
+                    alt="Preview"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              )}
+            </div>
+
+            {submitError && (
+              <p className="text-xs text-destructive">{submitError}</p>
+            )}
+
+            <Button type="submit" disabled={submitting}>
+              {submitting ? "Creating account..." : "Register"}
+            </Button>
+
+            <div className="relative flex items-center gap-2">
+              <span className="h-px flex-1 bg-border" />
+              <span className="text-xs text-muted-foreground">or continue with</span>
+              <span className="h-px flex-1 bg-border" />
+            </div>
+
+            <Button type="button" variant="outline" onClick={handleGoogle}>
+              <svg role="img" viewBox="0 0 24 24" className="h-4 w-4"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+              Google
+            </Button>
 
             <p className="text-center text-sm text-muted-foreground">
               Already have an account?{" "}
