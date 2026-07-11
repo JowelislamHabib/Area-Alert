@@ -17,14 +17,16 @@ export default function CTASection() {
           className="relative overflow-hidden rounded-3xl bg-card border border-border shadow-2xl p-8 md:p-16 lg:p-24 text-center flex flex-col items-center"
           style={{
             opacity: revealed ? 1 : 0,
-            transform: revealed ? "translateY(0) scale(1)" : "translateY(40px) scale(0.95)",
+            transform: revealed
+              ? "translateY(0) scale(1)"
+              : "translateY(40px) scale(0.95)",
             filter: revealed ? "blur(0)" : "blur(8px)",
             transition: `all 800ms ${spring}`,
           }}
         >
           {/* Decorative background blur */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] max-w-[600px] aspect-square rounded-full bg-primary/10 blur-3xl -z-10" />
-          
+
           <div className="relative z-10 flex flex-col items-center">
             <Badge variant="outline" className="mb-6">
               Join AreaAlert
@@ -35,20 +37,21 @@ export default function CTASection() {
             </h2>
 
             <p className="mt-6 max-w-xl text-lg text-muted-foreground leading-relaxed">
-              Join AreaAlert today and help thousands stay informed about utility outages in Bangladesh.
+              Join AreaAlert today and help thousands stay informed about
+              utility outages in Bangladesh.
             </p>
 
             <div className="mt-10 flex flex-col gap-4 sm:flex-row w-full sm:w-auto justify-center">
-              <Button size="lg"  asChild>
-                <Link href="/register">
+              <Link href="/register">
+                <Button size="lg">
                   Get Started Free <ArrowRight className="ml-2 size-5" />
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline"  asChild>
-                <Link href="/about">
+                </Button>
+              </Link>
+              <Link href="/about">
+                <Button size="lg" variant="outline">
                   Learn More
-                </Link>
-              </Button>
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

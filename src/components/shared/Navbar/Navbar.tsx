@@ -98,12 +98,16 @@ export default function Navbar() {
             </DropdownMenu>
           ) : (
             <>
-              <Button variant="ghost" size="sm">
-                <Link href="/login">Login</Link>
-              </Button>
-              <Button size="sm">
-                <Link href="/register">Register</Link>
-              </Button>
+              <Link href="/login">
+                <Button variant="ghost" size="sm">
+                  Login
+                </Button>
+              </Link>
+              <Link href="/register">
+                <Button size="sm">
+                  Register
+                </Button>
+              </Link>
             </>
           )}
         </div>
@@ -178,16 +182,20 @@ export default function Navbar() {
                 </>
               ) : (
                 <>
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    onClick={() => setOpen(false)}
-                  >
-                    <Link href="/login">Login</Link>
-                  </Button>
-                  <Button className="w-full" onClick={() => setOpen(false)}>
-                    <Link href="/register">Register</Link>
-                  </Button>
+                  <Link href="/login" className="w-full">
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => setOpen(false)}
+                    >
+                      Login
+                    </Button>
+                  </Link>
+                  <Link href="/register" className="w-full">
+                    <Button className="w-full" onClick={() => setOpen(false)}>
+                      Register
+                    </Button>
+                  </Link>
                 </>
               )}
             </div>

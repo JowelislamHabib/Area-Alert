@@ -121,21 +121,20 @@ export default function HeroSection() {
               }}
             >
               <Link href="/report">
-                <Button size="default">
+                <Button size="lg">
                   Report Outage <Activity className="ml-2" />
                 </Button>
               </Link>
 
-              <Button
-                size="lg"
-                variant="outline"
-                className="h-14 px-8 text-base bg-background/50 backdrop-blur-sm transition-all hover:bg-muted"
-                asChild
-              >
-                <Link href="/reports">
+              <Link href="/reports">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="h-14 px-8 text-base bg-background/50 backdrop-blur-sm transition-all hover:bg-muted"
+                >
                   Explore Map <ArrowRight className="ml-2 size-5" />
-                </Link>
-              </Button>
+                </Button>
+              </Link>
             </div>
 
             {/* Social Proof / Trust */}
