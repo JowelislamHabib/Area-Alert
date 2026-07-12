@@ -143,7 +143,7 @@ export function ReportValidation({ report, user }: { report: any; user: any }) {
               className={`flex-1 flex flex-row items-center justify-center gap-2 py-5 sm:py-2.5 rounded-xl text-sm font-semibold transition-all ${
                 hasUpvoted
                   ? "bg-emerald-500 text-white border-emerald-500 hover:bg-emerald-600 hover:text-white"
-                  : "hover:bg-emerald-50 hover:border-emerald-200 hover:text-emerald-700 text-slate-600"
+                  : "hover:bg-emerald-500/10 hover:border-emerald-500/30 hover:text-emerald-600 dark:hover:text-emerald-400 text-muted-foreground"
               }`}
             >
               <ThumbsUp className="size-4" />
@@ -157,7 +157,7 @@ export function ReportValidation({ report, user }: { report: any; user: any }) {
               className={`flex-1 flex flex-row items-center justify-center gap-2 py-5 sm:py-2.5 rounded-xl text-sm font-semibold transition-all ${
                 hasSuggestedResolved
                   ? "bg-blue-500 text-white border-blue-500 hover:bg-blue-600 hover:text-white"
-                  : "hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 text-slate-600"
+                  : "hover:bg-blue-500/10 hover:border-blue-500/30 hover:text-blue-600 dark:hover:text-blue-400 text-muted-foreground"
               }`}
             >
               <CheckCircle className="size-4" />
@@ -171,7 +171,7 @@ export function ReportValidation({ report, user }: { report: any; user: any }) {
               className={`flex-1 flex flex-row items-center justify-center gap-2 py-5 sm:py-2.5 rounded-xl text-sm font-semibold transition-all ${
                 hasDownvoted
                   ? "bg-red-400 text-white border-red-400 hover:bg-red-500 hover:text-white"
-                  : "hover:bg-red-50 hover:border-red-200 hover:text-red-600 text-slate-600"
+                  : "hover:bg-red-500/10 hover:border-red-500/30 hover:text-red-600 dark:hover:text-red-400 text-muted-foreground"
               }`}
             >
               <ThumbsDown className="size-4" />

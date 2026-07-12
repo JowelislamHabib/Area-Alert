@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { AlertTriangle, LogOut, Menu, User } from "lucide-react";
+import { AlertTriangle, LogOut, Menu, User, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -70,19 +70,24 @@ export default function Navbar() {
         {/* Desktop Auth */}
         <div className="hidden md:flex items-center gap-2">
           <ThemeToggle />
+          <Link href="/add-report">
+            <Button size="sm" className="font-semibold">
+              <Plus className="mr-1.5 size-4" /> Add Report
+            </Button>
+          </Link>
           {isPending ? null : user ? (
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex size-8 items-center justify-center overflow-hidden rounded-full border outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              <DropdownMenuTrigger className="flex size-10 items-center justify-center overflow-hidden rounded-full border outline-none focus-visible:ring-2 focus-visible:ring-ring ml-2">
                 {user.image ? (
                   <Image
                     src={user.image}
                     alt={user.name || ""}
-                    width={32}
-                    height={32}
+                    width={40}
+                    height={40}
                     className="size-full object-cover"
                   />
                 ) : (
-                  <User size={16} className="text-muted-foreground" />
+                  <User size={20} className="text-muted-foreground" />
                 )}
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" sideOffset={8}>
@@ -96,24 +101,24 @@ export default function Navbar() {
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout} variant="destructive">
-                  <LogOut size={16} />
+                  <LogOut size={16} className="mr-2" />
                   Log out
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <>
+            <div className="flex items-center gap-2 ml-2 pl-4 border-l border-border/40">
               <Link href={`/login${callbackQuery}`}>
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" className="font-semibold text-muted-foreground hover:text-foreground">
                   Login
                 </Button>
               </Link>
               <Link href={`/register${callbackQuery}`}>
-                <Button size="sm">
+                <Button variant="outline" size="sm" className="font-semibold">
                   Register
                 </Button>
               </Link>
-            </>
+            </div>
           )}
         </div>
 
