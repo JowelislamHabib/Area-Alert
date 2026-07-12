@@ -12,6 +12,7 @@ export type Report = {
   shortDescription: string;
   description: string;
   image?: string;
+  videoUrl?: string;
   ispName?: string;
   reporterId: string;
   reporterName: string;
@@ -29,6 +30,7 @@ export type CreateReportInput = {
   shortDescription: string;
   description: string;
   image?: string;
+  videoUrl?: string;
   ispName?: string;
   reporterId: string;
   reporterName: string;
