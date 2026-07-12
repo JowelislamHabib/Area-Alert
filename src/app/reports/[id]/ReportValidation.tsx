@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ThumbsUp, ThumbsDown, CheckCircle } from "lucide-react";
 import Link from "next/link";
@@ -13,6 +14,9 @@ export function ReportValidation({ report, user }: { report: any; user: any }) {
   const [downvotes, setDownvotes] = useState<string[]>(report.downvotes || []);
   const [resolvedVotes, setResolvedVotes] = useState<string[]>(report.resolvedVotes || []);
   
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const redirectTo = `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
   const [isPending, setIsPending] = useState(false);
 
   const totalVotes = upvotes.length + downvotes.length + resolvedVotes.length;
@@ -177,7 +181,7 @@ export function ReportValidation({ report, user }: { report: any; user: any }) {
         )
       ) : (
         <div className="bg-slate-50 border border-slate-100 rounded-xl p-3 text-center text-sm font-medium text-slate-600">
-          <Link href="/login" className="text-emerald-700 font-bold hover:underline">Sign in</Link> to validate this report
+          <Link href={`/login?redirect=${encodeURIComponent(redirectTo)}`} className="text-emerald-700 font-bold hover:underline">Sign in</Link> to validate this report
         </div>
       )}
     </>

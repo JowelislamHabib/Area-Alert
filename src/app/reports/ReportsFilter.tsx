@@ -1,14 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { useCallback, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -50,27 +43,43 @@ export function ReportsFilter({
   const [districtOpen, setDistrictOpen] = useState(false);
   const [areaOpen, setAreaOpen] = useState(false);
 
-  const currentDistrict = searchParams.get("district") || "";
-  const currentArea = searchParams.get("area") || "";
-  const currentUtility = searchParams.get("utilityType") || "";
-  const currentSort = searchParams.get("sortBy") || "newest";
-  const currentStatus = searchParams.get("status") || "";
+  const [localFilters, setLocalFilters] = useState({
+    district: searchParams.get("district") || "",
+    area: searchParams.get("area") || "",
+    utilityType: searchParams.get("utilityType") || "",
+    status: searchParams.get("status") || "",
+    sortBy: searchParams.get("sortBy") || "newest",
+    datePreset: searchParams.get("datePreset") || "all",
+    startDate: searchParams.get("startDate") || "",
+    endDate: searchParams.get("endDate") || "",
+  });
 
-  const currentPreset = searchParams.get("datePreset") || "all";
+  useEffect(() => {
+    if (isOpen) {
+      setLocalFilters({
+        district: searchParams.get("district") || "",
+        area: searchParams.get("area") || "",
+        utilityType: searchParams.get("utilityType") || "",
+        status: searchParams.get("status") || "",
+        sortBy: searchParams.get("sortBy") || "newest",
+        datePreset: searchParams.get("datePreset") || "all",
+        startDate: searchParams.get("startDate") || "",
+        endDate: searchParams.get("endDate") || "",
+      });
+    }
+  }, [isOpen, searchParams]);
 
-  const [date, setDate] = useState<{ from?: Date; to?: Date } | undefined>(
-    () => {
-      const from = searchParams.get("startDate");
-      const to = searchParams.get("endDate");
-      if ((from || to) && currentPreset === "custom") {
-        return {
-          from: from ? new Date(from) : undefined,
-          to: to ? new Date(to) : undefined,
-        };
-      }
-      return undefined;
-    },
-  );
+  const currentDistrict = localFilters.district;
+  const currentArea = localFilters.area;
+  const currentUtility = localFilters.utilityType;
+  const currentSort = localFilters.sortBy;
+  const currentStatus = localFilters.status;
+  const currentPreset = localFilters.datePreset;
+
+  const date = ((localFilters.startDate || localFilters.endDate) && currentPreset === "custom") ? {
+    from: localFilters.startDate ? new Date(localFilters.startDate) : undefined,
+    to: localFilters.endDate ? new Date(localFilters.endDate) : undefined,
+  } : undefined;
 
   const districts = areaData.map((d) => d.district);
   const selectedDistrictData = areaData.find(
@@ -80,78 +89,80 @@ export function ReportsFilter({
 
   const updateParam = useCallback(
     (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-      if (value) {
-        params.set(name, value);
-      } else {
-        params.delete(name);
-      }
-
-      if (name === "district" && value !== currentDistrict) {
-        params.delete("area");
-      }
-
-      router.push(`/reports?${params.toString()}`);
+      setLocalFilters((prev) => {
+        const next = { ...prev, [name]: value };
+        if (name === "district" && value !== prev.district) {
+          next.area = "";
+        }
+        return next;
+      });
     },
-    [searchParams, router, currentDistrict],
+    [],
   );
 
-  const handleDatePreset = (preset: "all" | "today" | "last7" | "custom") => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("datePreset", preset);
-
-    if (preset === "all") {
-      params.delete("startDate");
-      params.delete("endDate");
-      setDate(undefined);
-    } else if (preset === "today") {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      params.set("startDate", today.toISOString());
-      params.delete("endDate");
-      setDate(undefined);
-    } else if (preset === "last7") {
-      const today = new Date();
-      const lastWeek = new Date();
-      lastWeek.setDate(lastWeek.getDate() - 7);
-      lastWeek.setHours(0, 0, 0, 0);
-      params.set("startDate", lastWeek.toISOString());
-      params.set("endDate", today.toISOString());
-      setDate(undefined);
-    }
-
-    router.push(`/reports?${params.toString()}`);
+  const handleDatePreset = (preset: "all" | "today" | "custom") => {
+    setLocalFilters((prev) => {
+      const next = { ...prev, datePreset: preset };
+      if (preset === "all") {
+        next.startDate = "";
+        next.endDate = "";
+      } else if (preset === "today") {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        next.startDate = today.toISOString();
+        next.endDate = "";
+      }
+      return next;
+    });
   };
 
   const handleCustomDateChange = (
     newDate: { from?: Date; to?: Date } | undefined,
   ) => {
-    setDate(newDate);
+    setLocalFilters((prev) => {
+      const next = { ...prev, datePreset: "custom" };
+      if (newDate?.from) next.startDate = newDate.from.toISOString();
+      else next.startDate = "";
+
+      if (newDate?.to) next.endDate = newDate.to.toISOString();
+      else next.endDate = "";
+
+      return next;
+    });
+  };
+
+  const applyFilters = () => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("datePreset", "custom");
-
-    if (newDate?.from) params.set("startDate", newDate.from.toISOString());
-    else params.delete("startDate");
-
-    if (newDate?.to) params.set("endDate", newDate.to.toISOString());
-    else params.delete("endDate");
-
+    Object.entries(localFilters).forEach(([key, value]) => {
+      if (value && !(key === "sortBy" && value === "newest") && !(key === "datePreset" && value === "all")) {
+        params.set(key, value);
+      } else {
+        params.delete(key);
+      }
+    });
+    if (localFilters.datePreset === "all") {
+      params.delete("startDate");
+      params.delete("endDate");
+    }
     router.push(`/reports?${params.toString()}`);
+    setIsOpen(false);
   };
 
   const clearFilters = () => {
-    setDate(undefined);
-    router.push(`/reports`);
+    const params = new URLSearchParams(searchParams.toString());
+    ["district", "area", "utilityType", "status", "sortBy", "datePreset", "startDate", "endDate"].forEach(k => params.delete(k));
+    router.push(`/reports?${params.toString()}`);
+    setIsOpen(false);
   };
 
   const hasFilters =
-    currentDistrict ||
-    currentArea ||
-    currentUtility ||
-    currentSort !== "newest" ||
-    currentStatus ||
-    date ||
-    currentPreset !== "all";
+    localFilters.district ||
+    localFilters.area ||
+    localFilters.utilityType ||
+    localFilters.sortBy !== "newest" ||
+    localFilters.status ||
+    localFilters.startDate ||
+    localFilters.datePreset !== "all";
 
   return (
     <div className="flex flex-col gap-4 w-full">
@@ -171,7 +182,7 @@ export function ReportsFilter({
 
       {isOpen && (
         <div className="bg-card/80 backdrop-blur-xl border border-border/50 rounded-xl p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-8">
             {/* Service Type */}
             <div className="space-y-3">
               <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
@@ -418,31 +429,28 @@ export function ReportsFilter({
                   >
                     Today
                   </FilterOption>
-                  <FilterOption
-                    active={currentPreset === "last7"}
-                    onClick={() => handleDatePreset("last7")}
-                  >
-                    Last 7 Days
-                  </FilterOption>
 
                   <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          "w-full justify-start text-left font-normal mt-2 h-9",
-                          currentPreset !== "custom" && "text-muted-foreground",
-                          currentPreset === "custom" &&
-                            "border-emerald-500 ring-1 ring-emerald-500",
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {currentPreset === "custom" && date?.from
-                          ? date.to
-                            ? `${format(date.from, "LLL dd, y")} - ${format(date.to, "LLL dd, y")}`
-                            : format(date.from, "LLL dd, y")
-                          : "Pick a range"}
-                      </Button>
+                    <PopoverTrigger
+                      render={
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-full justify-start text-left font-normal mt-2 h-9",
+                            currentPreset !== "custom" &&
+                              "text-muted-foreground",
+                            currentPreset === "custom" &&
+                              "border-emerald-500 ring-1 ring-emerald-500",
+                          )}
+                        />
+                      }
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {currentPreset === "custom" && date?.from
+                        ? date.to
+                          ? `${format(date.from, "LLL dd, y")} - ${format(date.to, "LLL dd, y")}`
+                          : format(date.from, "LLL dd, y")
+                        : "Pick a Date Range"}
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
@@ -457,44 +465,89 @@ export function ReportsFilter({
                   </Popover>
                 </div>
               </div>
+            </div>
 
+            {/* Sort By */}
+            <div className="space-y-6">
               <div className="space-y-3">
                 <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
                   Sort By
                 </h4>
-                <Select
-                  value={currentSort}
-                  onValueChange={(val) =>
-                    updateParam("sortBy", val || "newest")
-                  }
-                >
-                  <SelectTrigger className="bg-background h-9">
-                    <SelectValue>
-                      {currentSort === "most_upvoted"
-                        ? "Most Upvoted"
-                        : "Newest First"}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="newest">Newest First</SelectItem>
-                    <SelectItem value="most_upvoted">Most Upvoted</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Popover>
+                  <PopoverTrigger
+                    render={
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className="w-full justify-between font-normal bg-background h-9"
+                      />
+                    }
+                  >
+                    {currentSort === "most_upvoted"
+                      ? "Most Upvoted"
+                      : "Newest First"}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className="w-[--anchor-width] p-0"
+                    align="start"
+                  >
+                    <Command>
+                      <CommandList>
+                        <CommandGroup>
+                          <CommandItem
+                            value="newest"
+                            onSelect={() => updateParam("sortBy", "newest")}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                currentSort !== "most_upvoted"
+                                  ? "opacity-100"
+                                  : "opacity-0",
+                              )}
+                            />
+                            Newest First
+                          </CommandItem>
+                          <CommandItem
+                            value="most_upvoted"
+                            onSelect={() =>
+                              updateParam("sortBy", "most_upvoted")
+                            }
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                currentSort === "most_upvoted"
+                                  ? "opacity-100"
+                                  : "opacity-0",
+                              )}
+                            />
+                            Most Upvoted
+                          </CommandItem>
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
               </div>
             </div>
           </div>
 
-          {hasFilters && (
-            <div className="mt-8 pt-4 border-t border-border/50 flex justify-end">
+          <div className="mt-6 pt-4 border-t border-border/50 flex justify-end gap-3">
+            {hasFilters && (
               <Button
                 variant="ghost"
                 onClick={clearFilters}
                 className="text-muted-foreground hover:text-foreground"
               >
-                <FilterX className="size-4 mr-2" /> Clear All Filters
+                <FilterX className="size-4 mr-2" /> Clear Filters
               </Button>
-            </div>
-          )}
+            )}
+            <Button onClick={applyFilters} className="bg-[#0f6b4b] hover:bg-[#0f6b4b]/90 text-white">
+              Apply Filters
+            </Button>
+          </div>
         </div>
       )}
     </div>

@@ -193,7 +193,7 @@ export default function AddReportPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Link href="/login">
+            <Link href="/login?redirect=/add-report">
               <Button size="lg" className="w-full">Log in to Report</Button>
             </Link>
           </CardContent>

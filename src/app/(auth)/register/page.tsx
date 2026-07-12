@@ -15,7 +15,8 @@ import { signIn, signUp } from "@/lib/auth-client";
 import { Camera, Check, Eye, EyeOff, ImageIcon, Link2, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { useActionState, useState } from "react";
 import { toast } from "sonner";
 
@@ -44,8 +45,10 @@ function validateName(name: string): string | null {
   return null;
 }
 
-export default function RegisterPage() {
+function RegisterForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("redirect") || "/";
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -115,7 +118,7 @@ export default function RegisterPage() {
       }
 
       toast.success("Account created successfully");
-      router.push("/login");
+      router.push(callbackUrl);
       return null;
     },
     null
@@ -317,7 +320,7 @@ export default function RegisterPage() {
 
             <p className="text-center text-sm text-muted-foreground">
               Already have an account?{" "}
-              <Link href="/login" className="font-medium text-foreground hover:underline">
+              <Link href={`/login${callbackUrl !== "/" ? `?redirect=${encodeURIComponent(callbackUrl)}` : ""}`} className="font-medium text-foreground hover:underline">
                 Log in
               </Link>
             </p>
@@ -325,5 +328,13 @@ export default function RegisterPage() {
         </CardContent>
       </Card>
     </main>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center">Loading...</div>}>
+      <RegisterForm />
+    </Suspense>
   );
 }

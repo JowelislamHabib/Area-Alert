@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { AlertTriangle, LogOut, Menu, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -33,6 +34,10 @@ const navLinks = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentPath = `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
+  const callbackQuery = `?redirect=${encodeURIComponent(currentPath)}`;
   const { data: session, isPending } = useSession();
   const user = session?.user;
 
@@ -98,12 +103,12 @@ export default function Navbar() {
             </DropdownMenu>
           ) : (
             <>
-              <Link href="/login">
+              <Link href={`/login${callbackQuery}`}>
                 <Button variant="ghost" size="sm">
                   Login
                 </Button>
               </Link>
-              <Link href="/register">
+              <Link href={`/register${callbackQuery}`}>
                 <Button size="sm">
                   Register
                 </Button>
@@ -182,7 +187,7 @@ export default function Navbar() {
                 </>
               ) : (
                 <>
-                  <Link href="/login" className="w-full">
+                  <Link href={`/login${callbackQuery}`} className="w-full">
                     <Button
                       variant="outline"
                       className="w-full"
@@ -191,7 +196,7 @@ export default function Navbar() {
                       Login
                     </Button>
                   </Link>
-                  <Link href="/register" className="w-full">
+                  <Link href={`/register${callbackQuery}`} className="w-full">
                     <Button className="w-full" onClick={() => setOpen(false)}>
                       Register
                     </Button>
