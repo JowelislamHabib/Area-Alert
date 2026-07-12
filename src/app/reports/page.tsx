@@ -3,11 +3,9 @@ import { ReportsFilter } from "./ReportsFilter";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { formatDistanceToNow } from "date-fns";
-import { Zap, Wifi, Droplets, Flame, MapPin, ArrowUp, MessageSquare, Paperclip, CheckCircle, ThumbsDown, Search, SlidersHorizontal } from "lucide-react";
+import { Zap, Wifi, Droplets, Flame, MapPin, ArrowUp, MessageSquare, Paperclip, CheckCircle, ThumbsDown, SlidersHorizontal } from "lucide-react";
 import Link from "next/link";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { SearchInput } from "./SearchInput";
 import fs from "fs";
 import path from "path";
 import type { Report } from "@/lib/types";
@@ -38,26 +36,9 @@ export default async function ReportsPage({ searchParams }: { searchParams: Prom
           <h1 className="text-3xl font-extrabold tracking-tight mb-2">Explore Reports</h1>
           <p className="text-muted-foreground text-sm mb-6">Browse and filter community utility outage reports across Bangladesh</p>
           
-          <div className="flex items-center gap-3 w-full">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Search by area, district, or description..." className="pl-9 h-11 bg-card border-border/50 shadow-sm" />
-            </div>
-            
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" className="h-11 px-4 gap-2 bg-card border-border/50 shadow-sm shrink-0">
-                  <SlidersHorizontal className="h-4 w-4" /> Filters
-                </Button>
-              </SheetTrigger>
-              <SheetContent className="w-full sm:max-w-md overflow-y-auto">
-                <SheetHeader className="px-0 pb-2">
-                  <SheetTitle>Filter Reports</SheetTitle>
-                </SheetHeader>
-                <ReportsFilter areaData={areaData} />
-              </SheetContent>
-            </Sheet>
-          </div>
+          <ReportsFilter areaData={areaData}>
+            <SearchInput />
+          </ReportsFilter>
         </div>
 
         <div className="flex flex-col gap-8 items-start">

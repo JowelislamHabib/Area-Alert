@@ -59,12 +59,16 @@ export async function createReport(formData: FormData) {
   return { success: true, report };
 }
 
-export async function getReports(searchParams?: { district?: string; area?: string; utilityType?: string; sortBy?: string }) {
+export async function getReports(searchParams?: { district?: string; area?: string; utilityType?: string; sortBy?: string; status?: string; startDate?: string; endDate?: string; q?: string }) {
   const params = new URLSearchParams();
   if (searchParams?.district) params.append("district", searchParams.district);
   if (searchParams?.area) params.append("area", searchParams.area);
   if (searchParams?.utilityType) params.append("utilityType", searchParams.utilityType);
   if (searchParams?.sortBy) params.append("sortBy", searchParams.sortBy);
+  if (searchParams?.status) params.append("status", searchParams.status);
+  if (searchParams?.startDate) params.append("startDate", searchParams.startDate);
+  if (searchParams?.endDate) params.append("endDate", searchParams.endDate);
+  if (searchParams?.q) params.append("q", searchParams.q);
 
   const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/reports${params.toString() ? `?${params.toString()}` : ""}`;
   
