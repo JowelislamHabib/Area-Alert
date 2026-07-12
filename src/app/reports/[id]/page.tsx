@@ -43,7 +43,7 @@ export default async function ReportDetailsPage({ params }: { params: Promise<{ 
 
   return (
     <main className="min-h-screen bg-[#FDFDFD] py-6 px-4 sm:px-8 font-sans text-slate-900">
-      <div className="max-w-5xl mx-auto space-y-6">
+      <div className="container mx-auto space-y-6">
         
         {/* Back Link */}
         <Link href="/reports" className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">

@@ -1,6 +1,6 @@
 export type UtilityType = "electricity" | "internet" | "water" | "gas";
 
-export type ReportStatus = "pending";
+export type ReportStatus = "pending" | "active" | "resolved";
 
 export type Report = {
   _id: string;
