@@ -77,7 +77,6 @@ export default function AddReportPage() {
 
   // Media State
   const [mediaType, setMediaType] = useState<"image" | "video">("image");
-  const [imageMode, setImageMode] = useState<"url" | "file">("file");
   const [imageUrl, setImageUrl] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
@@ -156,17 +155,17 @@ export default function AddReportPage() {
         formData.set("videoUrl", videoUrl);
       }
 
-      if (imageMode === "url" && imageUrl && !isValidImageUrl(imageUrl)) {
-        setUrlError("Invalid image URL");
-        return null;
-      }
-
-      if (imageMode === "file" && imageFile) {
+      if (imageFile) {
         try {
           const uploaded = await uploadImage(imageFile);
           formData.set("image", uploaded);
         } catch {
           return "Image upload failed. Please try again.";
+        }
+      } else if (imageUrl) {
+        if (!isValidImageUrl(imageUrl)) {
+          setUrlError("Invalid image URL");
+          return null;
         }
       }
 
@@ -537,56 +536,47 @@ export default function AddReportPage() {
                 </div>
 
                 {mediaType === "image" && (
-                  <div className="space-y-4 animate-in fade-in zoom-in-95 duration-200">
-                    <div className="flex items-center gap-2 mb-4 bg-muted p-1 rounded-lg w-fit">
-                      <button
-                        type="button"
-                        onClick={() => { setImageMode("file"); clearImage(); }}
-                        className={cn("px-4 py-1.5 rounded-md text-sm font-medium transition-colors", imageMode === "file" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground")}
-                      >
-                        Upload File
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => { setImageMode("url"); clearImage(); }}
-                        className={cn("px-4 py-1.5 rounded-md text-sm font-medium transition-colors", imageMode === "url" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground")}
-                      >
-                        Paste URL
-                      </button>
-                    </div>
-
-                    {imageMode === "file" ? (
-                      <div>
-                        {!preview ? (
-                          <label className="flex w-full cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-border/50 bg-background/30 px-6 py-10 transition-colors hover:border-primary/50 hover:bg-muted/50">
-                            <div className="rounded-full bg-primary/10 p-4">
-                              <Camera className="size-8 text-primary" />
-                            </div>
-                            <div className="text-center">
-                              <p className="text-sm font-medium text-foreground">Click to upload a photo</p>
-                              <p className="text-xs text-muted-foreground mt-1">PNG, JPG up to 5MB</p>
-                            </div>
-                            <input
-                              type="file"
-                              accept="image/png,image/jpg,image/jpeg,image/gif,image/webp"
-                              className="sr-only"
-                              onChange={handleFileChange}
-                            />
-                          </label>
-                        ) : (
-                          <div className="relative overflow-hidden rounded-xl border border-border shadow-sm max-w-sm group">
-                            <img src={preview} alt="Preview" className="w-full object-cover aspect-video" />
-                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                              <Button type="button" variant="destructive" size="sm" onClick={clearImage}>
-                                <X className="size-4 mr-2" /> Remove Image
-                              </Button>
-                            </div>
+                  <div className="space-y-6 animate-in fade-in zoom-in-95 duration-200">
+                    <div className="space-y-2">
+                      <Label className="text-muted-foreground">Upload Image File</Label>
+                      {!preview ? (
+                        <label className="flex w-full cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-border/50 bg-background/30 px-6 py-10 transition-colors hover:border-primary/50 hover:bg-muted/50">
+                          <div className="rounded-full bg-primary/10 p-4">
+                            <Camera className="size-8 text-primary" />
                           </div>
-                        )}
-                      </div>
-                    ) : (
+                          <div className="text-center">
+                            <p className="text-sm font-medium text-foreground">Click to upload a photo</p>
+                            <p className="text-xs text-muted-foreground mt-1">PNG, JPG up to 5MB</p>
+                          </div>
+                          <input
+                            type="file"
+                            accept="image/png,image/jpg,image/jpeg,image/gif,image/webp"
+                            className="sr-only"
+                            onChange={handleFileChange}
+                          />
+                        </label>
+                      ) : (
+                        <div className="relative overflow-hidden rounded-xl border border-border shadow-sm max-w-sm group">
+                          <img src={preview} alt="Preview" className="w-full object-cover aspect-video" />
+                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <Button type="button" variant="destructive" size="sm" onClick={clearImage}>
+                              <X className="size-4 mr-2" /> Remove Image
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {!imageFile && (
                       <div className="space-y-3">
+                        <div className="flex items-center gap-4">
+                          <div className="h-px bg-border/50 flex-1"></div>
+                          <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">OR</span>
+                          <div className="h-px bg-border/50 flex-1"></div>
+                        </div>
+                        <Label htmlFor="imageUrl" className="text-muted-foreground">Paste Image URL</Label>
                         <Input
+                          id="imageUrl"
                           name="image"
                           type="url"
                           placeholder="https://example.com/outage-photo.jpg"
@@ -596,21 +586,13 @@ export default function AddReportPage() {
                             setUrlError("");
                             if (e.target.value && isValidImageUrl(e.target.value)) {
                               setPreview(e.target.value);
-                            } else {
+                            } else if (!e.target.value) {
                               setPreview("");
                             }
                           }}
                           className="bg-background/50 h-12"
                         />
                         {urlError && <p className="text-xs text-destructive">{urlError}</p>}
-                        {preview && (
-                          <div className="relative overflow-hidden rounded-xl border border-border shadow-sm max-w-sm mt-3">
-                            <img src={preview} alt="Preview" className="w-full object-cover aspect-video" />
-                            <Button type="button" variant="destructive" size="icon" className="absolute top-2 right-2 size-8" onClick={clearImage}>
-                              <X className="size-4" />
-                            </Button>
-                          </div>
-                        )}
                       </div>
                     )}
                   </div>
