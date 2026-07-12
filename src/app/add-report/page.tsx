@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Textarea } from "@/components/ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
@@ -21,7 +22,7 @@ import { isValidImageUrl, uploadImage } from "@/lib/api/uploadImage";
 import { cn } from "@/lib/utils";
 
 import { format } from "date-fns";
-import { Camera, ImageIcon, Link2, Loader2, X, CalendarIcon, Zap, Droplets, Wifi, Flame, Clock, Navigation, MapPin, Video, PlaySquare } from "lucide-react";
+import { Camera, ImageIcon, Link2, Loader2, X, CalendarIcon, Zap, Droplets, Wifi, Flame, Clock, Navigation, MapPin, Video, PlaySquare, Check, ChevronsUpDown } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState, useState } from "react";
@@ -57,6 +58,8 @@ export default function AddReportPage() {
   const [utilityType, setUtilityType] = useState<string>("electricity");
   const [district, setDistrict] = useState("");
   const [area, setArea] = useState("");
+  const [districtOpen, setDistrictOpen] = useState(false);
+  const [areaOpen, setAreaOpen] = useState(false);
   
   // Date / Time State
   const initialDate = new Date();
@@ -275,51 +278,100 @@ export default function AddReportPage() {
               Where is it happening?
             </h2>
             <Card className="border-border/50 bg-card/80 backdrop-blur-xl">
-              <CardContent className="p-6 grid sm:grid-cols-2 gap-6">
+              <CardContent className="p-6 grid grid-cols-2 gap-4 sm:gap-6">
                 <div className="flex flex-col gap-3">
                   <Label htmlFor="district" className="flex items-center gap-2 text-muted-foreground">
                     <Navigation className="size-4" /> District
                   </Label>
-                  <Select
-                    value={district}
-                    onValueChange={(val) => {
-                      setDistrict(val || "");
-                      setArea("");
-                      if (fieldErrors.district) setFieldErrors((p) => ({ ...p, district: "" }));
-                    }}
-                  >
-                    <SelectTrigger id="district" className={cn("h-12 bg-background/50", fieldErrors.district && "border-destructive ring-destructive")}>
-                      <SelectValue placeholder="Select a district" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {districts.map((d) => (
-                        <SelectItem key={d} value={d}>{d}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Popover open={districtOpen} onOpenChange={setDistrictOpen}>
+                    <PopoverTrigger
+                      render={
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          aria-expanded={districtOpen}
+                          className={cn("w-full justify-between h-12 bg-background/50", fieldErrors.district && "border-destructive ring-destructive", !district && "text-muted-foreground")}
+                        />
+                      }
+                    >
+                      {district ? district : "Select district..."}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[--anchor-width] p-0" align="start">
+                      <Command>
+                        <CommandInput placeholder="Search district..." />
+                        <CommandList>
+                          <CommandEmpty>No district found.</CommandEmpty>
+                          <CommandGroup>
+                            {districts.map((d) => (
+                              <CommandItem
+                                key={d}
+                                value={d}
+                                onSelect={(currentValue) => {
+                                  // CommandItem value is always lowercased. Let's find the original case.
+                                  const originalValue = districts.find((dist) => dist.toLowerCase() === currentValue) || currentValue;
+                                  setDistrict(originalValue === district ? "" : originalValue);
+                                  setArea("");
+                                  if (fieldErrors.district) setFieldErrors((p) => ({ ...p, district: "" }));
+                                  setDistrictOpen(false);
+                                }}
+                              >
+                                <Check className={cn("mr-2 h-4 w-4", district === d ? "opacity-100" : "opacity-0")} />
+                                {d}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                 </div>
 
                 <div className="flex flex-col gap-3">
                   <Label htmlFor="area" className="flex items-center gap-2 text-muted-foreground">
                     <MapPin className="size-4" /> Area
                   </Label>
-                  <Select
-                    value={area}
-                    onValueChange={(val) => {
-                      setArea(val || "");
-                      if (fieldErrors.area) setFieldErrors((p) => ({ ...p, area: "" }));
-                    }}
-                    disabled={!district}
-                  >
-                    <SelectTrigger id="area" className={cn("h-12 bg-background/50", fieldErrors.area && "border-destructive ring-destructive")}>
-                      <SelectValue placeholder="Select an area" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {areas.map((a) => (
-                        <SelectItem key={a} value={a}>{a}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Popover open={areaOpen} onOpenChange={setAreaOpen}>
+                    <PopoverTrigger
+                      render={
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          aria-expanded={areaOpen}
+                          className={cn("w-full justify-between h-12 bg-background/50", fieldErrors.area && "border-destructive ring-destructive", !area && "text-muted-foreground")}
+                          disabled={!district}
+                        />
+                      }
+                    >
+                      {area ? area : "Select area..."}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[--anchor-width] p-0" align="start">
+                      <Command>
+                        <CommandInput placeholder="Search area..." />
+                        <CommandList>
+                          <CommandEmpty>No area found.</CommandEmpty>
+                          <CommandGroup>
+                            {areas.map((a) => (
+                              <CommandItem
+                                key={a}
+                                value={a}
+                                onSelect={(currentValue) => {
+                                  const originalValue = areas.find((ar) => ar.toLowerCase() === currentValue) || currentValue;
+                                  setArea(originalValue === area ? "" : originalValue);
+                                  if (fieldErrors.area) setFieldErrors((p) => ({ ...p, area: "" }));
+                                  setAreaOpen(false);
+                                }}
+                              >
+                                <Check className={cn("mr-2 h-4 w-4", area === a ? "opacity-100" : "opacity-0")} />
+                                {a}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </CardContent>
             </Card>
