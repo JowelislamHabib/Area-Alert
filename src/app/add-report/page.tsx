@@ -21,7 +21,7 @@ import { isValidImageUrl, uploadImage } from "@/lib/api/uploadImage";
 import { cn } from "@/lib/utils";
 
 import { format } from "date-fns";
-import { Camera, ImageIcon, Link2, Loader2, X, CalendarIcon, Zap, Droplets, Wifi, Flame, Clock, Navigation, MapPin } from "lucide-react";
+import { Camera, ImageIcon, Link2, Loader2, X, CalendarIcon, Zap, Droplets, Wifi, Flame, Clock, Navigation, MapPin, Video, PlaySquare } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState, useState } from "react";
@@ -41,6 +41,12 @@ const QUICK_CHIPS: Record<string, string[]> = {
   water: ["No Supply", "Low Pressure", "Dirty Water", "Pipe Burst"],
   internet: ["Complete Disconnection", "Slow Speeds", "High Ping", "Frequent Disconnects"],
   gas: ["No Supply", "Low Pressure", "Gas Leak"],
+};
+
+const getYoutubeVideoId = (url: string) => {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : null;
 };
 
 export default function AddReportPage() {
@@ -66,12 +72,16 @@ export default function AddReportPage() {
   const [ispName, setIspName] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
-  // Image State
+  // Media State
+  const [mediaType, setMediaType] = useState<"image" | "video">("image");
   const [imageMode, setImageMode] = useState<"url" | "file">("file");
   const [imageUrl, setImageUrl] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
   const [urlError, setUrlError] = useState("");
+
+  // Video State
+  const [videoUrl, setVideoUrl] = useState("");
 
   const districts = areaData.map((d) => d.district);
   const areas = areaData.find((d) => d.district === district)?.areas || [];
@@ -137,6 +147,10 @@ export default function AddReportPage() {
       // Description is optional visually, but if empty we just pass shortDescription or leave it empty.
       if (!description.trim()) {
         formData.set("description", shortDescription);
+      }
+
+      if (videoUrl) {
+        formData.set("videoUrl", videoUrl);
       }
 
       if (imageMode === "url" && imageUrl && !isValidImageUrl(imageUrl)) {
@@ -443,86 +457,140 @@ export default function AddReportPage() {
             </Card>
           </section>
 
-          {/* STEP 4: PHOTO UPLOAD */}
+          {/* STEP 4: MEDIA UPLOAD */}
           <section className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300 fill-mode-both">
             <h2 className="text-xl font-semibold flex items-center gap-2">
               <span className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary text-sm">4</span>
-              Add a Photo (Optional)
+              Add Media (Optional)
             </h2>
             <Card className="border-border/50 bg-card/80 backdrop-blur-xl">
               <CardContent className="p-6">
                 
-                <div className="flex items-center gap-2 mb-4 bg-muted p-1 rounded-lg w-fit">
+                {/* Media Type Tabs */}
+                <div className="flex items-center gap-2 mb-6 border-b border-border/50 pb-4">
                   <button
                     type="button"
-                    onClick={() => { setImageMode("file"); clearImage(); }}
-                    className={cn("px-4 py-1.5 rounded-md text-sm font-medium transition-colors", imageMode === "file" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground")}
+                    onClick={() => setMediaType("image")}
+                    className={cn("px-4 py-2 flex items-center gap-2 rounded-md text-sm font-medium transition-colors", mediaType === "image" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground")}
                   >
-                    Upload File
+                    <ImageIcon className="size-4" /> Image
                   </button>
                   <button
                     type="button"
-                    onClick={() => { setImageMode("url"); clearImage(); }}
-                    className={cn("px-4 py-1.5 rounded-md text-sm font-medium transition-colors", imageMode === "url" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground")}
+                    onClick={() => setMediaType("video")}
+                    className={cn("px-4 py-2 flex items-center gap-2 rounded-md text-sm font-medium transition-colors", mediaType === "video" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground")}
                   >
-                    Paste URL
+                    <Video className="size-4" /> Video
                   </button>
                 </div>
 
-                {imageMode === "file" ? (
-                  <div className="animate-in fade-in zoom-in-95 duration-200">
-                    {!preview ? (
-                      <label className="flex w-full cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-border/50 bg-background/30 px-6 py-10 transition-colors hover:border-primary/50 hover:bg-muted/50">
-                        <div className="rounded-full bg-primary/10 p-4">
-                          <Camera className="size-8 text-primary" />
-                        </div>
-                        <div className="text-center">
-                          <p className="text-sm font-medium text-foreground">Click to upload a photo</p>
-                          <p className="text-xs text-muted-foreground mt-1">PNG, JPG up to 5MB</p>
-                        </div>
-                        <input
-                          type="file"
-                          accept="image/png,image/jpg,image/jpeg,image/gif,image/webp"
-                          className="sr-only"
-                          onChange={handleFileChange}
-                        />
-                      </label>
+                {mediaType === "image" && (
+                  <div className="space-y-4 animate-in fade-in zoom-in-95 duration-200">
+                    <div className="flex items-center gap-2 mb-4 bg-muted p-1 rounded-lg w-fit">
+                      <button
+                        type="button"
+                        onClick={() => { setImageMode("file"); clearImage(); }}
+                        className={cn("px-4 py-1.5 rounded-md text-sm font-medium transition-colors", imageMode === "file" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground")}
+                      >
+                        Upload File
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => { setImageMode("url"); clearImage(); }}
+                        className={cn("px-4 py-1.5 rounded-md text-sm font-medium transition-colors", imageMode === "url" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground")}
+                      >
+                        Paste URL
+                      </button>
+                    </div>
+
+                    {imageMode === "file" ? (
+                      <div>
+                        {!preview ? (
+                          <label className="flex w-full cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-border/50 bg-background/30 px-6 py-10 transition-colors hover:border-primary/50 hover:bg-muted/50">
+                            <div className="rounded-full bg-primary/10 p-4">
+                              <Camera className="size-8 text-primary" />
+                            </div>
+                            <div className="text-center">
+                              <p className="text-sm font-medium text-foreground">Click to upload a photo</p>
+                              <p className="text-xs text-muted-foreground mt-1">PNG, JPG up to 5MB</p>
+                            </div>
+                            <input
+                              type="file"
+                              accept="image/png,image/jpg,image/jpeg,image/gif,image/webp"
+                              className="sr-only"
+                              onChange={handleFileChange}
+                            />
+                          </label>
+                        ) : (
+                          <div className="relative overflow-hidden rounded-xl border border-border shadow-sm max-w-sm group">
+                            <img src={preview} alt="Preview" className="w-full object-cover aspect-video" />
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                              <Button type="button" variant="destructive" size="sm" onClick={clearImage}>
+                                <X className="size-4 mr-2" /> Remove Image
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     ) : (
-                      <div className="relative overflow-hidden rounded-xl border border-border shadow-sm max-w-sm group">
-                        <img src={preview} alt="Preview" className="w-full object-cover aspect-video" />
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                          <Button type="button" variant="destructive" size="sm" onClick={clearImage}>
-                            <X className="size-4 mr-2" /> Remove Image
-                          </Button>
-                        </div>
+                      <div className="space-y-3">
+                        <Input
+                          name="image"
+                          type="url"
+                          placeholder="https://example.com/outage-photo.jpg"
+                          value={imageUrl}
+                          onChange={(e) => {
+                            setImageUrl(e.target.value);
+                            setUrlError("");
+                            if (e.target.value && isValidImageUrl(e.target.value)) {
+                              setPreview(e.target.value);
+                            } else {
+                              setPreview("");
+                            }
+                          }}
+                          className="bg-background/50 h-12"
+                        />
+                        {urlError && <p className="text-xs text-destructive">{urlError}</p>}
+                        {preview && (
+                          <div className="relative overflow-hidden rounded-xl border border-border shadow-sm max-w-sm mt-3">
+                            <img src={preview} alt="Preview" className="w-full object-cover aspect-video" />
+                            <Button type="button" variant="destructive" size="icon" className="absolute top-2 right-2 size-8" onClick={clearImage}>
+                              <X className="size-4" />
+                            </Button>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
-                ) : (
-                  <div className="space-y-3 animate-in fade-in zoom-in-95 duration-200">
-                    <Input
-                      name="image"
-                      type="url"
-                      placeholder="https://example.com/outage-photo.jpg"
-                      value={imageUrl}
-                      onChange={(e) => {
-                        setImageUrl(e.target.value);
-                        setUrlError("");
-                        if (e.target.value && isValidImageUrl(e.target.value)) {
-                          setPreview(e.target.value);
-                        } else {
-                          setPreview("");
-                        }
-                      }}
-                      className="bg-background/50 h-12"
-                    />
-                    {urlError && <p className="text-xs text-destructive">{urlError}</p>}
-                    {preview && (
-                      <div className="relative overflow-hidden rounded-xl border border-border shadow-sm max-w-sm mt-3">
-                        <img src={preview} alt="Preview" className="w-full object-cover aspect-video" />
-                        <Button type="button" variant="destructive" size="icon" className="absolute top-2 right-2 size-8" onClick={clearImage}>
-                          <X className="size-4" />
-                        </Button>
+                )}
+
+                {mediaType === "video" && (
+                  <div className="flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-200">
+                    <div className="flex flex-col gap-2">
+                      <Label htmlFor="videoUrl" className="text-muted-foreground flex items-center gap-2">
+                        <PlaySquare className="size-4 text-red-500" /> YouTube Video URL
+                      </Label>
+                      <Input
+                        id="videoUrl"
+                        name="videoUrl"
+                        type="url"
+                        placeholder="https://www.youtube.com/watch?v=..."
+                        value={videoUrl}
+                        onChange={(e) => setVideoUrl(e.target.value)}
+                        className="bg-background/50 h-12"
+                      />
+                    </div>
+                    {videoUrl && getYoutubeVideoId(videoUrl) && (
+                      <div className="relative overflow-hidden rounded-xl border border-border shadow-sm max-w-sm aspect-video bg-black mt-2">
+                        <iframe
+                          width="100%"
+                          height="100%"
+                          src={`https://www.youtube.com/embed/${getYoutubeVideoId(videoUrl)}`}
+                          title="YouTube video player"
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        ></iframe>
                       </div>
                     )}
                   </div>
