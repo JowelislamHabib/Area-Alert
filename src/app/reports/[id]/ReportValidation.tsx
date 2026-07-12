@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ThumbsUp, ThumbsDown, CheckCircle } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
-import { voteReport } from "@/lib/actions/report";
+import { voteReport, updateReportStatus } from "@/lib/actions/report";
 
 export function ReportValidation({ report, user }: { report: any; user: any }) {
   // Local state for optimistic updates
@@ -70,6 +70,20 @@ export function ReportValidation({ report, user }: { report: any; user: any }) {
     toast.success(msgs[voteType]);
   };
 
+  const handleStatusUpdate = async (status: "active" | "resolved") => {
+    if (!user || user.id !== report.reporterId) return;
+    
+    setIsPending(true);
+    const res = await updateReportStatus(report._id, status);
+    setIsPending(false);
+    
+    if (res.error) {
+      toast.error(res.error);
+    } else {
+      toast.success("Report status updated!");
+    }
+  };
+
   return (
     <>
       {confidence !== null && (
@@ -111,7 +125,7 @@ export function ReportValidation({ report, user }: { report: any; user: any }) {
           <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 text-center text-sm font-medium text-slate-600 space-y-4">
             <p>You cannot validate your own report.</p>
             {report.status !== "resolved" && (
-              <Button variant="default">
+              <Button variant="default" disabled={isPending} onClick={() => handleStatusUpdate("resolved")}>
                 Mark as Resolved
               </Button>
             )}

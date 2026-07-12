@@ -53,12 +53,12 @@ export function ReportsFilter({ areaData }: { areaData: DistrictData }) {
   const hasFilters = currentDistrict || currentArea || currentUtility || currentSort !== "newest";
 
   return (
-    <div className="bg-card/80 backdrop-blur-xl border border-border/50 rounded-xl p-6 space-y-6 sticky top-24">
+    <div className="space-y-6 mt-4">
       <div className="flex items-center justify-between">
-        <h3 className="font-semibold text-lg">Filters</h3>
+        <h3 className="font-semibold text-lg hidden">Filters</h3>
         {hasFilters && (
           <Button variant="ghost" size="sm" onClick={clearFilters} className="h-8 px-2 text-muted-foreground hover:text-foreground">
-            <FilterX className="size-4 mr-2" /> Clear
+            <FilterX className="size-4 mr-2" /> Clear Filters
           </Button>
         )}
       </div>

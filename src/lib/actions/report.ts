@@ -118,3 +118,30 @@ export async function voteReport(id: string, voteType: "upvote" | "downvote" | "
   const report = await res.json();
   return { success: true, report };
 }
+
+export async function updateReportStatus(id: string, status: "active" | "resolved") {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session?.user) {
+    return { error: "Unauthorized" };
+  }
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/reports/${id}/status`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      userId: session.user.id,
+      status,
+    }),
+  });
+
+  if (!res.ok) {
+    return { error: "Failed to update status" };
+  }
+
+  const report = await res.json();
+  revalidatePath(`/reports/${id}`);
+  revalidatePath(`/reports`);
+  return { success: true, report };
+}
