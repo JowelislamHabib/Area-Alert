@@ -180,8 +180,34 @@ export function ReportValidation({ report, user }: { report: any; user: any }) {
           </div>
         )
       ) : (
-        <div className="bg-slate-50 border border-slate-100 rounded-xl p-3 text-center text-sm font-medium text-slate-600">
-          <Link href={`/login?redirect=${encodeURIComponent(redirectTo)}`} className="text-emerald-700 font-bold hover:underline">Sign in</Link> to validate this report
+        <div className="relative overflow-hidden bg-gradient-to-br from-emerald-500/10 via-emerald-500/5 to-transparent border border-emerald-500/20 rounded-2xl p-6 sm:p-8 flex flex-col items-center justify-center text-center group transition-all duration-300 hover:shadow-md hover:border-emerald-500/30">
+          <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02] bg-[size:16px]" />
+          
+          <div className="relative z-10 flex flex-col items-center gap-4">
+            <div className="h-12 w-12 rounded-full bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shadow-inner group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 ease-out">
+              <CheckCircle className="size-6" />
+            </div>
+            
+            <div className="space-y-1.5">
+              <h4 className="text-lg font-bold text-foreground tracking-tight">Help Verify This Report</h4>
+              <p className="text-sm text-muted-foreground max-w-sm mx-auto leading-relaxed">
+                Join your neighbors to confirm or flag this issue. Reliable updates start with community input!
+              </p>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row gap-3 mt-3 w-full sm:w-auto">
+              <Link href={`/login?redirect=${encodeURIComponent(redirectTo)}`} className="w-full sm:w-auto">
+                <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm hover:shadow-emerald-500/20 transition-all duration-300 font-semibold px-6">
+                  Sign In
+                </Button>
+              </Link>
+              <Link href={`/register?redirect=${encodeURIComponent(redirectTo)}`} className="w-full sm:w-auto">
+                <Button variant="outline" className="w-full border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-800/50 dark:hover:bg-emerald-950/50 transition-all duration-300 font-semibold px-6">
+                  Create Account
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
       )}
     </>
