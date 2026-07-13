@@ -85,7 +85,7 @@ export function UpdateReportDialog({ report }: { report: Report }) {
               <Label htmlFor="status">Status</Label>
               <Select
                 value={formData.status}
-                onValueChange={(val) => setFormData((prev) => ({ ...prev, status: val }))}
+                onValueChange={(val) => setFormData((prev) => ({ ...prev, status: val as "pending" | "active" | "resolved" }))}
               >
                 <SelectTrigger id="status">
                   <SelectValue placeholder="Select status" />

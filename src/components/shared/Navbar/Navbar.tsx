@@ -28,6 +28,7 @@ import { ThemeToggle } from "@/components/shared/ThemeToggle";
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "Explore Reports", href: "/reports" },
+  { label: "Safety Map", href: "/safety-map" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];

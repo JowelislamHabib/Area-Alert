@@ -37,7 +37,6 @@ export default async function MyReportsPage() {
 
   const { reports = [], error } = await getReports({
     reporterId: session.user.id,
-    limit: "100",
   });
 
   const totalReports = reports?.length || 0;
