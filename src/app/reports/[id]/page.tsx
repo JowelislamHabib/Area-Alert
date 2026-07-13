@@ -16,6 +16,7 @@ import {
 import Link from "next/link";
 import { ReportMedia } from "./ReportMedia";
 import { ReportValidation } from "./ReportValidation";
+import { UpdateReportDialog } from "./UpdateReportDialog";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
@@ -82,13 +83,18 @@ export default async function ReportDetailsPage({
   return (
     <main className="min-h-screen bg-background py-6 px-4 sm:px-8 font-sans text-foreground">
       <div className="container mx-auto space-y-6">
-        {/* Back Link */}
-        <Link
-          href="/reports"
-          className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <ArrowLeft className="size-4 mr-2" /> Back to Explore
-        </Link>
+        {/* Back Link and Actions */}
+        <div className="flex justify-between items-center">
+          <Link
+            href="/reports"
+            className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ArrowLeft className="size-4 mr-2" /> Back to Explore
+          </Link>
+          {user?.id === report.reporterId && (
+            <UpdateReportDialog report={report} />
+          )}
+        </div>
 
         <Card className="shadow-sm p-0 gap-0 overflow-hidden border-border/50 relative bg-card">
           {/* Subtle grid texture fading out at the bottom of the header area */}

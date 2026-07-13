@@ -23,11 +23,11 @@ export function AuthRequired({
         {description}
       </p>
       <div className="flex w-full flex-col gap-2">
-        <Button asChild className="w-full h-9">
-          <Link href={`/login?redirect=${redirectUrl}`}>Sign in</Link>
+        <Button render={<Link href={`/login?redirect=${redirectUrl}`} />} className="w-full h-9">
+          Sign in
         </Button>
-        <Button asChild variant="outline" className="w-full h-9">
-          <Link href={`/register?redirect=${redirectUrl}`}>Create account</Link>
+        <Button variant="outline" render={<Link href={`/register?redirect=${redirectUrl}`} />} className="w-full h-9">
+          Create account
         </Button>
       </div>
     </div>

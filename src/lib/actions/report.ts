@@ -56,10 +56,13 @@ export async function createReport(formData: FormData) {
   }
 
   const report = await res.json();
+  revalidatePath("/reports");
+  revalidatePath("/reports/my-reports");
+  revalidatePath("/");
   return { success: true, report };
 }
 
-export async function getReports(searchParams?: { district?: string; area?: string; utilityType?: string; sortBy?: string; status?: string; startDate?: string; endDate?: string; q?: string; page?: string }) {
+export async function getReports(searchParams?: { district?: string; area?: string; utilityType?: string; sortBy?: string; status?: string; startDate?: string; endDate?: string; q?: string; page?: string; reporterId?: string }) {
   const params = new URLSearchParams();
   if (searchParams?.district) params.append("district", searchParams.district);
   if (searchParams?.area) params.append("area", searchParams.area);
@@ -70,6 +73,7 @@ export async function getReports(searchParams?: { district?: string; area?: stri
   if (searchParams?.endDate) params.append("endDate", searchParams.endDate);
   if (searchParams?.q) params.append("q", searchParams.q);
   if (searchParams?.page) params.append("page", searchParams.page);
+  if (searchParams?.reporterId) params.append("reporterId", searchParams.reporterId);
 
   const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/reports${params.toString() ? `?${params.toString()}` : ""}`;
   
@@ -153,4 +157,58 @@ export async function updateReportStatus(id: string, status: "active" | "resolve
   revalidatePath(`/reports/${id}`);
   revalidatePath(`/reports`);
   return { success: true, report };
+}
+
+export async function deleteReport(id: string) {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session?.user) {
+    return { error: "Unauthorized" };
+  }
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/reports/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      userId: session.user.id,
+    }),
+  });
+
+  if (!res.ok) {
+    return { error: "Failed to delete report" };
+  }
+
+  revalidatePath(`/reports`);
+  revalidatePath(`/reports/my-reports`);
+  return { success: true };
+}
+
+export async function updateReport(id: string, data: { shortDescription?: string; description?: string; image?: string; videoUrl?: string; status?: string }) {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session?.user) {
+    return { error: "Unauthorized" };
+  }
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/reports/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      userId: session.user.id,
+      ...data,
+    }),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    return { error: err.error || "Failed to update report" };
+  }
+
+  const updatedReport = await res.json();
+  revalidatePath(`/reports/${id}`);
+  revalidatePath(`/reports`);
+  revalidatePath(`/reports/my-reports`);
+  return { success: true, report: updatedReport.report };
 }
