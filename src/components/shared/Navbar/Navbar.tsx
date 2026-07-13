@@ -50,8 +50,7 @@ export default function Navbar() {
       <div className="container mx-auto flex h-14 items-center justify-between px-4 md:px-6">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-semibold">
-          <AlertTriangle className="h-5 w-5 text-primary" />
-          <span className="font-heading text-lg">AreaAlert</span>
+          <Image src="/areaalert-logo.png" alt="AreaAlert Logo" width={200} height={50} priority className="h-8 w-auto" />
         </Link>
 
         {/* Desktop Nav */}
@@ -143,8 +142,7 @@ export default function Navbar() {
           <SheetContent side="right" className="w-72">
             <SheetHeader>
               <SheetTitle className="flex items-center gap-2">
-                <AlertTriangle className="h-4 w-4 text-primary" />
-                AreaAlert
+                <Image src="/areaalert-logo.png" alt="AreaAlert Logo" width={150} height={40} className="h-6 w-auto" />
               </SheetTitle>
             </SheetHeader>
             <nav className="flex flex-col gap-1 mt-4 px-4">

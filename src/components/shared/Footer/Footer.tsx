@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AlertTriangle } from "lucide-react";
+import Image from "next/image";
 
 const footerLinks = [
   { label: "Home", href: "/" },
@@ -22,8 +22,13 @@ export default function Footer() {
         <div className="grid gap-8 md:grid-cols-3">
           <div>
             <Link href="/" className="flex items-center gap-2 font-semibold">
-              <AlertTriangle className="size-5 text-primary" />
-              <span className="font-heading text-lg">AreaAlert</span>
+              <Image
+                src="/areaalert-logo.png"
+                alt="AreaAlert Logo"
+                width={200}
+                height={50}
+                className="h-8 w-auto"
+              />
             </Link>
             <p className="mt-2 max-w-xs text-sm text-muted-foreground">
               Community-powered utility outage tracking for Bangladesh. Know

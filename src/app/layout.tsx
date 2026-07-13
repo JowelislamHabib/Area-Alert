@@ -19,6 +19,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "AreaAlert",
   description: "Community Utility Outage & Service Status Platform",
+  icons: {
+    icon: "/areaalert-favicon.png",
+  },
 };
 
 export default function RootLayout({
