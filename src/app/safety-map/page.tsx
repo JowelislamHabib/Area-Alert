@@ -55,6 +55,7 @@ function SafetyMapContent() {
   const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
   const [selectedDistrict, setSelectedDistrict] = useState(searchParams.get("district") || "");
   const [utilityFilter, setUtilityFilter] = useState(searchParams.get("utilityType") || "all");
+  const [safetyFilter, setSafetyFilter] = useState(searchParams.get("safetyLevel") || "all");
   const [page, setPage] = useState(parseInt(searchParams.get("page") || "1", 10));
   
   const [stats, setStats] = useState<DistrictStats[]>([]);
@@ -95,6 +96,13 @@ function SafetyMapContent() {
     updateUrlParams({ utilityType: val === "all" ? null : val, page: "1" });
   };
 
+  const handleSafetyChange = (val: string | null) => {
+    if (!val) return;
+    setSafetyFilter(val);
+    setPage(1);
+    updateUrlParams({ safetyLevel: val === "all" ? null : val, page: "1" });
+  };
+
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
     updateUrlParams({ page: newPage.toString() });
@@ -123,6 +131,7 @@ function SafetyMapContent() {
       if (searchQuery) url.searchParams.set("q", searchQuery);
       if (selectedDistrict && activeTab === "areas") url.searchParams.set("district", selectedDistrict);
       if (utilityFilter !== "all") url.searchParams.set("utilityType", utilityFilter);
+      if (safetyFilter !== "all") url.searchParams.set("safetyLevel", safetyFilter);
 
       const res = await fetch(url.toString());
       if (!res.ok) throw new Error("Failed to fetch safety stats");
@@ -137,7 +146,7 @@ function SafetyMapContent() {
     } finally {
       setLoading(false);
     }
-  }, [activeTab, page, searchQuery, selectedDistrict, utilityFilter]);
+  }, [activeTab, page, searchQuery, selectedDistrict, utilityFilter, safetyFilter]);
 
   // Use a debouncer for the search query to avoid spamming the backend
   useEffect(() => {
@@ -200,15 +209,32 @@ function SafetyMapContent() {
                 />
               </div>
               <Select value={utilityFilter} onValueChange={handleUtilityChange}>
-                <SelectTrigger className="w-[140px] rounded-full bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 shadow-sm">
-                  <SelectValue placeholder="Utility" />
+                <SelectTrigger className="w-[150px] rounded-full bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 shadow-sm">
+                  <div className="flex items-center gap-1">
+                    <span className="text-neutral-500 font-medium">Utility:</span>
+                    <SelectValue placeholder="All" />
+                  </div>
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Utilities</SelectItem>
+                  <SelectItem value="all">All</SelectItem>
                   <SelectItem value="electricity">Electricity</SelectItem>
                   <SelectItem value="water">Water</SelectItem>
                   <SelectItem value="gas">Gas</SelectItem>
                   <SelectItem value="internet">Internet</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={safetyFilter} onValueChange={handleSafetyChange}>
+                <SelectTrigger className="w-[150px] rounded-full bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 shadow-sm">
+                  <div className="flex items-center gap-1">
+                    <span className="text-neutral-500 font-medium">Safety:</span>
+                    <SelectValue placeholder="All" />
+                  </div>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="safe">Safe</SelectItem>
+                  <SelectItem value="caution">Caution</SelectItem>
+                  <SelectItem value="avoid">Avoid if possible</SelectItem>
                 </SelectContent>
               </Select>
             </div>
