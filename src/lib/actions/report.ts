@@ -59,7 +59,7 @@ export async function createReport(formData: FormData) {
   return { success: true, report };
 }
 
-export async function getReports(searchParams?: { district?: string; area?: string; utilityType?: string; sortBy?: string; status?: string; startDate?: string; endDate?: string; q?: string }) {
+export async function getReports(searchParams?: { district?: string; area?: string; utilityType?: string; sortBy?: string; status?: string; startDate?: string; endDate?: string; q?: string; page?: string }) {
   const params = new URLSearchParams();
   if (searchParams?.district) params.append("district", searchParams.district);
   if (searchParams?.area) params.append("area", searchParams.area);
@@ -69,6 +69,7 @@ export async function getReports(searchParams?: { district?: string; area?: stri
   if (searchParams?.startDate) params.append("startDate", searchParams.startDate);
   if (searchParams?.endDate) params.append("endDate", searchParams.endDate);
   if (searchParams?.q) params.append("q", searchParams.q);
+  if (searchParams?.page) params.append("page", searchParams.page);
 
   const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/reports${params.toString() ? `?${params.toString()}` : ""}`;
   
@@ -80,8 +81,12 @@ export async function getReports(searchParams?: { district?: string; area?: stri
     return { error: "Failed to fetch reports" };
   }
 
-  const reports = await res.json();
-  return { success: true, reports };
+  const data = await res.json();
+  // The backend now returns { reports, totalPages, currentPage, total }
+  if (data.reports) {
+    return { success: true, reports: data.reports, totalPages: data.totalPages, currentPage: data.currentPage, total: data.total };
+  }
+  return { success: true, reports: data, totalPages: 1, currentPage: 1, total: data.length };
 }
 
 export async function getReportById(id: string) {
