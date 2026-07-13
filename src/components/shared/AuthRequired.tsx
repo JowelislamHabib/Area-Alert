@@ -1,0 +1,35 @@
+import { Button } from "@/components/ui/button";
+import { Lock } from "lucide-react";
+import Link from "next/link";
+
+interface AuthRequiredProps {
+  title?: string;
+  description?: string;
+  redirectUrl?: string;
+}
+
+export function AuthRequired({ 
+  title = "Authentication Required", 
+  description = "You need to be logged in to access this page.",
+  redirectUrl = "/" 
+}: AuthRequiredProps) {
+  return (
+    <div className="flex flex-col items-center justify-center p-6 text-center border rounded-lg bg-card max-w-sm mx-auto shadow-sm">
+      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted mb-3">
+        <Lock className="h-5 w-5 text-muted-foreground" />
+      </div>
+      <h3 className="text-base font-semibold tracking-tight">{title}</h3>
+      <p className="text-sm text-muted-foreground mt-1 mb-5 leading-relaxed">
+        {description}
+      </p>
+      <div className="flex w-full flex-col gap-2">
+        <Button asChild className="w-full h-9">
+          <Link href={`/login?redirect=${redirectUrl}`}>Sign in</Link>
+        </Button>
+        <Button asChild variant="outline" className="w-full h-9">
+          <Link href={`/register?redirect=${redirectUrl}`}>Create account</Link>
+        </Button>
+      </div>
+    </div>
+  );
+}

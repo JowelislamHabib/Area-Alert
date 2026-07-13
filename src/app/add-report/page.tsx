@@ -23,6 +23,7 @@ import { cn } from "@/lib/utils";
 
 import { format } from "date-fns";
 import { Camera, ImageIcon, Link2, Loader2, X, CalendarIcon, Zap, Droplets, Wifi, Flame, Clock, Navigation, MapPin, Video, PlaySquare, Check, ChevronsUpDown } from "lucide-react";
+import { AuthRequired } from "@/components/shared/AuthRequired";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState, useState } from "react";
@@ -142,17 +143,19 @@ export default function AddReportPage() {
       formData.set("startedAt", startDateTime.toISOString());
       
       // Values
-      formData.set("district", district);
-      formData.set("area", area);
-      formData.set("utilityType", utilityType);
+      formData.set("district", district.trim());
+      formData.set("area", area.trim());
+      formData.set("utilityType", utilityType.trim());
 
       // Description is optional visually, but if empty we just pass shortDescription or leave it empty.
       if (!description.trim()) {
-        formData.set("description", shortDescription);
+        formData.set("description", shortDescription.trim());
+      } else {
+        formData.set("description", description.trim());
       }
 
       if (videoUrl) {
-        formData.set("videoUrl", videoUrl);
+        formData.set("videoUrl", videoUrl.trim());
       }
 
       if (imageFile) {
@@ -185,19 +188,11 @@ export default function AddReportPage() {
   if (!session?.user) {
     return (
       <main className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center bg-muted/30 p-4">
-        <Card className="w-full max-w-md text-center shadow-xl border-border/50 bg-card/80 backdrop-blur-xl">
-          <CardHeader>
-            <CardTitle>Sign in required</CardTitle>
-            <CardDescription>
-              You need to be logged in to report an outage.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Link href="/login?redirect=/add-report">
-              <Button size="lg" className="w-full">Log in to Report</Button>
-            </Link>
-          </CardContent>
-        </Card>
+        <AuthRequired 
+          title="Sign in to report" 
+          description="You must be logged in to report an outage. This helps us prevent spam and ensure reliability." 
+          redirectUrl="/add-report"
+        />
       </main>
     );
   }

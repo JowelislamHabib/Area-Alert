@@ -85,18 +85,20 @@ function RegisterForm() {
 
   const [submitError, submitAction, submitting] = useActionState(
     async (prevState: string | null, formData: FormData) => {
-      const nameErr = validateName(name);
-      const emailErr = validateEmail(email);
+      const nameErr = validateName(name.trim());
+      const emailErr = validateEmail(email.trim());
       setFieldErrors({ name: nameErr ?? undefined, email: emailErr ?? undefined });
 
       if (nameErr || emailErr || !passwordValid) return null;
 
-      if (imageMode === "url" && imageUrl && !isValidImageUrl(imageUrl)) {
+      const trimmedImageUrl = imageUrl.trim();
+
+      if (imageMode === "url" && trimmedImageUrl && !isValidImageUrl(trimmedImageUrl)) {
         setUrlError("URL must end with an image extension (png, jpg, jpeg, gif, webp, svg)");
         return null;
       }
 
-      let finalImageUrl = imageUrl;
+      let finalImageUrl = trimmedImageUrl;
 
       if (imageMode === "file" && imageFile) {
         try {
@@ -107,8 +109,8 @@ function RegisterForm() {
       }
 
       const { error } = await signUp.email({
-        name,
-        email,
+        name: name.trim(),
+        email: email.trim(),
         password,
         image: finalImageUrl || undefined,
       });

@@ -11,15 +11,15 @@ export async function createReport(formData: FormData) {
     return { error: "You must be logged in to report an outage" };
   }
 
-  const utilityType = formData.get("utilityType") as string;
-  const area = formData.get("area") as string;
-  const district = formData.get("district") as string;
-  const startedAt = formData.get("startedAt") as string;
-  const shortDescription = formData.get("shortDescription") as string;
-  const description = formData.get("description") as string;
-  const image = formData.get("image") as string;
-  const videoUrl = formData.get("videoUrl") as string;
-  const ispName = formData.get("ispName") as string;
+  const utilityType = (formData.get("utilityType") as string)?.trim();
+  const area = (formData.get("area") as string)?.trim();
+  const district = (formData.get("district") as string)?.trim();
+  const startedAt = (formData.get("startedAt") as string)?.trim();
+  const shortDescription = (formData.get("shortDescription") as string)?.trim();
+  const description = (formData.get("description") as string)?.trim();
+  const image = (formData.get("image") as string)?.trim();
+  const videoUrl = (formData.get("videoUrl") as string)?.trim();
+  const ispName = (formData.get("ispName") as string)?.trim();
 
   if (!utilityType || !area || !district || !shortDescription || !description) {
     return { error: "Missing required fields" };

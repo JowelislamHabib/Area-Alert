@@ -40,7 +40,7 @@ function LoginForm() {
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({});
 
   const validate = () => {
-    const emailErr = validateEmail(email);
+    const emailErr = validateEmail(email.trim());
     const passwordErr = validatePassword(password);
     setFieldErrors({ email: emailErr ?? undefined, password: passwordErr ?? undefined });
     return !emailErr && !passwordErr;
@@ -50,7 +50,7 @@ function LoginForm() {
     async (prevState: string | null, formData: FormData) => {
       if (!validate()) return null;
 
-      const { error: signInError } = await signIn.email({ email, password });
+      const { error: signInError } = await signIn.email({ email: email.trim(), password });
 
       if (signInError) {
         return signInError.message || "Invalid credentials";
