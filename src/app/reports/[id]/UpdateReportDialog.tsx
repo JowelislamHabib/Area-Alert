@@ -67,7 +67,7 @@ export function UpdateReportDialog({ report }: { report: Report }) {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger render={<Button variant="outline" size="sm" className="gap-2" />}>
+      <DialogTrigger render={<Button variant="default" size="default" className="gap-2 shadow-sm" />}>
         <Edit className="size-4" />
         Update Report
       </DialogTrigger>

@@ -14,9 +14,11 @@ import {
   Flame,
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { ReportMedia } from "./ReportMedia";
 import { ReportValidation } from "./ReportValidation";
 import { UpdateReportDialog } from "./UpdateReportDialog";
+import { DeleteReportButton } from "../my-reports/DeleteReportButton";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
@@ -82,7 +84,7 @@ export default async function ReportDetailsPage({
 
   return (
     <main className="min-h-screen bg-background py-6 px-4 sm:px-8 font-sans text-foreground">
-      <div className="container mx-auto space-y-6">
+      <div className="container mx-auto max-w-5xl space-y-6">
         {/* Back Link and Actions */}
         <div className="flex justify-between items-center">
           <Link
@@ -92,7 +94,10 @@ export default async function ReportDetailsPage({
             <ArrowLeft className="size-4 mr-2" /> Back to Explore
           </Link>
           {user?.id === report.reporterId && (
-            <UpdateReportDialog report={report} />
+            <div className="flex items-center gap-2">
+              <UpdateReportDialog report={report} />
+              <DeleteReportButton id={report._id} />
+            </div>
           )}
         </div>
 
@@ -100,8 +105,8 @@ export default async function ReportDetailsPage({
           {/* Subtle grid texture fading out at the bottom of the header area */}
           <div className="absolute inset-x-0 top-0 h-48 bg-grid-black/[0.02] dark:bg-grid-white/[0.02] bg-[size:24px] pointer-events-none [mask-image:linear-gradient(to_bottom,white,transparent)]" />
 
-          <div className="p-5 sm:p-6 lg:p-8 relative z-10">
-            <div className="flex flex-wrap items-center gap-3 mb-5 mt-1">
+          <div className="p-4 sm:p-6 lg:p-8 relative z-10">
+            <div className="flex flex-wrap items-center gap-2 mb-4 mt-1">
               <Badge
                 variant="secondary"
                 className={`${ui.bg} ${ui.color} border-none rounded-full px-3 py-1 font-semibold text-xs tracking-wide uppercase gap-1.5`}
@@ -120,19 +125,20 @@ export default async function ReportDetailsPage({
               </Badge>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-extrabold mb-5 tracking-tight leading-tight">
-              {report.shortDescription} — {report.area}, {report.district}
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold mb-4 tracking-tight leading-tight">
+              {report.shortDescription}
             </h1>
 
-            <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-muted-foreground font-medium">
+            <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm text-muted-foreground font-medium mt-4">
               <div className="flex items-center gap-1.5 bg-secondary/50 dark:bg-secondary/20 px-2.5 py-1.5 rounded-md">
-                <MapPin className="size-3.5" /> {report.area}, {report.district}
+                <MapPin className="size-3.5 shrink-0" /> {report.area},{" "}
+                {report.district}
               </div>
               <div className="flex items-center gap-1.5 bg-secondary/50 dark:bg-secondary/20 px-2.5 py-1.5 rounded-md">
-                <Clock className="size-3.5" /> Reported {timeAgo}
+                <Clock className="size-3.5 shrink-0" /> Reported {timeAgo}
               </div>
               <div className="flex items-center gap-1.5 bg-secondary/50 dark:bg-secondary/20 px-2.5 py-1.5 rounded-md">
-                <User className="size-3.5" /> By {report.reporterName}
+                <User className="size-3.5 shrink-0" /> By {report.reporterName}
               </div>
             </div>
           </div>
@@ -257,15 +263,25 @@ export default async function ReportDetailsPage({
               </div>
               <div className="p-5">
                 <div className="flex items-center gap-3">
-                  <div className="size-10 rounded-full bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400 flex items-center justify-center">
-                    <User className="size-4" />
+                  <div className="size-10 rounded-full bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400 flex items-center justify-center overflow-hidden shrink-0">
+                    {report.reporterImage ? (
+                      <Image
+                        src={report.reporterImage}
+                        alt={report.reporterName}
+                        width={40}
+                        height={40}
+                        className="size-full object-cover"
+                      />
+                    ) : (
+                      <User className="size-4" />
+                    )}
                   </div>
                   <div>
                     <p className="text-[14px] font-bold text-foreground">
                       {report.reporterName}
                     </p>
                     <p className="text-[12px] font-medium text-muted-foreground flex items-center gap-1.5 mt-0.5">
-                      <Clock className="size-3" />{" "}
+                      <Clock className="size-3" /> Joined:{" "}
                       {format(new Date(report.createdAt), "MMM d, yyyy")}
                     </p>
                   </div>

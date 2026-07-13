@@ -16,6 +16,7 @@ export type Report = {
   ispName?: string;
   reporterId: string;
   reporterName: string;
+  reporterImage?: string;
   createdAt: string;
   upvotes: string[];
   downvotes: string[];
@@ -34,4 +35,5 @@ export type CreateReportInput = {
   ispName?: string;
   reporterId: string;
   reporterName: string;
+  reporterImage?: string;
 };

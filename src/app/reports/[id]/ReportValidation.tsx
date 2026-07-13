@@ -91,42 +91,42 @@ export function ReportValidation({ report, user }: { report: any; user: any }) {
   return (
     <>
       {confidence !== null && (
-        <div className="mb-6 p-4 bg-slate-50/50 rounded-xl border border-slate-100">
+        <div className="mb-6 p-4 bg-slate-50/50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-slate-800">
           <div className="flex items-center justify-between text-sm font-semibold mb-2">
-            <span className="text-slate-700">Community Confidence</span>
-            <span className={`font-bold ${confidence >= 70 ? "text-emerald-600" : confidence >= 40 ? "text-amber-600" : "text-red-500"}`}>
+            <span className="text-slate-700 dark:text-slate-300">Community Confidence</span>
+            <span className={`font-bold ${confidence >= 70 ? "text-emerald-600 dark:text-emerald-400" : confidence >= 40 ? "text-amber-600 dark:text-amber-400" : "text-red-500 dark:text-red-400"}`}>
               {confidence}%
             </span>
           </div>
-          <div className="h-2.5 w-full bg-slate-200/60 rounded-full overflow-hidden">
+          <div className="h-2.5 w-full bg-slate-200/60 dark:bg-slate-800 rounded-full overflow-hidden">
             <div 
               className={`h-full rounded-full transition-all duration-500 ${confidence >= 70 ? "bg-emerald-500" : confidence >= 40 ? "bg-amber-400" : "bg-red-400"}`} 
               style={{ width: `${confidence}%` }} 
             />
           </div>
-          <p className="text-xs text-slate-500 mt-2">Based on {totalVotes} vote{totalVotes !== 1 && "s"}</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">Based on {totalVotes} vote{totalVotes !== 1 && "s"}</p>
         </div>
       )}
 
       {/* Static Vote Counts Grid */}
       <div className="grid grid-cols-3 gap-3 mb-6">
-        <div className="bg-emerald-50 rounded-xl p-3 sm:p-4 text-center flex flex-col items-center justify-center border border-emerald-100">
-          <span className="text-xl sm:text-2xl font-bold text-emerald-700">{upvotes.length}</span>
-          <span className="text-xs font-semibold text-emerald-700 mt-1">Confirmed Real</span>
+        <div className="bg-emerald-50 dark:bg-emerald-500/10 rounded-xl p-3 sm:p-4 text-center flex flex-col items-center justify-center border border-emerald-100 dark:border-emerald-500/20">
+          <span className="text-xl sm:text-2xl font-bold text-emerald-700 dark:text-emerald-400">{upvotes.length}</span>
+          <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 mt-1">Confirmed Real</span>
         </div>
-        <div className="bg-blue-50 rounded-xl p-3 sm:p-4 text-center flex flex-col items-center justify-center border border-blue-100">
-          <span className="text-xl sm:text-2xl font-bold text-blue-700">{resolvedVotes.length}</span>
-          <span className="text-xs font-semibold text-blue-700 mt-1">Think Resolved</span>
+        <div className="bg-blue-50 dark:bg-blue-500/10 rounded-xl p-3 sm:p-4 text-center flex flex-col items-center justify-center border border-blue-100 dark:border-blue-500/20">
+          <span className="text-xl sm:text-2xl font-bold text-blue-700 dark:text-blue-400">{resolvedVotes.length}</span>
+          <span className="text-xs font-semibold text-blue-700 dark:text-blue-400 mt-1">Think Resolved</span>
         </div>
-        <div className="bg-red-50 rounded-xl p-3 sm:p-4 text-center flex flex-col items-center justify-center border border-red-100">
-          <span className="text-xl sm:text-2xl font-bold text-red-600">{downvotes.length}</span>
-          <span className="text-xs font-semibold text-red-600 mt-1">May Be Fake</span>
+        <div className="bg-red-50 dark:bg-red-500/10 rounded-xl p-3 sm:p-4 text-center flex flex-col items-center justify-center border border-red-100 dark:border-red-500/20">
+          <span className="text-xl sm:text-2xl font-bold text-red-600 dark:text-red-400">{downvotes.length}</span>
+          <span className="text-xs font-semibold text-red-600 dark:text-red-400 mt-1">May Be Fake</span>
         </div>
       </div>
       
       {user ? (
         user.id === report.reporterId ? (
-          <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 text-center text-sm font-medium text-slate-600 space-y-4">
+          <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 rounded-xl p-4 text-center text-sm font-medium text-slate-600 dark:text-slate-400 space-y-4">
             <p>You cannot validate your own report.</p>
             {report.status !== "resolved" && (
               <Button variant="default" disabled={isPending} onClick={() => handleStatusUpdate("resolved")}>
@@ -140,9 +140,9 @@ export function ReportValidation({ report, user }: { report: any; user: any }) {
               variant="outline"
               disabled={isPending}
               onClick={() => handleVote("upvote")}
-              className={`flex-1 flex flex-row items-center justify-center gap-2 py-5 sm:py-2.5 rounded-xl text-sm font-semibold transition-all ${
+              className={`w-full sm:flex-1 flex flex-row items-center justify-center gap-1.5 h-10 sm:h-11 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
                 hasUpvoted
-                  ? "bg-emerald-500 text-white border-emerald-500 hover:bg-emerald-600 hover:text-white"
+                  ? "bg-emerald-500 dark:bg-emerald-600 text-white border-emerald-500 dark:border-emerald-600 hover:bg-emerald-600 dark:hover:bg-emerald-700 hover:text-white"
                   : "hover:bg-emerald-500/10 hover:border-emerald-500/30 hover:text-emerald-600 dark:hover:text-emerald-400 text-muted-foreground"
               }`}
             >
@@ -154,9 +154,9 @@ export function ReportValidation({ report, user }: { report: any; user: any }) {
               variant="outline"
               disabled={isPending}
               onClick={() => handleVote("resolved")}
-              className={`flex-1 flex flex-row items-center justify-center gap-2 py-5 sm:py-2.5 rounded-xl text-sm font-semibold transition-all ${
+              className={`w-full sm:flex-1 flex flex-row items-center justify-center gap-1.5 h-10 sm:h-11 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
                 hasSuggestedResolved
-                  ? "bg-blue-500 text-white border-blue-500 hover:bg-blue-600 hover:text-white"
+                  ? "bg-blue-500 dark:bg-blue-600 text-white border-blue-500 dark:border-blue-600 hover:bg-blue-600 dark:hover:bg-blue-700 hover:text-white"
                   : "hover:bg-blue-500/10 hover:border-blue-500/30 hover:text-blue-600 dark:hover:text-blue-400 text-muted-foreground"
               }`}
             >
@@ -168,9 +168,9 @@ export function ReportValidation({ report, user }: { report: any; user: any }) {
               variant="outline"
               disabled={isPending}
               onClick={() => handleVote("downvote")}
-              className={`flex-1 flex flex-row items-center justify-center gap-2 py-5 sm:py-2.5 rounded-xl text-sm font-semibold transition-all ${
+              className={`w-full sm:flex-1 flex flex-row items-center justify-center gap-1.5 h-10 sm:h-11 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
                 hasDownvoted
-                  ? "bg-red-400 text-white border-red-400 hover:bg-red-500 hover:text-white"
+                  ? "bg-red-400 dark:bg-red-600 text-white border-red-400 dark:border-red-600 hover:bg-red-500 dark:hover:bg-red-700 hover:text-white"
                   : "hover:bg-red-500/10 hover:border-red-500/30 hover:text-red-600 dark:hover:text-red-400 text-muted-foreground"
               }`}
             >

@@ -42,6 +42,7 @@ export async function createReport(formData: FormData) {
     ispName: utilityType === "internet" ? (ispName || undefined) : undefined,
     reporterId: session.user.id,
     reporterName: session.user.name || "Anonymous",
+    reporterImage: session.user.image || undefined,
   };
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/reports`, {

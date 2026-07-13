@@ -61,7 +61,7 @@ export function DeleteReportButton({ id }: { id: string }) {
             Are you sure you want to delete this report? This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="gap-2 sm:gap-0 mt-4">
+        <DialogFooter className="gap-3 mt-4">
           <Button variant="outline" onClick={() => setIsOpen(false)} disabled={isDeleting}>
             Cancel
           </Button>
