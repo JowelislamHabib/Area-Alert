@@ -16,7 +16,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-export function DeleteReportButton({ id }: { id: string }) {
+export function DeleteReportButton({ id, redirectTo }: { id: string; redirectTo?: string }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
 
@@ -31,7 +31,11 @@ export function DeleteReportButton({ id }: { id: string }) {
       } else {
         toast.success("Report deleted successfully");
         setIsOpen(false);
-        router.refresh();
+        if (redirectTo) {
+          router.push(redirectTo);
+        } else {
+          router.refresh();
+        }
       }
     } catch (error) {
       toast.error("Failed to delete report");

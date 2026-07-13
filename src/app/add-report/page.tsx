@@ -179,7 +179,21 @@ export default function AddReportPage() {
       }
 
       toast.success("Outage reported successfully!");
-      router.push("/");
+      
+      // Reset form state to defaults
+      setUtilityType("electricity");
+      setDistrict("");
+      setArea("");
+      setShortDescription("");
+      setDescription("");
+      setIspName("");
+      setIsHappeningNow(true);
+      setDate(new Date());
+      setTime(`${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`);
+      clearImage();
+      setVideoUrl("");
+      setFieldErrors({});
+      
       return null;
     },
     null

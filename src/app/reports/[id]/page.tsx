@@ -96,7 +96,7 @@ export default async function ReportDetailsPage({
           {user?.id === report.reporterId && (
             <div className="flex items-center gap-2">
               <UpdateReportDialog report={report} />
-              <DeleteReportButton id={report._id} />
+              <DeleteReportButton id={report._id} redirectTo="/reports" />
             </div>
           )}
         </div>
