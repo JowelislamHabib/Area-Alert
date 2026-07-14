@@ -26,8 +26,9 @@ import {
 import Link from "next/link";
 import { SearchInput } from "./SearchInput";
 import { PaginationControls } from "./PaginationControls";
+import fs from "fs";
+import path from "path";
 import type { Report } from "@/lib/types";
-import areaDataFile from "../../../public/data/area.json";
 
 const UTILITY_ICONS = {
   electricity: {
@@ -89,7 +90,9 @@ const STATUS_STYLES: Record<
 };
 
 function getAreaData() {
-  return areaDataFile;
+  const filePath = path.join(process.cwd(), "public", "data", "area.json");
+  const data = fs.readFileSync(filePath, "utf8");
+  return JSON.parse(data);
 }
 
 export default async function ReportsPage({

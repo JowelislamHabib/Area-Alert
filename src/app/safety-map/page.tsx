@@ -148,7 +148,7 @@ function SafetyMapContent() {
     setLoading(true);
     try {
       const url = new URL(
-        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/reports/safety-stats`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/reports/safety-stats`,
       );
       url.searchParams.set("type", activeTab);
       url.searchParams.set("page", page.toString());
@@ -228,8 +228,7 @@ function SafetyMapContent() {
                 variant="ghost"
                 className={cn(
                   "px-6",
-                  activeTab === "districts" &&
-                    "bg-background shadow-sm",
+                  activeTab === "districts" && "bg-background shadow-sm",
                 )}
                 onClick={() => handleTabChange("districts")}
               >
@@ -239,8 +238,7 @@ function SafetyMapContent() {
                 variant="ghost"
                 className={cn(
                   "px-6",
-                  activeTab === "areas" &&
-                    "bg-background shadow-sm",
+                  activeTab === "areas" && "bg-background shadow-sm",
                 )}
                 onClick={() => handleTabChange("areas")}
               >
