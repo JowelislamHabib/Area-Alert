@@ -18,6 +18,7 @@ import {
   Droplets,
   Flame,
   ThumbsUp,
+  Waves,
 } from "lucide-react";
 import { DeleteReportButton } from "./DeleteReportButton";
 
@@ -26,6 +27,7 @@ const UTILITY_ICONS = {
   internet: { icon: Wifi, color: "text-purple-500", bg: "bg-purple-500/10" },
   water: { icon: Droplets, color: "text-blue-500", bg: "bg-blue-500/10" },
   gas: { icon: Flame, color: "text-orange-500", bg: "bg-orange-500/10" },
+  flood: { icon: Waves, color: "text-cyan-500", bg: "bg-cyan-500/10" },
 };
 
 export default async function MyReportsPage() {

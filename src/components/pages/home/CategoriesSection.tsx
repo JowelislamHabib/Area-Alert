@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Zap, Wifi, Droplets, Flame, ArrowRight } from "lucide-react";
+import { Zap, Wifi, Droplets, Flame, ArrowRight, Waves } from "lucide-react";
 import { getReports } from "@/lib/actions/report";
 import { cn } from "@/lib/utils";
 
@@ -39,6 +39,15 @@ const categories = [
     gradient: "from-orange-500 to-red-400",
     light: "bg-orange-50 dark:bg-orange-950/30",
     ring: "ring-orange-500/20",
+  },
+  {
+    type: "flood",
+    icon: Waves,
+    label: "Flood",
+    href: "/reports?utilityType=flood",
+    gradient: "from-cyan-500 to-blue-400",
+    light: "bg-cyan-50 dark:bg-cyan-950/30",
+    ring: "ring-cyan-500/20",
   },
 ];
 

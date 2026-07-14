@@ -26,7 +26,7 @@ export async function createReport(formData: FormData) {
     return { error: "Missing required fields" };
   }
 
-  const validUtilityTypes = ["electricity", "internet", "water", "gas"];
+  const validUtilityTypes = ["electricity", "internet", "water", "gas", "flood"];
   if (!validUtilityTypes.includes(utilityType)) {
     return { error: "Invalid utility type" };
   }

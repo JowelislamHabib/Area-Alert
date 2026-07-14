@@ -1,19 +1,23 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 import { Textarea } from "@/components/ui/textarea";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 
 import { createReport } from "@/lib/actions/report";
@@ -22,9 +26,26 @@ import { isValidImageUrl, uploadImage } from "@/lib/api/uploadImage";
 import { cn } from "@/lib/utils";
 
 import { format } from "date-fns";
-import { Camera, ImageIcon, Link2, Loader2, X, CalendarIcon, Zap, Droplets, Wifi, Flame, Clock, Navigation, MapPin, Video, PlaySquare, Check, ChevronsUpDown } from "lucide-react";
+import {
+  Camera,
+  ImageIcon,
+  Loader2,
+  X,
+  CalendarIcon,
+  Zap,
+  Droplets,
+  Wifi,
+  Flame,
+  Clock,
+  Navigation,
+  MapPin,
+  Video,
+  PlaySquare,
+  Check,
+  ChevronsUpDown,
+  Waves,
+} from "lucide-react";
 import { AuthRequired } from "@/components/shared/AuthRequired";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useActionState, useState } from "react";
 import { toast } from "sonner";
@@ -32,23 +53,70 @@ import { toast } from "sonner";
 import areaData from "@/../public/data/area.json";
 
 const UTILITIES = [
-  { id: "electricity", label: "Electricity", icon: Zap, color: "text-amber-500", bg: "bg-amber-500/10", activeBorder: "border-amber-500" },
-  { id: "water", label: "Water", icon: Droplets, color: "text-blue-500", bg: "bg-blue-500/10", activeBorder: "border-blue-500" },
-  { id: "internet", label: "Internet", icon: Wifi, color: "text-purple-500", bg: "bg-purple-500/10", activeBorder: "border-purple-500" },
-  { id: "gas", label: "Gas", icon: Flame, color: "text-orange-500", bg: "bg-orange-500/10", activeBorder: "border-orange-500" },
+  {
+    id: "electricity",
+    label: "Electricity",
+    icon: Zap,
+    color: "text-amber-500",
+    bg: "bg-amber-500/10",
+    activeBorder: "border-amber-500",
+  },
+  {
+    id: "water",
+    label: "Water",
+    icon: Droplets,
+    color: "text-blue-500",
+    bg: "bg-blue-500/10",
+    activeBorder: "border-blue-500",
+  },
+  {
+    id: "internet",
+    label: "Internet",
+    icon: Wifi,
+    color: "text-purple-500",
+    bg: "bg-purple-500/10",
+    activeBorder: "border-purple-500",
+  },
+  {
+    id: "gas",
+    label: "Gas",
+    icon: Flame,
+    color: "text-orange-500",
+    bg: "bg-orange-500/10",
+    activeBorder: "border-orange-500",
+  },
+  {
+    id: "flood",
+    label: "Flood",
+    icon: Waves,
+    color: "text-cyan-500",
+    bg: "bg-cyan-500/10",
+    activeBorder: "border-cyan-500",
+  },
 ] as const;
 
 const QUICK_CHIPS: Record<string, string[]> = {
-  electricity: ["Total Blackout", "Low Voltage", "Frequent Drops", "Scheduled Outage"],
+  electricity: [
+    "Total Blackout",
+    "Low Voltage",
+    "Frequent Drops",
+    "Scheduled Outage",
+  ],
   water: ["No Supply", "Low Pressure", "Dirty Water", "Pipe Burst"],
-  internet: ["Complete Disconnection", "Slow Speeds", "High Ping", "Frequent Disconnects"],
+  internet: [
+    "Complete Disconnection",
+    "Slow Speeds",
+    "High Ping",
+    "Frequent Disconnects",
+  ],
   gas: ["No Supply", "Low Pressure", "Gas Leak"],
+  flood: ["Flash Flood", "Waterlogging", "Rising Water Level", "Dam Overflow"],
 };
 
 const getYoutubeVideoId = (url: string) => {
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
   const match = url.match(regExp);
-  return (match && match[2].length === 11) ? match[2] : null;
+  return match && match[2].length === 11 ? match[2] : null;
 };
 
 export default function AddReportPage() {
@@ -61,15 +129,15 @@ export default function AddReportPage() {
   const [area, setArea] = useState("");
   const [districtOpen, setDistrictOpen] = useState(false);
   const [areaOpen, setAreaOpen] = useState(false);
-  
+
   // Date / Time State
   const initialDate = new Date();
   const [isHappeningNow, setIsHappeningNow] = useState(true);
   const [date, setDate] = useState<Date | undefined>(initialDate);
   const [time, setTime] = useState<string>(
-    `${initialDate.getHours().toString().padStart(2, '0')}:${initialDate.getMinutes().toString().padStart(2, '0')}`
+    `${initialDate.getHours().toString().padStart(2, "0")}:${initialDate.getMinutes().toString().padStart(2, "0")}`,
   );
-  
+
   // Details State
   const [shortDescription, setShortDescription] = useState("");
   const [description, setDescription] = useState("");
@@ -105,21 +173,24 @@ export default function AddReportPage() {
 
   const handleChipClick = (chip: string) => {
     setShortDescription(chip);
-    if (fieldErrors.shortDescription) setFieldErrors((p) => ({ ...p, shortDescription: "" }));
+    if (fieldErrors.shortDescription)
+      setFieldErrors((p) => ({ ...p, shortDescription: "" }));
   };
 
   const validate = () => {
     const errors: Record<string, string> = {};
     if (!district) errors.district = "Select a district";
     if (!area) errors.area = "Select an area";
-    if (!shortDescription.trim()) errors.shortDescription = "Select or type a short description";
-    if (utilityType === "internet" && !ispName.trim()) errors.ispName = "ISP name is required";
+    if (!shortDescription.trim())
+      errors.shortDescription = "Select or type a short description";
+    if (utilityType === "internet" && !ispName.trim())
+      errors.ispName = "ISP name is required";
     setFieldErrors(errors);
-    
+
     if (Object.keys(errors).length > 0) {
       toast.error("Please fill in all required fields.");
     }
-    
+
     return Object.keys(errors).length === 0;
   };
 
@@ -135,13 +206,13 @@ export default function AddReportPage() {
       // DateTime Logic
       let startDateTime = new Date();
       if (!isHappeningNow && date) {
-        const [hours, minutes] = time.split(':');
+        const [hours, minutes] = time.split(":");
         startDateTime = new Date(date);
-        startDateTime.setHours(parseInt(hours || '0', 10));
-        startDateTime.setMinutes(parseInt(minutes || '0', 10));
+        startDateTime.setHours(parseInt(hours || "0", 10));
+        startDateTime.setMinutes(parseInt(minutes || "0", 10));
       }
       formData.set("startedAt", startDateTime.toISOString());
-      
+
       // Values
       formData.set("district", district.trim());
       formData.set("area", area.trim());
@@ -179,7 +250,7 @@ export default function AddReportPage() {
       }
 
       toast.success("Outage reported successfully!");
-      
+
       // Reset form state to defaults
       setUtilityType("electricity");
       setDistrict("");
@@ -189,22 +260,24 @@ export default function AddReportPage() {
       setIspName("");
       setIsHappeningNow(true);
       setDate(new Date());
-      setTime(`${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`);
+      setTime(
+        `${new Date().getHours().toString().padStart(2, "0")}:${new Date().getMinutes().toString().padStart(2, "0")}`,
+      );
       clearImage();
       setVideoUrl("");
       setFieldErrors({});
-      
+
       return null;
     },
-    null
+    null,
   );
 
   if (!session?.user) {
     return (
       <main className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center bg-muted/30 p-4">
-        <AuthRequired 
-          title="Sign in to report" 
-          description="You must be logged in to report an outage. This helps us prevent spam and ensure reliability." 
+        <AuthRequired
+          title="Sign in to report"
+          description="You must be logged in to report an outage. This helps us prevent spam and ensure reliability."
           redirectUrl="/add-report"
         />
       </main>
@@ -212,23 +285,32 @@ export default function AddReportPage() {
   }
 
   return (
-    <main className="min-h-[calc(100vh-3.5rem)] bg-muted/30 py-8 px-4 md:py-16">
-      <div className="container max-w-3xl mx-auto space-y-8">
-        
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl font-extrabold tracking-tight">Report an Outage</h1>
-          <p className="text-muted-foreground text-lg">Help your community by sharing what's happening.</p>
+    <main className="min-h-[calc(100vh-3.5rem)] bg-muted/30 pb-8">
+      {/* Hero Header */}
+      <div className="bg-primary text-primary-foreground">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12">
+          <div className="max-w-4xl">
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">
+              Report an Outage
+            </h1>
+            <p className="text-primary-foreground/80 text-base md:text-lg max-w-xl">
+              Help your community by sharing what's happening.
+            </p>
+          </div>
         </div>
+      </div>
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
         <form action={submitAction} className="space-y-8" noValidate>
-          
           {/* STEP 1: UTILITY SELECTION */}
           <section className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <h2 className="text-xl font-semibold flex items-center gap-2">
-              <span className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary text-sm">1</span>
+              <span className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary text-sm">
+                1
+              </span>
               What is the issue?
             </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
               {UTILITIES.map((u) => {
                 const Icon = u.icon;
                 const isSelected = utilityType === u.id;
@@ -241,27 +323,51 @@ export default function AddReportPage() {
                       setShortDescription(""); // reset chips
                     }}
                     className={cn(
-                      "relative flex flex-col items-center justify-center gap-3 rounded-2xl border-2 p-6 transition-all duration-200 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                      isSelected ? cn("bg-card shadow-sm", u.activeBorder) : "border-border/50 bg-card/50 opacity-70 hover:opacity-100 hover:border-border"
+                      "relative flex flex-col items-center justify-center gap-3 rounded-xl border-2 p-6 transition-all duration-200 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                      isSelected
+                        ? cn("bg-card shadow-sm", u.activeBorder)
+                        : "border-border/50 bg-card/50 opacity-70 hover:opacity-100 hover:border-border",
                     )}
                   >
-                    <div className={cn("rounded-full p-3 transition-colors duration-300", isSelected ? u.bg : "bg-muted")}>
-                      <Icon className={cn("size-8", isSelected ? u.color : "text-muted-foreground")} />
+                    <div
+                      className={cn(
+                        "rounded-full p-3 transition-colors duration-300",
+                        isSelected ? u.bg : "bg-muted",
+                      )}
+                    >
+                      <Icon
+                        className={cn(
+                          "size-8",
+                          isSelected ? u.color : "text-muted-foreground",
+                        )}
+                      />
                     </div>
-                    <span className={cn("font-medium", isSelected ? "text-foreground" : "text-muted-foreground")}>
+                    <span
+                      className={cn(
+                        "font-medium",
+                        isSelected
+                          ? "text-foreground"
+                          : "text-muted-foreground",
+                      )}
+                    >
                       {u.label}
                     </span>
                   </button>
                 );
               })}
             </div>
-            
+
             {/* Conditional ISP Input with animation */}
             {utilityType === "internet" && (
               <div className="animate-in fade-in slide-in-from-top-4 duration-300 pt-2">
                 <Card className="border-purple-500/20 bg-purple-500/5">
                   <CardContent className="p-4 flex flex-col gap-2">
-                    <Label htmlFor="ispName" className="text-purple-700 dark:text-purple-300">Which Internet Service Provider (ISP)?</Label>
+                    <Label
+                      htmlFor="ispName"
+                      className="text-purple-700 dark:text-purple-300"
+                    >
+                      Which Internet Service Provider (ISP)?
+                    </Label>
                     <Input
                       id="ispName"
                       name="ispName"
@@ -269,9 +375,14 @@ export default function AddReportPage() {
                       value={ispName}
                       onChange={(e) => {
                         setIspName(e.target.value);
-                        if (fieldErrors.ispName) setFieldErrors((p) => ({ ...p, ispName: "" }));
+                        if (fieldErrors.ispName)
+                          setFieldErrors((p) => ({ ...p, ispName: "" }));
                       }}
-                      className={cn("bg-background", fieldErrors.ispName && "border-destructive ring-destructive")}
+                      className={cn(
+                        "bg-background",
+                        fieldErrors.ispName &&
+                          "border-destructive ring-destructive",
+                      )}
                     />
                   </CardContent>
                 </Card>
@@ -282,13 +393,18 @@ export default function AddReportPage() {
           {/* STEP 2: LOCATION */}
           <section className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100 fill-mode-both">
             <h2 className="text-xl font-semibold flex items-center gap-2">
-              <span className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary text-sm">2</span>
+              <span className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary text-sm">
+                2
+              </span>
               Where is it happening?
             </h2>
             <Card className="border-border/50 bg-card/80 backdrop-blur-xl">
               <CardContent className="p-6 grid grid-cols-2 gap-4 sm:gap-6">
                 <div className="flex flex-col gap-3">
-                  <Label htmlFor="district" className="flex items-center gap-2 text-muted-foreground">
+                  <Label
+                    htmlFor="district"
+                    className="flex items-center gap-2 text-muted-foreground"
+                  >
                     <Navigation className="size-4" /> District
                   </Label>
                   <Popover open={districtOpen} onOpenChange={setDistrictOpen}>
@@ -298,14 +414,22 @@ export default function AddReportPage() {
                           variant="outline"
                           role="combobox"
                           aria-expanded={districtOpen}
-                          className={cn("w-full justify-between h-12 bg-background/50", fieldErrors.district && "border-destructive ring-destructive", !district && "text-muted-foreground")}
+                          className={cn(
+                            "w-full justify-between h-11 bg-background/50",
+                            fieldErrors.district &&
+                              "border-destructive ring-destructive",
+                            !district && "text-muted-foreground",
+                          )}
                         />
                       }
                     >
                       {district ? district : "Select district..."}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </PopoverTrigger>
-                    <PopoverContent className="w-[--anchor-width] p-0" align="start">
+                    <PopoverContent
+                      className="w-[--anchor-width] p-0"
+                      align="start"
+                    >
                       <Command>
                         <CommandInput placeholder="Search district..." />
                         <CommandList>
@@ -317,14 +441,33 @@ export default function AddReportPage() {
                                 value={d}
                                 onSelect={(currentValue) => {
                                   // CommandItem value is always lowercased. Let's find the original case.
-                                  const originalValue = districts.find((dist) => dist.toLowerCase() === currentValue) || currentValue;
-                                  setDistrict(originalValue === district ? "" : originalValue);
+                                  const originalValue =
+                                    districts.find(
+                                      (dist) =>
+                                        dist.toLowerCase() === currentValue,
+                                    ) || currentValue;
+                                  setDistrict(
+                                    originalValue === district
+                                      ? ""
+                                      : originalValue,
+                                  );
                                   setArea("");
-                                  if (fieldErrors.district) setFieldErrors((p) => ({ ...p, district: "" }));
+                                  if (fieldErrors.district)
+                                    setFieldErrors((p) => ({
+                                      ...p,
+                                      district: "",
+                                    }));
                                   setDistrictOpen(false);
                                 }}
                               >
-                                <Check className={cn("mr-2 h-4 w-4", district === d ? "opacity-100" : "opacity-0")} />
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    district === d
+                                      ? "opacity-100"
+                                      : "opacity-0",
+                                  )}
+                                />
                                 {d}
                               </CommandItem>
                             ))}
@@ -336,7 +479,10 @@ export default function AddReportPage() {
                 </div>
 
                 <div className="flex flex-col gap-3">
-                  <Label htmlFor="area" className="flex items-center gap-2 text-muted-foreground">
+                  <Label
+                    htmlFor="area"
+                    className="flex items-center gap-2 text-muted-foreground"
+                  >
                     <MapPin className="size-4" /> Area
                   </Label>
                   <Popover open={areaOpen} onOpenChange={setAreaOpen}>
@@ -346,7 +492,12 @@ export default function AddReportPage() {
                           variant="outline"
                           role="combobox"
                           aria-expanded={areaOpen}
-                          className={cn("w-full justify-between h-12 bg-background/50", fieldErrors.area && "border-destructive ring-destructive", !area && "text-muted-foreground")}
+                          className={cn(
+                            "w-full justify-between h-11 bg-background/50",
+                            fieldErrors.area &&
+                              "border-destructive ring-destructive",
+                            !area && "text-muted-foreground",
+                          )}
                           disabled={!district}
                         />
                       }
@@ -354,7 +505,10 @@ export default function AddReportPage() {
                       {area ? area : "Select area..."}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </PopoverTrigger>
-                    <PopoverContent className="w-[--anchor-width] p-0" align="start">
+                    <PopoverContent
+                      className="w-[--anchor-width] p-0"
+                      align="start"
+                    >
                       <Command>
                         <CommandInput placeholder="Search area..." />
                         <CommandList>
@@ -365,13 +519,24 @@ export default function AddReportPage() {
                                 key={a}
                                 value={a}
                                 onSelect={(currentValue) => {
-                                  const originalValue = areas.find((ar) => ar.toLowerCase() === currentValue) || currentValue;
-                                  setArea(originalValue === area ? "" : originalValue);
-                                  if (fieldErrors.area) setFieldErrors((p) => ({ ...p, area: "" }));
+                                  const originalValue =
+                                    areas.find(
+                                      (ar) => ar.toLowerCase() === currentValue,
+                                    ) || currentValue;
+                                  setArea(
+                                    originalValue === area ? "" : originalValue,
+                                  );
+                                  if (fieldErrors.area)
+                                    setFieldErrors((p) => ({ ...p, area: "" }));
                                   setAreaOpen(false);
                                 }}
                               >
-                                <Check className={cn("mr-2 h-4 w-4", area === a ? "opacity-100" : "opacity-0")} />
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    area === a ? "opacity-100" : "opacity-0",
+                                  )}
+                                />
                                 {a}
                               </CommandItem>
                             ))}
@@ -388,20 +553,24 @@ export default function AddReportPage() {
           {/* STEP 3: DETAILS & TIMING */}
           <section className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200 fill-mode-both">
             <h2 className="text-xl font-semibold flex items-center gap-2">
-              <span className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary text-sm">3</span>
+              <span className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary text-sm">
+                3
+              </span>
               What happened?
             </h2>
             <Card className="border-border/50 bg-card/80 backdrop-blur-xl">
               <CardContent className="p-6 space-y-6">
-                
                 {/* Time Selection */}
                 <div className="space-y-3 pb-6 border-b border-border/50">
-                  <Label className="text-muted-foreground">When did it start?</Label>
+                  <Label className="text-muted-foreground">
+                    When did it start?
+                  </Label>
                   <div className="flex flex-col sm:flex-row gap-3">
                     <Button
                       type="button"
+                      size="lg"
                       variant={isHappeningNow ? "default" : "outline"}
-                      className={cn("flex-1 h-12", isHappeningNow && "shadow-md")}
+                      className={cn("flex-1 h-11", isHappeningNow && "shadow-md")}
                       onClick={() => setIsHappeningNow(true)}
                     >
                       <Clock className="mr-2 size-4" />
@@ -409,8 +578,9 @@ export default function AddReportPage() {
                     </Button>
                     <Button
                       type="button"
+                      size="lg"
                       variant={!isHappeningNow ? "default" : "outline"}
-                      className={cn("flex-1 h-12", !isHappeningNow && "shadow-md")}
+                      className={cn("flex-1 h-11", !isHappeningNow && "shadow-md")}
                       onClick={() => setIsHappeningNow(false)}
                     >
                       <CalendarIcon className="mr-2 size-4" />
@@ -427,8 +597,8 @@ export default function AddReportPage() {
                             <Button
                               variant="outline"
                               className={cn(
-                                "w-full justify-start text-left font-normal h-12 bg-background/50 hover:bg-background/80",
-                                !date && "text-muted-foreground"
+                                "w-full justify-start text-left font-normal h-11 bg-background/50 hover:bg-background/80",
+                                !date && "text-muted-foreground",
                               )}
                             />
                           }
@@ -447,7 +617,12 @@ export default function AddReportPage() {
                             onSelect={setDate}
                           />
                           <div className="p-3 border-t flex items-center justify-between gap-4">
-                            <Label htmlFor="time" className="text-xs text-muted-foreground">Time</Label>
+                            <Label
+                              htmlFor="time"
+                              className="text-xs text-muted-foreground"
+                            >
+                              Time
+                            </Label>
                             <Input
                               id="time"
                               type="time"
@@ -466,7 +641,12 @@ export default function AddReportPage() {
                 <div className="space-y-4">
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between">
-                      <Label htmlFor="shortDescription" className="text-muted-foreground">Quick Summary</Label>
+                      <Label
+                        htmlFor="shortDescription"
+                        className="text-muted-foreground"
+                      >
+                        Quick Summary
+                      </Label>
                     </div>
                     <div className="flex flex-wrap gap-2 mb-2">
                       {QUICK_CHIPS[utilityType]?.map((chip) => (
@@ -476,9 +656,9 @@ export default function AddReportPage() {
                           onClick={() => handleChipClick(chip)}
                           className={cn(
                             "px-3 py-1.5 rounded-full text-xs font-medium transition-colors border",
-                            shortDescription === chip 
-                              ? "bg-primary text-primary-foreground border-primary shadow-sm" 
-                              : "bg-background/50 text-muted-foreground hover:bg-muted hover:text-foreground border-border/50"
+                            shortDescription === chip
+                              ? "bg-primary text-primary-foreground border-primary shadow-sm"
+                              : "bg-background/50 text-muted-foreground hover:bg-muted hover:text-foreground border-border/50",
                           )}
                         >
                           {chip}
@@ -493,14 +673,27 @@ export default function AddReportPage() {
                       value={shortDescription}
                       onChange={(e) => {
                         setShortDescription(e.target.value);
-                        if (fieldErrors.shortDescription) setFieldErrors((p) => ({ ...p, shortDescription: "" }));
+                        if (fieldErrors.shortDescription)
+                          setFieldErrors((p) => ({
+                            ...p,
+                            shortDescription: "",
+                          }));
                       }}
-                      className={cn("bg-background/50", fieldErrors.shortDescription && "border-destructive ring-destructive")}
+                      className={cn(
+                        "bg-background/50 h-11",
+                        fieldErrors.shortDescription &&
+                          "border-destructive ring-destructive",
+                      )}
                     />
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <Label htmlFor="description" className="text-muted-foreground">More Details (Optional)</Label>
+                    <Label
+                      htmlFor="description"
+                      className="text-muted-foreground"
+                    >
+                      More Details (Optional)
+                    </Label>
                     <Textarea
                       id="description"
                       name="description"
@@ -512,7 +705,6 @@ export default function AddReportPage() {
                     />
                   </div>
                 </div>
-
               </CardContent>
             </Card>
           </section>
@@ -520,25 +712,36 @@ export default function AddReportPage() {
           {/* STEP 4: MEDIA UPLOAD */}
           <section className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300 fill-mode-both">
             <h2 className="text-xl font-semibold flex items-center gap-2">
-              <span className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary text-sm">4</span>
+              <span className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary text-sm">
+                4
+              </span>
               Add Media (Optional)
             </h2>
             <Card className="border-border/50 bg-card/80 backdrop-blur-xl">
               <CardContent className="p-6">
-                
                 {/* Media Type Tabs */}
                 <div className="flex items-center gap-2 mb-6 border-b border-border/50 pb-4">
                   <button
                     type="button"
                     onClick={() => setMediaType("image")}
-                    className={cn("px-4 py-2 flex items-center gap-2 rounded-md text-sm font-medium transition-colors", mediaType === "image" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground")}
+                    className={cn(
+                      "px-4 py-2 flex items-center gap-2 rounded-md text-sm font-medium transition-colors",
+                      mediaType === "image"
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:text-foreground",
+                    )}
                   >
                     <ImageIcon className="size-4" /> Image
                   </button>
                   <button
                     type="button"
                     onClick={() => setMediaType("video")}
-                    className={cn("px-4 py-2 flex items-center gap-2 rounded-md text-sm font-medium transition-colors", mediaType === "video" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground")}
+                    className={cn(
+                      "px-4 py-2 flex items-center gap-2 rounded-md text-sm font-medium transition-colors",
+                      mediaType === "video"
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:text-foreground",
+                    )}
                   >
                     <Video className="size-4" /> Video
                   </button>
@@ -547,15 +750,21 @@ export default function AddReportPage() {
                 {mediaType === "image" && (
                   <div className="space-y-6 animate-in fade-in zoom-in-95 duration-200">
                     <div className="space-y-2">
-                      <Label className="text-muted-foreground">Upload Image File</Label>
+                      <Label className="text-muted-foreground">
+                        Upload Image File
+                      </Label>
                       {!preview ? (
                         <label className="flex w-full cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-border/50 bg-background/30 px-6 py-10 transition-colors hover:border-primary/50 hover:bg-muted/50">
                           <div className="rounded-full bg-primary/10 p-4">
                             <Camera className="size-8 text-primary" />
                           </div>
                           <div className="text-center">
-                            <p className="text-sm font-medium text-foreground">Click to upload a photo</p>
-                            <p className="text-xs text-muted-foreground mt-1">PNG, JPG up to 5MB</p>
+                            <p className="text-sm font-medium text-foreground">
+                              Click to upload a photo
+                            </p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              PNG, JPG up to 5MB
+                            </p>
                           </div>
                           <input
                             type="file"
@@ -566,24 +775,40 @@ export default function AddReportPage() {
                         </label>
                       ) : (
                         <div className="relative overflow-hidden rounded-xl border border-border shadow-sm max-w-sm group">
-                          <img src={preview} alt="Preview" className="w-full object-cover aspect-video" />
+                          <img
+                            src={preview}
+                            alt="Preview"
+                            className="w-full object-cover aspect-video"
+                          />
                           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <Button type="button" variant="destructive" size="sm" onClick={clearImage}>
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="sm"
+                              onClick={clearImage}
+                            >
                               <X className="size-4 mr-2" /> Remove Image
                             </Button>
                           </div>
                         </div>
                       )}
                     </div>
-                    
+
                     {!imageFile && (
                       <div className="space-y-3">
                         <div className="flex items-center gap-4">
                           <div className="h-px bg-border/50 flex-1"></div>
-                          <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">OR</span>
+                          <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">
+                            OR
+                          </span>
                           <div className="h-px bg-border/50 flex-1"></div>
                         </div>
-                        <Label htmlFor="imageUrl" className="text-muted-foreground">Paste Image URL</Label>
+                        <Label
+                          htmlFor="imageUrl"
+                          className="text-muted-foreground"
+                        >
+                          Paste Image URL
+                        </Label>
                         <Input
                           id="imageUrl"
                           name="image"
@@ -593,15 +818,20 @@ export default function AddReportPage() {
                           onChange={(e) => {
                             setImageUrl(e.target.value);
                             setUrlError("");
-                            if (e.target.value && isValidImageUrl(e.target.value)) {
+                            if (
+                              e.target.value &&
+                              isValidImageUrl(e.target.value)
+                            ) {
                               setPreview(e.target.value);
                             } else if (!e.target.value) {
                               setPreview("");
                             }
                           }}
-                          className="bg-background/50 h-12"
+                          className="bg-background/50 h-11"
                         />
-                        {urlError && <p className="text-xs text-destructive">{urlError}</p>}
+                        {urlError && (
+                          <p className="text-xs text-destructive">{urlError}</p>
+                        )}
                       </div>
                     )}
                   </div>
@@ -610,8 +840,12 @@ export default function AddReportPage() {
                 {mediaType === "video" && (
                   <div className="flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-200">
                     <div className="flex flex-col gap-2">
-                      <Label htmlFor="videoUrl" className="text-muted-foreground flex items-center gap-2">
-                        <PlaySquare className="size-4 text-red-500" /> YouTube Video URL
+                      <Label
+                        htmlFor="videoUrl"
+                        className="text-muted-foreground flex items-center gap-2"
+                      >
+                        <PlaySquare className="size-4 text-red-500" /> YouTube
+                        Video URL
                       </Label>
                       <Input
                         id="videoUrl"
@@ -620,7 +854,7 @@ export default function AddReportPage() {
                         placeholder="https://www.youtube.com/watch?v=..."
                         value={videoUrl}
                         onChange={(e) => setVideoUrl(e.target.value)}
-                        className="bg-background/50 h-12"
+                        className="bg-background/50"
                       />
                     </div>
                     {videoUrl && getYoutubeVideoId(videoUrl) && (
@@ -643,7 +877,11 @@ export default function AddReportPage() {
           </section>
 
           <input type="hidden" name="reporterId" value={session.user.id} />
-          <input type="hidden" name="reporterName" value={session.user.name || "Anonymous"} />
+          <input
+            type="hidden"
+            name="reporterName"
+            value={session.user.name || "Anonymous"}
+          />
 
           <div className="pt-4 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-500 fill-mode-both">
             {submitError && (
@@ -651,10 +889,10 @@ export default function AddReportPage() {
                 {submitError}
               </div>
             )}
-            <Button 
-              type="submit" 
-              size="lg" 
-              className="w-full h-14 text-lg font-bold shadow-xl shadow-primary/20 hover:shadow-primary/30 transition-all" 
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full h-14 text-lg font-bold shadow-xl shadow-primary/20 hover:shadow-primary/30 transition-all"
               disabled={submitting}
             >
               {submitting ? (
@@ -663,7 +901,7 @@ export default function AddReportPage() {
                   Submitting Report...
                 </>
               ) : (
-                "Submit Outage Report"
+                "Submit Report"
               )}
             </Button>
             <p className="text-center text-xs text-muted-foreground mt-4">

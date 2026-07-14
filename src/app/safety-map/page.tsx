@@ -29,6 +29,7 @@ export interface AreaStats {
     water: number;
     gas: number;
     internet: number;
+    flood: number;
   };
   districtName?: string;
 }
@@ -46,6 +47,7 @@ export interface DistrictStats {
     water: number;
     gas: number;
     internet: number;
+    flood: number;
   };
 }
 

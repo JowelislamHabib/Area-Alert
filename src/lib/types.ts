@@ -1,4 +1,4 @@
-export type UtilityType = "electricity" | "internet" | "water" | "gas";
+export type UtilityType = "electricity" | "internet" | "water" | "gas" | "flood";
 
 export type ReportStatus = "pending" | "active" | "resolved";
 

@@ -26,12 +26,14 @@ function aggregateChartData(reports: Report[]): ChartData {
     internet: "#3b82f6",
     water: "#06b6d4",
     gas: "#f97316",
+    flood: "#06b6d4",
   };
   const utilityLabels: Record<string, string> = {
     electricity: "Electricity",
     internet: "Internet",
     water: "Water",
     gas: "Gas",
+    flood: "Flood",
   };
 
   const utilityData = Object.entries(utilityCounts).map(([type, value]) => ({

@@ -12,6 +12,7 @@ import {
   Wifi,
   Droplets,
   Flame,
+  Waves,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -46,6 +47,12 @@ const UTILITY_ICONS = {
     color: "text-orange-600 dark:text-orange-400",
     bg: "bg-orange-100 dark:bg-orange-500/10",
     label: "Gas",
+  },
+  flood: {
+    icon: Waves,
+    color: "text-cyan-500",
+    bg: "bg-cyan-500/10",
+    label: "Flood",
   },
 };
 

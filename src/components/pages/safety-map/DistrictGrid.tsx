@@ -1,5 +1,5 @@
 import { DistrictStats, AreaStats } from "@/app/safety-map/page";
-import { MapPin, Zap, Droplet, Wifi, Flame, ShieldAlert, ShieldCheck, Shield, ArrowRight } from "lucide-react";
+import { MapPin, Zap, Droplet, Wifi, Flame, ShieldAlert, ShieldCheck, Shield, ArrowRight, Waves } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -76,7 +76,7 @@ export function DistrictGrid({ stats, activeTab, onViewAreas }: DistrictGridProp
         </div>
 
         {/* Utility Blocks */}
-        <div className="grid grid-cols-4 gap-2 mb-5">
+        <div className="grid grid-cols-5 gap-2 mb-5">
           <div className="bg-amber-500/5 hover:bg-amber-500/10 transition-colors rounded-xl p-3 flex flex-col items-center justify-center border border-amber-500/20">
             <Zap className="w-4 h-4 text-amber-500 mb-1" />
             <span className={cn("font-bold", data.activeUtilities?.electricity > 0 ? "text-amber-600 dark:text-amber-400" : "text-amber-600/50 dark:text-amber-400/50")}>{data.activeUtilities?.electricity || 0}</span>
@@ -96,6 +96,11 @@ export function DistrictGrid({ stats, activeTab, onViewAreas }: DistrictGridProp
             <Flame className="w-4 h-4 text-rose-500 mb-1" />
             <span className={cn("font-bold", data.activeUtilities?.gas > 0 ? "text-rose-600 dark:text-rose-400" : "text-rose-600/50 dark:text-rose-400/50")}>{data.activeUtilities?.gas || 0}</span>
             <span className="text-[10px] text-rose-600/70 dark:text-rose-400/70 font-medium">Gas</span>
+          </div>
+          <div className="bg-cyan-500/5 hover:bg-cyan-500/10 transition-colors rounded-xl p-3 flex flex-col items-center justify-center border border-cyan-500/20">
+            <Waves className="w-4 h-4 text-cyan-500 mb-1" />
+            <span className={cn("font-bold", data.activeUtilities?.flood > 0 ? "text-cyan-600 dark:text-cyan-400" : "text-cyan-600/50 dark:text-cyan-400/50")}>{data.activeUtilities?.flood || 0}</span>
+            <span className="text-[10px] text-cyan-600/70 dark:text-cyan-400/70 font-medium">Flood</span>
           </div>
         </div>
 

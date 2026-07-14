@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Zap, Wifi, Droplets, Flame, MapPin, ArrowUp, CheckCircle, ThumbsDown, ShieldCheck, User } from "lucide-react";
+import { Zap, Wifi, Droplets, Flame, MapPin, ArrowUp, CheckCircle, ThumbsDown, ShieldCheck, User, Waves } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import type { Report } from "@/lib/types";
 import { formatDistanceToNow } from "date-fns";
@@ -9,6 +9,7 @@ const utilityIcons = {
   internet: Wifi,
   water: Droplets,
   gas: Flame,
+  flood: Waves,
 } as const;
 
 const utilityStyles: Record<string, { icon: typeof Zap; color: string; bg: string; label: string }> = {
@@ -35,6 +36,12 @@ const utilityStyles: Record<string, { icon: typeof Zap; color: string; bg: strin
     color: "text-orange-600 dark:text-orange-400",
     bg: "bg-orange-500/10",
     label: "Gas",
+  },
+  flood: {
+    icon: Waves,
+    color: "text-cyan-600 dark:text-cyan-400",
+    bg: "bg-cyan-500/10",
+    label: "Flood",
   },
 };
 

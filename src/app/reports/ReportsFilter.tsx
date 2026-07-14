@@ -219,6 +219,12 @@ export function ReportsFilter({
                 >
                   Gas
                 </FilterOption>
+                <FilterOption
+                  active={currentUtility === "flood"}
+                  onClick={() => updateParam("utilityType", "flood")}
+                >
+                  Flood
+                </FilterOption>
               </div>
             </div>
 
