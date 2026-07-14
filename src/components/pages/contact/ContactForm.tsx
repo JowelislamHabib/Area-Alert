@@ -45,7 +45,7 @@ export function ContactForm() {
               name="name" 
               placeholder="John Doe" 
               required 
-              className="bg-background"
+              className="bg-background h-11"
             />
           </div>
           
@@ -57,7 +57,7 @@ export function ContactForm() {
               type="email" 
               placeholder="john@example.com" 
               required 
-              className="bg-background"
+              className="bg-background h-11"
             />
           </div>
           
@@ -74,14 +74,15 @@ export function ContactForm() {
           
           <Button 
             type="submit" 
-            className="w-full" 
+            size="lg"
+            className="w-full gap-2" 
             disabled={isSubmitting}
           >
             {isSubmitting ? (
               <>Sending...</>
             ) : (
               <>
-                <Send className="mr-2 h-4 w-4" />
+                <Send className="h-4 w-4" />
                 Send Message
               </>
             )}

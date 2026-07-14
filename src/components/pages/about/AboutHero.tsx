@@ -5,7 +5,7 @@ export function AboutHero() {
     <section className="relative overflow-hidden bg-background pt-24 pb-12 sm:pt-32 sm:pb-16 lg:pb-24">
       <div className="absolute inset-0 bg-[url('https://ui.shadcn.com/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
       
-      <div className="container relative mx-auto px-4 text-center">
+      <div className="max-w-7xl relative mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="mx-auto flex max-w-2xl flex-col items-center gap-6">
           <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
             <MapPin className="h-4 w-4" />

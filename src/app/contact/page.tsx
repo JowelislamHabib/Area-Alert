@@ -12,8 +12,8 @@ export default function ContactPage() {
     <div className="flex min-h-screen flex-col">
       <ContactHero />
       
-      <section className="container mx-auto px-4 pb-24">
-        <div className="grid max-w-5xl mx-auto gap-8 md:grid-cols-2 items-start">
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+        <div className="grid w-full gap-8 md:grid-cols-2 items-start">
           <ContactInfo />
           <ContactForm />
         </div>

@@ -30,7 +30,7 @@ export function MissionVisionSection() {
   ];
 
   return (
-    <section className="container mx-auto px-4 py-16 sm:py-24">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
       <div className="grid gap-8 md:grid-cols-3">
         {items.map((item, index) => (
           <Card 
