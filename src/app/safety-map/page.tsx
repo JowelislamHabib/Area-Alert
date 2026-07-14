@@ -193,41 +193,41 @@ function SafetyMapContent() {
     <>
       <SafetyMapHero overview={overview} activeType={activeTab} />
 
-      <main className="container mx-auto px-4 md:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Legend & Tabs container */}
         <div className="flex flex-col gap-6 mb-8">
-          <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl p-4 flex items-center gap-6 overflow-x-auto shadow-sm">
+          <div className="bg-card border border-border rounded-xl p-4 flex items-center gap-6 overflow-x-auto shadow-sm">
             <span className="font-semibold text-sm whitespace-nowrap">
               Safety Score:
             </span>
             <div className="flex items-center gap-2 whitespace-nowrap">
               <span className="w-3 h-3 rounded-full bg-emerald-500"></span>
-              <span className="text-sm text-neutral-600 dark:text-neutral-400">
+              <span className="text-sm text-muted-foreground">
                 80–100: Safe
               </span>
             </div>
             <div className="flex items-center gap-2 whitespace-nowrap">
               <span className="w-3 h-3 rounded-full bg-amber-400"></span>
-              <span className="text-sm text-neutral-600 dark:text-neutral-400">
+              <span className="text-sm text-muted-foreground">
                 50–79: Caution
               </span>
             </div>
             <div className="flex items-center gap-2 whitespace-nowrap">
               <span className="w-3 h-3 rounded-full bg-rose-500"></span>
-              <span className="text-sm text-neutral-600 dark:text-neutral-400">
+              <span className="text-sm text-muted-foreground">
                 0–49: Avoid if possible
               </span>
             </div>
           </div>
 
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="flex items-center gap-1 bg-white dark:bg-neutral-900 p-1 rounded-full border border-neutral-200 dark:border-neutral-800 shadow-sm w-fit">
+            <div className="flex items-center gap-1 bg-muted/50 p-1 rounded-lg border border-border shadow-sm w-fit">
               <Button
                 variant="ghost"
                 className={cn(
-                  "rounded-full px-6",
+                  "px-6",
                   activeTab === "districts" &&
-                    "bg-neutral-100 dark:bg-neutral-800 shadow-sm",
+                    "bg-background shadow-sm",
                 )}
                 onClick={() => handleTabChange("districts")}
               >
@@ -236,9 +236,9 @@ function SafetyMapContent() {
               <Button
                 variant="ghost"
                 className={cn(
-                  "rounded-full px-6",
+                  "px-6",
                   activeTab === "areas" &&
-                    "bg-neutral-100 dark:bg-neutral-800 shadow-sm",
+                    "bg-background shadow-sm",
                 )}
                 onClick={() => handleTabChange("areas")}
               >
@@ -248,18 +248,18 @@ function SafetyMapContent() {
 
             <div className="flex items-center gap-3 w-full md:w-auto">
               <div className="relative flex-1 md:w-64">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
                   placeholder="Search location..."
-                  className="pl-9 rounded-full bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 shadow-sm"
+                  className="pl-9 bg-card border-border shadow-sm"
                   value={searchQuery}
                   onChange={(e) => handleSearchChange(e.target.value)}
                 />
               </div>
               <Select value={utilityFilter} onValueChange={handleUtilityChange}>
-                <SelectTrigger className="w-[150px] rounded-full bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 shadow-sm">
+                <SelectTrigger className="w-[150px] bg-card border-border shadow-sm">
                   <div className="flex items-center gap-1">
-                    <span className="text-neutral-500 font-medium">
+                    <span className="text-muted-foreground font-medium">
                       Utility:
                     </span>
                     <SelectValue placeholder="All" />
@@ -274,9 +274,9 @@ function SafetyMapContent() {
                 </SelectContent>
               </Select>
               <Select value={safetyFilter} onValueChange={handleSafetyChange}>
-                <SelectTrigger className="w-[150px] rounded-full bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 shadow-sm">
+                <SelectTrigger className="w-[150px] bg-card border-border shadow-sm">
                   <div className="flex items-center gap-1">
-                    <span className="text-neutral-500 font-medium">
+                    <span className="text-muted-foreground font-medium">
                       Safety:
                     </span>
                     <SelectValue placeholder="All" />
@@ -295,14 +295,14 @@ function SafetyMapContent() {
           {/* Active Filters Display */}
           {activeTab === "areas" && selectedDistrict && (
             <div className="flex items-center gap-2 mt-2">
-              <span className="text-sm text-neutral-500">
+              <span className="text-sm text-muted-foreground">
                 Filtered by district:
               </span>
-              <div className="flex items-center gap-1.5 bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400 px-3 py-1 rounded-full text-sm font-medium border border-emerald-200 dark:border-emerald-900">
+              <div className="flex items-center gap-1.5 bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400 px-3 py-1 rounded-md text-sm font-medium border border-emerald-200 dark:border-emerald-900">
                 {selectedDistrict}
                 <button
                   onClick={handleClearDistrict}
-                  className="hover:bg-emerald-200 dark:hover:bg-emerald-800 p-0.5 rounded-full transition-colors"
+                  className="hover:bg-emerald-200 dark:hover:bg-emerald-800 p-0.5 rounded-sm transition-colors"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -313,15 +313,15 @@ function SafetyMapContent() {
 
         {loading && stats.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20">
-            <Loader2 className="w-10 h-10 animate-spin text-emerald-600 mb-4" />
-            <p className="text-neutral-500 animate-pulse">
+            <Loader2 className="w-10 h-10 animate-spin text-primary mb-4" />
+            <p className="text-muted-foreground animate-pulse">
               Analyzing safety data...
             </p>
           </div>
         ) : stats.length === 0 ? (
-          <div className="text-center py-20 bg-white dark:bg-neutral-900 rounded-3xl border border-neutral-200 dark:border-neutral-800 shadow-sm">
+          <div className="text-center py-20 bg-card rounded-3xl border border-border shadow-sm">
             <h3 className="text-2xl font-semibold mb-2">No results found</h3>
-            <p className="text-neutral-500">
+            <p className="text-muted-foreground">
               Try adjusting your search or filter.
             </p>
           </div>
@@ -346,11 +346,11 @@ function SafetyMapContent() {
                   variant="outline"
                   onClick={() => handlePageChange(Math.max(1, page - 1))}
                   disabled={page === 1 || loading}
-                  className="rounded-full shadow-sm bg-white"
+                  className="shadow-sm"
                 >
                   <ChevronLeft className="w-4 h-4 mr-1" /> Previous
                 </Button>
-                <span className="text-sm font-medium text-neutral-500">
+                <span className="text-sm font-medium text-muted-foreground">
                   Page {page} of {totalPages}
                 </span>
                 <Button
@@ -359,7 +359,7 @@ function SafetyMapContent() {
                     handlePageChange(Math.min(totalPages, page + 1))
                   }
                   disabled={page === totalPages || loading}
-                  className="rounded-full shadow-sm bg-white"
+                  className="shadow-sm"
                 >
                   Next <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
@@ -374,7 +374,7 @@ function SafetyMapContent() {
 
 export default function SafetyMapPage() {
   return (
-    <div className="min-h-screen bg-neutral-50/50 dark:bg-neutral-950 pb-20">
+    <div className="min-h-screen bg-muted/30 pb-20">
       <Suspense fallback={<div className="min-h-screen" />}>
         <SafetyMapContent />
       </Suspense>

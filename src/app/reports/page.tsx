@@ -16,6 +16,7 @@ import {
   ShieldCheck,
   User,
   HelpCircle,
+  FileText,
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import Link from "next/link";
@@ -79,76 +80,72 @@ export default async function ReportsPage({
   const stats = await getReportStatsData();
 
   return (
-    <main className="min-h-[calc(100vh-3.5rem)] bg-muted/30 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-extrabold tracking-tight mb-2">
-            Explore Reports
-          </h1>
-          <p className="text-muted-foreground text-sm mb-6">
-            Browse and filter community utility outage reports across Bangladesh
-          </p>
+    <main className="min-h-[calc(100vh-3.5rem)] bg-muted/30 pb-8">
+      {/* Hero Header */}
+      <div className="bg-primary text-primary-foreground">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12">
+          <div className="max-w-4xl">
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-3 flex items-center gap-3">
+              <FileText className="w-8 h-8 opacity-90" />
+              Explore Reports
+            </h1>
+            <p className="text-primary-foreground/80 text-base md:text-lg mb-8 max-w-xl">
+              Browse and filter community utility outage reports across Bangladesh
+            </p>
 
-          {stats && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              {/* Most Reported District */}
-              <Card className="p-4 bg-red-500/5 border-red-500/20 group hover:bg-red-500/10 transition-colors">
-                <div className="flex items-center gap-2 mb-2">
-                  <TrendingUp className="size-4 text-red-500" />
-                  <p className="text-[10px] font-bold text-red-600 uppercase tracking-wider">Most Reported District</p>
+            {stats && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <div className="bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors border border-primary-foreground/20 rounded-lg px-3 py-2.5 flex flex-col justify-center gap-1 overflow-hidden">
+                  <div className="flex items-center text-[11px] font-medium text-primary-foreground/80 uppercase tracking-wider">
+                    <TrendingUp className="w-3 h-3 mr-1.5 text-red-400 shrink-0" />
+                    <span className="truncate">Most reported district</span>
+                  </div>
+                  <div className="flex items-baseline gap-1.5 truncate">
+                    <strong className="text-sm truncate">{stats.mostReportedDistrict?.district || "N/A"}</strong>
+                    <span className="text-xs text-primary-foreground/60 font-medium shrink-0">({stats.mostReportedDistrict?.totalReports || 0})</span>
+                  </div>
                 </div>
-                <p className="text-xl font-extrabold text-foreground truncate" title={stats.mostReportedDistrict?.district || "N/A"}>
-                  {stats.mostReportedDistrict?.district || "N/A"}
-                </p>
-                <p className="text-sm font-semibold text-red-500 mt-1">
-                  {stats.mostReportedDistrict?.totalReports || 0} reports
-                </p>
-              </Card>
-
-              {/* Lowest Reported District */}
-              <Card className="p-4 bg-emerald-500/5 border-emerald-500/20 group hover:bg-emerald-500/10 transition-colors">
-                <div className="flex items-center gap-2 mb-2">
-                  <TrendingDown className="size-4 text-emerald-500" />
-                  <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Lowest Reported District</p>
+                
+                <div className="bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors border border-primary-foreground/20 rounded-lg px-3 py-2.5 flex flex-col justify-center gap-1 overflow-hidden">
+                  <div className="flex items-center text-[11px] font-medium text-primary-foreground/80 uppercase tracking-wider">
+                    <TrendingDown className="w-3 h-3 mr-1.5 text-emerald-400 shrink-0" />
+                    <span className="truncate">Safest district</span>
+                  </div>
+                  <div className="flex items-baseline gap-1.5 truncate">
+                    <strong className="text-sm truncate">{stats.lowestReportedDistrict?.district || "N/A"}</strong>
+                    <span className="text-xs text-primary-foreground/60 font-medium shrink-0">({stats.lowestReportedDistrict?.totalReports || 0})</span>
+                  </div>
                 </div>
-                <p className="text-xl font-extrabold text-foreground truncate" title={stats.lowestReportedDistrict?.district || "N/A"}>
-                  {stats.lowestReportedDistrict?.district || "N/A"}
-                </p>
-                <p className="text-sm font-semibold text-emerald-500 mt-1">
-                  {stats.lowestReportedDistrict?.totalReports || 0} reports
-                </p>
-              </Card>
-
-              {/* Most Reported Area */}
-              <Card className="p-4 bg-orange-500/5 border-orange-500/20 group hover:bg-orange-500/10 transition-colors">
-                <div className="flex items-center gap-2 mb-2">
-                  <MapPin className="size-4 text-orange-500" />
-                  <p className="text-[10px] font-bold text-orange-600 uppercase tracking-wider">Most Reported Area</p>
+                
+                <div className="bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors border border-primary-foreground/20 rounded-lg px-3 py-2.5 flex flex-col justify-center gap-1 overflow-hidden">
+                  <div className="flex items-center text-[11px] font-medium text-primary-foreground/80 uppercase tracking-wider">
+                    <MapPin className="w-3 h-3 mr-1.5 text-orange-400 shrink-0" />
+                    <span className="truncate">Most reported area</span>
+                  </div>
+                  <div className="flex items-baseline gap-1.5 truncate">
+                    <strong className="text-sm truncate">{stats.mostReportedArea?.area || "N/A"}</strong>
+                    <span className="text-xs text-primary-foreground/60 font-medium shrink-0">({stats.mostReportedArea?.totalReports || 0})</span>
+                  </div>
                 </div>
-                <p className="text-xl font-extrabold text-foreground truncate" title={stats.mostReportedArea?.area || "N/A"}>
-                  {stats.mostReportedArea?.area || "N/A"}
-                </p>
-                <p className="text-sm font-semibold text-orange-500 mt-1">
-                  {stats.mostReportedArea?.totalReports || 0} reports
-                </p>
-              </Card>
-
-              {/* Lowest Reported Area */}
-              <Card className="p-4 bg-blue-500/5 border-blue-500/20 group hover:bg-blue-500/10 transition-colors">
-                <div className="flex items-center gap-2 mb-2">
-                  <TrendingDown className="size-4 text-blue-500" />
-                  <p className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Lowest Reported Area</p>
+                
+                <div className="bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors border border-primary-foreground/20 rounded-lg px-3 py-2.5 flex flex-col justify-center gap-1 overflow-hidden">
+                  <div className="flex items-center text-[11px] font-medium text-primary-foreground/80 uppercase tracking-wider">
+                    <TrendingDown className="w-3 h-3 mr-1.5 text-blue-400 shrink-0" />
+                    <span className="truncate">Safest area</span>
+                  </div>
+                  <div className="flex items-baseline gap-1.5 truncate">
+                    <strong className="text-sm truncate">{stats.lowestReportedArea?.area || "N/A"}</strong>
+                    <span className="text-xs text-primary-foreground/60 font-medium shrink-0">({stats.lowestReportedArea?.totalReports || 0})</span>
+                  </div>
                 </div>
-                <p className="text-xl font-extrabold text-foreground truncate" title={stats.lowestReportedArea?.area || "N/A"}>
-                  {stats.lowestReportedArea?.area || "N/A"}
-                </p>
-                <p className="text-sm font-semibold text-blue-500 mt-1">
-                  {stats.lowestReportedArea?.totalReports || 0} reports
-                </p>
-              </Card>
-            </div>
-          )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 mt-8">
+        <div>
           <ReportsFilter areaData={areaData}>
             <SearchInput />
           </ReportsFilter>
