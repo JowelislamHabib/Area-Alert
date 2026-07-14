@@ -106,6 +106,34 @@ export async function getReports(searchParams?: { district?: string; area?: stri
   return { success: true, reports: data, totalPages: 1, currentPage: 1, total: data.length };
 }
 
+export async function getReportStatsData() {
+  try {
+    const [districtsRes, areasRes] = await Promise.all([
+      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/reports/safety-stats?type=districts&limit=100`, { cache: "no-store" }),
+      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/reports/safety-stats?type=areas&limit=1000`, { cache: "no-store" })
+    ]);
+
+    const districtsData = await districtsRes.json();
+    const areasData = await areasRes.json();
+
+    const districts = districtsData.stats || [];
+    const areas = areasData.stats || [];
+
+    const validDistricts = districts.filter((d: any) => d.totalReports > 0).sort((a: any, b: any) => b.totalReports - a.totalReports);
+    const validAreas = areas.filter((a: any) => a.totalReports > 0).sort((a: any, b: any) => b.totalReports - a.totalReports);
+
+    return {
+      mostReportedDistrict: validDistricts[0] || null,
+      lowestReportedDistrict: validDistricts[validDistricts.length - 1] || null,
+      mostReportedArea: validAreas[0] || null,
+      lowestReportedArea: validAreas[validAreas.length - 1] || null,
+    };
+  } catch (e) {
+    console.error("Failed to fetch report stats data", e);
+    return null;
+  }
+}
+
 export async function getReportById(id: string) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/reports/${id}`, {
     cache: "no-store",

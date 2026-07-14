@@ -1,4 +1,4 @@
-import { getReports } from "@/lib/actions/report";
+import { getReports, getReportStatsData } from "@/lib/actions/report";
 import { ReportsFilter } from "./ReportsFilter";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +13,10 @@ import {
   Paperclip,
   CheckCircle,
   ThumbsDown,
+  TrendingUp,
+  TrendingDown,
+  AlertTriangle,
+  ShieldCheck,
 } from "lucide-react";
 import Link from "next/link";
 import { SearchInput } from "./SearchInput";
@@ -62,6 +66,7 @@ export default async function ReportsPage({
   const params = await searchParams;
   const areaData = getAreaData();
   const { reports, totalPages = 1, currentPage = 1, error } = await getReports(params);
+  const stats = await getReportStatsData();
 
   return (
     <main className="min-h-[calc(100vh-3.5rem)] bg-muted/30 py-8 px-4">
@@ -73,6 +78,74 @@ export default async function ReportsPage({
           <p className="text-muted-foreground text-sm mb-6">
             Browse and filter community utility outage reports across Bangladesh
           </p>
+
+          {stats && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+              <Card className="p-4 bg-red-500/5 border-red-500/20 relative overflow-hidden group hover:bg-red-500/10 transition-colors">
+                <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <AlertTriangle className="w-24 h-24 text-red-500" />
+                </div>
+                <div className="flex items-center gap-2 mb-2">
+                  <TrendingUp className="size-4 text-red-500" />
+                  <p className="text-[10px] font-bold text-red-600 uppercase tracking-wider">Most Reported District</p>
+                </div>
+                <p className="text-xl font-extrabold text-foreground truncate" title={stats.mostReportedDistrict?.district || "N/A"}>
+                  {stats.mostReportedDistrict?.district || "N/A"}
+                </p>
+                <p className="text-sm font-semibold text-red-500 mt-1">
+                  {stats.mostReportedDistrict?.totalReports || 0} reports
+                </p>
+              </Card>
+
+              <Card className="p-4 bg-emerald-500/5 border-emerald-500/20 relative overflow-hidden group hover:bg-emerald-500/10 transition-colors">
+                <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <ShieldCheck className="w-24 h-24 text-emerald-500" />
+                </div>
+                <div className="flex items-center gap-2 mb-2">
+                  <TrendingDown className="size-4 text-emerald-500" />
+                  <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Lowest Reported District</p>
+                </div>
+                <p className="text-xl font-extrabold text-foreground truncate" title={stats.lowestReportedDistrict?.district || "N/A"}>
+                  {stats.lowestReportedDistrict?.district || "N/A"}
+                </p>
+                <p className="text-sm font-semibold text-emerald-500 mt-1">
+                  {stats.lowestReportedDistrict?.totalReports || 0} reports
+                </p>
+              </Card>
+
+              <Card className="p-4 bg-orange-500/5 border-orange-500/20 relative overflow-hidden group hover:bg-orange-500/10 transition-colors">
+                <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <AlertTriangle className="w-24 h-24 text-orange-500" />
+                </div>
+                <div className="flex items-center gap-2 mb-2">
+                  <TrendingUp className="size-4 text-orange-500" />
+                  <p className="text-[10px] font-bold text-orange-600 uppercase tracking-wider">Most Reported Area</p>
+                </div>
+                <p className="text-xl font-extrabold text-foreground truncate" title={stats.mostReportedArea?.area || "N/A"}>
+                  {stats.mostReportedArea?.area || "N/A"}
+                </p>
+                <p className="text-sm font-semibold text-orange-500 mt-1">
+                  {stats.mostReportedArea?.totalReports || 0} reports
+                </p>
+              </Card>
+
+              <Card className="p-4 bg-blue-500/5 border-blue-500/20 relative overflow-hidden group hover:bg-blue-500/10 transition-colors">
+                <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <ShieldCheck className="w-24 h-24 text-blue-500" />
+                </div>
+                <div className="flex items-center gap-2 mb-2">
+                  <TrendingDown className="size-4 text-blue-500" />
+                  <p className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Lowest Reported Area</p>
+                </div>
+                <p className="text-xl font-extrabold text-foreground truncate" title={stats.lowestReportedArea?.area || "N/A"}>
+                  {stats.lowestReportedArea?.area || "N/A"}
+                </p>
+                <p className="text-sm font-semibold text-blue-500 mt-1">
+                  {stats.lowestReportedArea?.totalReports || 0} reports
+                </p>
+              </Card>
+            </div>
+          )}
 
           <ReportsFilter areaData={areaData}>
             <SearchInput />
