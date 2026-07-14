@@ -19,6 +19,7 @@ import {
   Flame,
   ThumbsUp,
   Waves,
+  Plus,
 } from "lucide-react";
 import { DeleteReportButton } from "./DeleteReportButton";
 
@@ -50,8 +51,8 @@ export default async function MyReportsPage() {
   const totalUpvotes = reports?.reduce((acc: number, r: any) => acc + (r.upvotes?.length || 0), 0) || 0;
 
   return (
-    <main className="min-h-[calc(100vh-3.5rem)] bg-muted/30 py-8 px-4">
-      <div className="container mx-auto max-w-5xl space-y-6">
+    <main className="min-h-[calc(100vh-3.5rem)] bg-muted/30 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
@@ -63,7 +64,10 @@ export default async function MyReportsPage() {
               Manage your submitted utility outage reports
             </p>
           </div>
-          <Button render={<Link href="/add-report" />} nativeButton={false}>Report New Outage</Button>
+          <Button className="gap-2" render={<Link href="/add-report" />} nativeButton={false}>
+            <Plus className="size-4" />
+            Report New Outage
+          </Button>
         </div>
 
         {/* Stats Grid */}
@@ -139,7 +143,8 @@ export default async function MyReportsPage() {
               <p className="text-sm text-muted-foreground max-w-sm mb-4">
                 You haven't submitted any utility outage reports yet.
               </p>
-              <Button variant="outline" render={<Link href="/add-report" />} nativeButton={false}>
+              <Button variant="outline" className="gap-2" render={<Link href="/add-report" />} nativeButton={false}>
+                <Plus className="size-4" />
                 Submit your first report
               </Button>
             </div>

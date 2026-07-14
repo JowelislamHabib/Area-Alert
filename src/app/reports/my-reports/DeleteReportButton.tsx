@@ -16,7 +16,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-export function DeleteReportButton({ id, redirectTo }: { id: string; redirectTo?: string }) {
+export function DeleteReportButton({ id, redirectTo, asIcon = true }: { id: string; redirectTo?: string; asIcon?: boolean }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
 
@@ -47,16 +47,25 @@ export function DeleteReportButton({ id, redirectTo }: { id: string; redirectTo?
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger render={
-        <Button
-          variant="destructive"
-          size="sm"
-          className="h-8 w-8 p-0"
-          disabled={isDeleting}
-          title="Delete Report"
-        />
+        asIcon ? (
+          <Button
+            variant="destructive"
+            size="sm"
+            className="h-8 w-8 p-0"
+            disabled={isDeleting}
+            title="Delete Report"
+          />
+        ) : (
+          <Button
+            variant="destructive"
+            size="default"
+            className="gap-2 shadow-sm"
+            disabled={isDeleting}
+          />
+        )
       }>
         <Trash2 className="size-4" />
-        <span className="sr-only">Delete</span>
+        {asIcon ? <span className="sr-only">Delete</span> : "Delete Report"}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

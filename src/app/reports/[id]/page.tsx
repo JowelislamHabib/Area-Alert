@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { formatDistanceToNow, format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import {
   ArrowLeft,
   Clock,
@@ -90,20 +91,23 @@ export default async function ReportDetailsPage({
   const exactTime = format(new Date(report.createdAt), "MMM d, yyyy h:mm a");
 
   return (
-    <main className="min-h-screen bg-background py-6 px-4 sm:px-8 font-sans text-foreground">
-      <div className="container mx-auto max-w-5xl space-y-6">
+    <main className="min-h-[calc(100vh-3.5rem)] bg-background py-6 font-sans text-foreground">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         {/* Back Link and Actions */}
         <div className="flex justify-between items-center">
-          <Link
-            href="/reports"
-            className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <ArrowLeft className="size-4 mr-2" /> Back to Explore
+          <Link href="/reports">
+            <Button
+              variant="ghost"
+              size="default"
+              className="gap-2 text-muted-foreground hover:text-foreground"
+            >
+              <ArrowLeft className="size-4" /> Back to Explore
+            </Button>
           </Link>
           {(user?.id === report.reporterId || user?.role === "admin") && (
             <div className="flex items-center gap-2">
-              <UpdateReportDialog report={report} />
-              <DeleteReportButton id={report._id} redirectTo="/reports" />
+              <UpdateReportDialog report={report} asIcon={false} />
+              <DeleteReportButton id={report._id} redirectTo="/reports" asIcon={false} />
             </div>
           )}
         </div>
