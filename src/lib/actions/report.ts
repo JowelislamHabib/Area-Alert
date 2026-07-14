@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import type { CreateReportInput } from "@/lib/types";
 import { revalidatePath } from "next/cache";
+import { getTokenServer } from "@/lib/getTokenServer";
 
 export async function createReport(formData: FormData) {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -45,15 +46,25 @@ export async function createReport(formData: FormData) {
     reporterImage: session.user.image || undefined,
   };
 
+  const token = await getTokenServer();
+
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/reports`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { 
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
+    },
     body: JSON.stringify(body),
   });
 
   if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    return { error: err.error || "Failed to create report" };
+    const text = await res.text().catch(() => "");
+    console.error("Backend fetch failed in createReport:", res.status, res.statusText, text);
+    let err = {};
+    try {
+      err = JSON.parse(text);
+    } catch (e) {}
+    return { error: (err as any).error || (err as any).msg || "Failed to create report" };
   }
 
   const report = await res.json();
@@ -114,10 +125,13 @@ export async function voteReport(id: string, voteType: "upvote" | "downvote" | "
     return { error: "Unauthorized" };
   }
 
+  const token = await getTokenServer();
+
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/reports/${id}/vote`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
     },
     body: JSON.stringify({
       userId: session.user.id,
@@ -140,10 +154,13 @@ export async function updateReportStatus(id: string, status: "active" | "resolve
     return { error: "Unauthorized" };
   }
 
+  const token = await getTokenServer();
+
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/reports/${id}/status`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
     },
     body: JSON.stringify({
       userId: session.user.id,
@@ -167,10 +184,13 @@ export async function deleteReport(id: string) {
     return { error: "Unauthorized" };
   }
 
+  const token = await getTokenServer();
+
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/reports/${id}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
     },
     body: JSON.stringify({
       userId: session.user.id,
@@ -192,10 +212,13 @@ export async function updateReport(id: string, data: { shortDescription?: string
     return { error: "Unauthorized" };
   }
 
+  const token = await getTokenServer();
+
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/reports/${id}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
     },
     body: JSON.stringify({
       userId: session.user.id,

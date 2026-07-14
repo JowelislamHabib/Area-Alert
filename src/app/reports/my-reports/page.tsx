@@ -61,7 +61,7 @@ export default async function MyReportsPage() {
               Manage your submitted utility outage reports
             </p>
           </div>
-          <Button render={<Link href="/add-report" />}>Report New Outage</Button>
+          <Button render={<Link href="/add-report" />} nativeButton={false}>Report New Outage</Button>
         </div>
 
         {/* Stats Grid */}
@@ -137,7 +137,7 @@ export default async function MyReportsPage() {
               <p className="text-sm text-muted-foreground max-w-sm mb-4">
                 You haven't submitted any utility outage reports yet.
               </p>
-              <Button variant="outline" render={<Link href="/add-report" />}>
+              <Button variant="outline" render={<Link href="/add-report" />} nativeButton={false}>
                 Submit your first report
               </Button>
             </div>
@@ -199,7 +199,7 @@ export default async function MyReportsPage() {
                               variant="ghost"
                               size="icon-sm"
                               className="text-muted-foreground hover:text-primary"
-                              render={<Link href={`/reports/${report._id}`} title="View Report" />}
+                              render={<Link href={`/reports/${report._id}`} title="View Report" />} nativeButton={false}
                             >
                               <Eye className="size-4" />
                               <span className="sr-only">View</span>

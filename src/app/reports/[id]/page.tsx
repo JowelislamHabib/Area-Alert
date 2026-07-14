@@ -93,7 +93,7 @@ export default async function ReportDetailsPage({
           >
             <ArrowLeft className="size-4 mr-2" /> Back to Explore
           </Link>
-          {user?.id === report.reporterId && (
+          {(user?.id === report.reporterId || user?.role === "admin") && (
             <div className="flex items-center gap-2">
               <UpdateReportDialog report={report} />
               <DeleteReportButton id={report._id} redirectTo="/reports" />
