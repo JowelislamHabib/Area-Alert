@@ -1,7 +1,6 @@
 import { getReports, getReportStatsData } from "@/lib/actions/report";
 import { ReportsFilter } from "./ReportsFilter";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { formatDistanceToNow } from "date-fns";
 import {
   Zap,
@@ -10,14 +9,15 @@ import {
   Flame,
   MapPin,
   ArrowUp,
-  Paperclip,
   CheckCircle,
   ThumbsDown,
   TrendingUp,
   TrendingDown,
-  AlertTriangle,
   ShieldCheck,
+  User,
+  HelpCircle,
 } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import Link from "next/link";
 import { SearchInput } from "./SearchInput";
 import { PaginationControls } from "./PaginationControls";
@@ -28,28 +28,38 @@ import type { Report } from "@/lib/types";
 const UTILITY_ICONS = {
   electricity: {
     icon: Zap,
-    color: "text-yellow-500",
-    bg: "bg-yellow-500/10",
+    color: "text-amber-500",
+    bg: "bg-amber-500/10",
+    gradient: "from-amber-500 to-yellow-400",
     label: "Electricity",
   },
   internet: {
     icon: Wifi,
     color: "text-blue-500",
     bg: "bg-blue-500/10",
+    gradient: "from-blue-500 to-indigo-400",
     label: "Internet",
   },
   water: {
     icon: Droplets,
     color: "text-cyan-500",
     bg: "bg-cyan-500/10",
+    gradient: "from-cyan-500 to-teal-400",
     label: "Water",
   },
   gas: {
     icon: Flame,
     color: "text-orange-500",
     bg: "bg-orange-500/10",
+    gradient: "from-orange-500 to-red-400",
     label: "Gas",
   },
+};
+
+const STATUS_STYLES: Record<string, { dot: string; badge: string; label: string }> = {
+  active: { dot: "bg-red-500", badge: "bg-red-500/10 text-red-600 dark:text-red-400", label: "Active" },
+  resolved: { dot: "bg-emerald-500", badge: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400", label: "Resolved" },
+  pending: { dot: "bg-yellow-500", badge: "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400", label: "Pending" },
 };
 
 function getAreaData() {
@@ -69,8 +79,8 @@ export default async function ReportsPage({
   const stats = await getReportStatsData();
 
   return (
-    <main className="min-h-[calc(100vh-3.5rem)] bg-muted/30 py-8 px-4">
-      <div className="container mx-auto space-y-8">
+    <main className="min-h-[calc(100vh-3.5rem)] bg-muted/30 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="mb-8">
           <h1 className="text-3xl font-extrabold tracking-tight mb-2">
             Explore Reports
@@ -81,10 +91,8 @@ export default async function ReportsPage({
 
           {stats && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              <Card className="p-4 bg-red-500/5 border-red-500/20 relative overflow-hidden group hover:bg-red-500/10 transition-colors">
-                <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                  <AlertTriangle className="w-24 h-24 text-red-500" />
-                </div>
+              {/* Most Reported District */}
+              <Card className="p-4 bg-red-500/5 border-red-500/20 group hover:bg-red-500/10 transition-colors">
                 <div className="flex items-center gap-2 mb-2">
                   <TrendingUp className="size-4 text-red-500" />
                   <p className="text-[10px] font-bold text-red-600 uppercase tracking-wider">Most Reported District</p>
@@ -97,10 +105,8 @@ export default async function ReportsPage({
                 </p>
               </Card>
 
-              <Card className="p-4 bg-emerald-500/5 border-emerald-500/20 relative overflow-hidden group hover:bg-emerald-500/10 transition-colors">
-                <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                  <ShieldCheck className="w-24 h-24 text-emerald-500" />
-                </div>
+              {/* Lowest Reported District */}
+              <Card className="p-4 bg-emerald-500/5 border-emerald-500/20 group hover:bg-emerald-500/10 transition-colors">
                 <div className="flex items-center gap-2 mb-2">
                   <TrendingDown className="size-4 text-emerald-500" />
                   <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Lowest Reported District</p>
@@ -113,12 +119,10 @@ export default async function ReportsPage({
                 </p>
               </Card>
 
-              <Card className="p-4 bg-orange-500/5 border-orange-500/20 relative overflow-hidden group hover:bg-orange-500/10 transition-colors">
-                <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                  <AlertTriangle className="w-24 h-24 text-orange-500" />
-                </div>
+              {/* Most Reported Area */}
+              <Card className="p-4 bg-orange-500/5 border-orange-500/20 group hover:bg-orange-500/10 transition-colors">
                 <div className="flex items-center gap-2 mb-2">
-                  <TrendingUp className="size-4 text-orange-500" />
+                  <MapPin className="size-4 text-orange-500" />
                   <p className="text-[10px] font-bold text-orange-600 uppercase tracking-wider">Most Reported Area</p>
                 </div>
                 <p className="text-xl font-extrabold text-foreground truncate" title={stats.mostReportedArea?.area || "N/A"}>
@@ -129,10 +133,8 @@ export default async function ReportsPage({
                 </p>
               </Card>
 
-              <Card className="p-4 bg-blue-500/5 border-blue-500/20 relative overflow-hidden group hover:bg-blue-500/10 transition-colors">
-                <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                  <ShieldCheck className="w-24 h-24 text-blue-500" />
-                </div>
+              {/* Lowest Reported Area */}
+              <Card className="p-4 bg-blue-500/5 border-blue-500/20 group hover:bg-blue-500/10 transition-colors">
                 <div className="flex items-center gap-2 mb-2">
                   <TrendingDown className="size-4 text-blue-500" />
                   <p className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Lowest Reported Area</p>
@@ -166,7 +168,7 @@ export default async function ReportsPage({
                 <p>Try adjusting your filters to see more results.</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                 {reports?.map((report: Report) => {
                   const ui =
                     UTILITY_ICONS[report.utilityType] ||
@@ -179,6 +181,7 @@ export default async function ReportsPage({
                   const upvotesCount = report.upvotes?.length || 0;
                   const resolvedVotesCount = report.resolvedVotes?.length || 0;
                   const downvotesCount = report.downvotes?.length || 0;
+                  const status = STATUS_STYLES[report.status] || STATUS_STYLES.pending;
 
                   return (
                     <Link
@@ -186,64 +189,94 @@ export default async function ReportsPage({
                       key={report._id}
                       className="block h-full"
                     >
-                      <Card className="p-0 gap-0 hover:border-primary/50 transition-all duration-300 hover:shadow-md h-full flex flex-col bg-card/80 backdrop-blur-sm cursor-pointer group overflow-hidden">
-                        <div className="p-4 flex-1 flex flex-col">
-                          <div className="flex items-start justify-between mb-3">
-                            <div className={`p-2 rounded-xl ${ui.bg}`}>
-                              <Icon className={`size-4 ${ui.color}`} />
+                      <div className="group relative bg-card rounded-2xl border border-border/60 overflow-hidden hover:shadow-lg hover:shadow-primary/5 hover:border-primary/20 hover:-translate-y-0.5 transition-all duration-300 h-full flex flex-col cursor-pointer">
+                        <div className="p-5 flex-1 flex flex-col">
+                          {/* Header: icon + status */}
+                          <div className="flex items-start justify-between mb-4">
+                            <div className={`flex size-10 items-center justify-center rounded-xl ${ui.bg} ${ui.color}`}>
+                              <Icon className="size-5" />
                             </div>
-                            <Badge
-                              variant={
-                                report.status === "active"
-                                  ? "destructive"
-                                  : report.status === "resolved"
-                                    ? "default"
-                                    : "secondary"
-                              }
-                              className={`text-[10px] uppercase tracking-wide font-bold px-2 py-0.5 ${report.status === "resolved" ? "bg-emerald-500 hover:bg-emerald-600" : ""}`}
-                            >
-                              {report.status}
-                            </Badge>
+                            <div className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${status.badge}`}>
+                              <span className={`size-1.5 rounded-full ${status.dot}`} />
+                              {status.label}
+                            </div>
                           </div>
 
-                          <h3 className="text-sm font-bold leading-tight group-hover:text-primary transition-colors line-clamp-1">
-                            {report.area}
-                          </h3>
-                          <p className="text-xs text-muted-foreground mt-0.5 mb-2 line-clamp-1">
-                            {report.district}
-                          </p>
+                          {/* Area + District */}
+                          <div className="mb-3">
+                            <h3 className="text-sm font-bold text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                              {report.area}
+                            </h3>
+                            <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
+                              {report.district}
+                            </p>
+                          </div>
 
-                          <p className="text-xs font-medium text-slate-700 dark:text-slate-300 line-clamp-2 mb-3 flex-1">
+                          {/* Description */}
+                          <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-4 flex-1">
                             {report.shortDescription}
                           </p>
 
-                          <div className="flex items-center gap-1.5 mt-auto flex-wrap pt-2">
-                            <div className="flex items-center gap-1 text-[10px] font-semibold text-emerald-600 bg-emerald-50/80 px-1.5 py-0.5 rounded">
-                              <ArrowUp className="size-3" /> {upvotesCount}
-                            </div>
-                            <div className="flex items-center gap-1 text-[10px] font-semibold text-blue-600 bg-blue-50/80 px-1.5 py-0.5 rounded">
-                              <CheckCircle className="size-3" />{" "}
-                              {resolvedVotesCount}
-                            </div>
-                            <div className="flex items-center gap-1 text-[10px] font-semibold text-red-600 bg-red-50/80 px-1.5 py-0.5 rounded">
-                              <ThumbsDown className="size-3" /> {downvotesCount}
-                            </div>
-                            <span className="text-[10px] text-muted-foreground font-medium ml-auto">
+                          {/* Vote counts */}
+                          <div className="flex items-center gap-2 mb-3">
+                            <Tooltip>
+                              <TooltipTrigger className="flex items-center gap-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 rounded-lg px-2 py-1">
+                                <ArrowUp className="size-3" /> {upvotesCount}
+                              </TooltipTrigger>
+                              <TooltipContent>Confirmed</TooltipContent>
+                            </Tooltip>
+                            <Tooltip>
+                              <TooltipTrigger className="flex items-center gap-1 text-[11px] font-semibold text-blue-600 dark:text-blue-400 bg-blue-500/10 rounded-lg px-2 py-1">
+                                <CheckCircle className="size-3" /> {resolvedVotesCount}
+                              </TooltipTrigger>
+                              <TooltipContent>Resolved</TooltipContent>
+                            </Tooltip>
+                            {downvotesCount > 0 && (
+                              <Tooltip>
+                                <TooltipTrigger className="flex items-center gap-1 text-[11px] font-semibold text-red-600 dark:text-red-400 bg-red-500/10 rounded-lg px-2 py-1">
+                                  <ThumbsDown className="size-3" /> {downvotesCount}
+                                </TooltipTrigger>
+                                <TooltipContent>Faked</TooltipContent>
+                              </Tooltip>
+                            )}
+                          </div>
+
+                          {/* Footer: verified + time */}
+                          <div className="flex items-center justify-between pt-3 border-t border-border/50">
+                            {upvotesCount > 0 ? (
+                              <div className="flex items-center gap-2">
+                                <div className="flex items-center text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+                                  <ShieldCheck className="size-3.5 mr-1" />
+                                  Verified by {upvotesCount} {upvotesCount === 1 ? "user" : "users"}
+                                </div>
+                                {/* Stacked avatars */}
+                                <div className="flex -space-x-1.5">
+                                  {report.upvotes.slice(0, 3).map((userId: string, i: number) => {
+                                    const colors = ["bg-primary/20 text-primary", "bg-blue-500/20 text-blue-500", "bg-purple-500/20 text-purple-500"];
+                                    return (
+                                      <div
+                                        key={userId}
+                                        className={`size-5 rounded-full border-2 border-background flex items-center justify-center ${colors[i % 3]}`}
+                                        style={{ zIndex: 3 - i }}
+                                      >
+                                        <User className="size-2.5" />
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            ) : (
+                              <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                                <HelpCircle className="size-3.5" />
+                                Help us verify this
+                              </span>
+                            )}
+                            <span className="text-[11px] text-muted-foreground">
                               {timeAgo}
                             </span>
                           </div>
                         </div>
-                        <div className="bg-muted/40 px-4 py-2.5 flex items-center gap-2 border-t border-border/50 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
-                          <span className="truncate max-w-[100px] text-foreground/80">
-                            {ui.label}
-                          </span>
-                          {(report.image || report.videoUrl) && (
-                            <span className="flex items-center gap-1 ml-auto text-blue-600 dark:text-blue-400">
-                              Media <Paperclip className="size-3" />
-                            </span>
-                          )}
-                        </div>
-                      </Card>
+                      </div>
                     </Link>
                   );
                 })}

@@ -4,6 +4,7 @@ import { Toaster } from "sonner";
 import Navbar from "@/components/shared/Navbar/Navbar";
 import Footer from "@/components/shared/Footer/Footer";
 import { ThemeProvider } from "@/components/shared/ThemeProvider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -42,9 +43,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          <TooltipProvider>
+            <Navbar />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </TooltipProvider>
           <Toaster position="top-right" richColors />
         </ThemeProvider>
       </body>
