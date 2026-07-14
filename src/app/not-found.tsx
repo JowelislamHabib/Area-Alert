@@ -24,15 +24,27 @@ export default function NotFound() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full justify-center">
-          <Button variant="default" className="w-full sm:w-auto min-w-[150px] p-0" asChild>
-            <Link href="/reports" className="flex items-center justify-center w-full h-full px-4 py-2">
+          <Button
+            variant="default"
+            className="w-full sm:w-auto min-w-[150px] p-0"
+          >
+            <Link
+              href="/reports"
+              className="flex items-center justify-center w-full h-full px-4 py-2"
+            >
               <Search className="size-4 mr-2" />
               Explore Reports
             </Link>
           </Button>
 
-          <Button variant="outline" className="w-full sm:w-auto min-w-[150px] p-0" asChild>
-            <Link href="/" className="flex items-center justify-center w-full h-full px-4 py-2">
+          <Button
+            variant="outline"
+            className="w-full sm:w-auto min-w-[150px] p-0"
+          >
+            <Link
+              href="/"
+              className="flex items-center justify-center w-full h-full px-4 py-2"
+            >
               <Home className="size-4 mr-2" />
               Go Home
             </Link>
