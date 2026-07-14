@@ -1,267 +1,100 @@
-"use client";
-
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { useReveal, spring } from "@/lib/useReveal";
-import {
-  ArrowRight,
-  Zap,
-  Droplets,
-  Wifi,
-  Activity,
-  ShieldCheck,
-} from "lucide-react";
-import { useEffect, useState } from "react";
+import { buttonVariants } from "@/components/ui/button";
+import { Search, ArrowRight, Zap, Wifi, Droplets, Flame, Shield, Clock } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function HeroSection() {
-  const [eyebrowRef, eyebrowRevealed] = useReveal();
-  const [headlineRef, headlineRevealed] = useReveal();
-  const [subtitleRef, subtitleRevealed] = useReveal();
-  const [ctaRef, ctaRevealed] = useReveal();
-  const [visualRef, visualRevealed] = useReveal();
-
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({
-        x: (e.clientX / window.innerWidth - 0.5) * 20,
-        y: (e.clientY / window.innerHeight - 0.5) * 20,
-      });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
   return (
-    <section className="relative overflow-hidden bg-background pt-24 pb-32 md:pt-32 md:pb-40 isolate">
-      {/* Premium Ambient Background */}
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-background to-background" />
-      <div
-        className="absolute top-1/2 right-1/4 -z-10 h-[500px] w-[500px] -translate-y-1/2 translate-x-1/2 rounded-full bg-primary/20 blur-[120px] opacity-50 dark:opacity-20 transition-transform duration-1000 ease-out"
-        style={{
-          transform: `translate(calc(50% + ${mousePos.x}px), calc(-50% + ${mousePos.y}px))`,
-        }}
-      />
-      <div
-        className="absolute top-1/4 left-1/4 -z-10 h-[400px] w-[400px] -translate-y-1/2 -translate-x-1/2 rounded-full bg-accent/10 blur-[100px] opacity-50 dark:opacity-20 transition-transform duration-1000 ease-out"
-        style={{
-          transform: `translate(calc(-50% - ${mousePos.x}px), calc(-50% - ${mousePos.y}px))`,
-        }}
-      />
-
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
-          {/* Left Column: Copy & CTA */}
-          <div className="flex flex-col items-start z-10">
-            <div
-              ref={eyebrowRef}
-              className="mb-8 inline-flex items-center gap-2 rounded-full border border-border/50 bg-background/50 px-3 py-1.5 text-sm font-medium text-foreground backdrop-blur-md shadow-sm"
-              style={{
-                opacity: eyebrowRevealed ? 1 : 0,
-                transform: eyebrowRevealed
-                  ? "translateY(0)"
-                  : "translateY(16px)",
-                filter: eyebrowRevealed ? "blur(0)" : "blur(4px)",
-                transition: `all 700ms ${spring}`,
-              }}
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-              </span>
-              <span className="text-muted-foreground tracking-wide uppercase text-xs font-semibold">
-                Live Outage Tracking
-              </span>
+    <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary/90 to-primary/80">
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyem0wLTR2Mkgxdi0yaDE1em0wLTR2Mkg4di0yaDE2eiIvPjwvZz48L2c+PC9zdmc+')] opacity-40" />
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 lg:py-40">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
+          <div className="space-y-6 text-primary-foreground">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-2 text-sm font-medium backdrop-blur-sm">
+              <Shield className="size-4" />
+              Community-Powered Utility Tracking
             </div>
-
-            <h1
-              ref={headlineRef}
-              className="text-5xl font-extrabold tracking-tight text-foreground sm:text-6xl md:text-7xl lg:text-7xl xl:text-8xl"
-              style={{
-                opacity: headlineRevealed ? 1 : 0,
-                transform: headlineRevealed
-                  ? "translateY(0)"
-                  : "translateY(24px)",
-                filter: headlineRevealed ? "blur(0)" : "blur(6px)",
-                transition: `all 800ms ${spring} 100ms`,
-              }}
-            >
-              Never stay in the{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-400 dark:to-emerald-300">
-                dark
-              </span>{" "}
-              again.
+            <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold tracking-tight text-primary-foreground text-balance leading-[1.15]">
+              Navigate Your City With <span className="text-primary-foreground/80">Confidence</span>
             </h1>
-
-            <p
-              ref={subtitleRef}
-              className="mt-6 text-lg text-muted-foreground md:text-xl leading-relaxed max-w-xl"
-              style={{
-                opacity: subtitleRevealed ? 1 : 0,
-                transform: subtitleRevealed
-                  ? "translateY(0)"
-                  : "translateY(20px)",
-                filter: subtitleRevealed ? "blur(0)" : "blur(4px)",
-                transition: `all 800ms ${spring} 200ms`,
-              }}
-            >
-              AreaAlert empowers communities across Bangladesh to report, track,
-              and resolve electricity, water, and internet outages in real-time.
+            <p className="text-lg sm:text-xl text-primary-foreground/80 max-w-lg leading-relaxed text-balance">
+              Don't let sudden power cuts or flooded roads catch you off guard. Rely on real-time community reports to stay safe and save time.
             </p>
-
-            <div
-              ref={ctaRef}
-              className="mt-10 flex flex-col gap-4 sm:flex-row w-full sm:w-auto"
-              style={{
-                opacity: ctaRevealed ? 1 : 0,
-                transform: ctaRevealed ? "translateY(0)" : "translateY(20px)",
-                filter: ctaRevealed ? "blur(0)" : "blur(4px)",
-                transition: `all 800ms ${spring} 300ms`,
-              }}
-            >
-              <Link href="/report">
-                <Button size="lg">
-                  Report Outage <Activity className="ml-2" />
-                </Button>
+            <div className="flex flex-col sm:flex-row gap-4 pt-2">
+              <Link
+                href="/reports"
+                className={cn(
+                  buttonVariants({ size: "lg" }),
+                  "font-semibold bg-primary-foreground text-primary hover:bg-primary-foreground/90 border-0 shadow-lg shadow-black/10"
+                )}
+              >
+                <Search className="mr-2 size-4" />
+                Explore Reports
               </Link>
-
-              <Link href="/reports">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="h-14 px-8 text-base bg-background/50 backdrop-blur-sm transition-all hover:bg-muted"
-                >
-                  Explore Map <ArrowRight className="ml-2 size-5" />
-                </Button>
+              <Link
+                href="/add-report"
+                className={cn(
+                  buttonVariants({ variant: "outline", size: "lg" }),
+                  "bg-transparent font-semibold border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+                )}
+              >
+                Report an Outage
+                <ArrowRight className="ml-2 size-4" />
               </Link>
-            </div>
-
-            {/* Social Proof / Trust */}
-            <div className="mt-12 flex items-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-500 fill-mode-both">
-              <div className="flex -space-x-3">
-                {[1, 2, 3, 4].map((i) => (
-                  <div
-                    key={i}
-                    className="size-10 rounded-full border-2 border-background bg-muted overflow-hidden"
-                  >
-                    <img
-                      src={`https://api.dicebear.com/9.x/notionists/svg?seed=${i}&backgroundColor=transparent`}
-                      alt="User"
-                      className="size-full object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
-              <div className="text-sm">
-                <div className="font-semibold text-foreground">
-                  Trusted by 10k+
-                </div>
-                <div className="text-muted-foreground">community members</div>
-              </div>
             </div>
           </div>
-
-          {/* Right Column: Premium Visuals */}
-          <div
-            ref={visualRef}
-            className="relative hidden lg:flex h-full min-h-[600px] w-full items-center justify-center perspective-[1000px]"
-            style={{
-              opacity: visualRevealed ? 1 : 0,
-              transform: visualRevealed
-                ? "scale(0.95) translateY(20px)"
-                : "scale(0.9) translateY(40px)",
-              filter: visualRevealed ? "blur(0)" : "blur(10px)",
-              transition: `all 1000ms ${spring} 400ms`,
-            }}
-          >
-            {/* Main Center Card */}
-            <div
-              className="absolute z-20 w-[380px] rounded-3xl bg-card/80 border border-border/50 shadow-2xl backdrop-blur-xl p-6 transition-transform duration-700 ease-out"
-              style={{
-                transform: `rotateY(${mousePos.x * 0.5}deg) rotateX(${-mousePos.y * 0.5}deg)`,
-              }}
-            >
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
-                  <div className="size-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
-                    <Zap className="size-6 fill-primary/20" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-lg text-foreground">
-                      Power Outage
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      Gulshan-1, Dhaka
-                    </p>
-                  </div>
-                </div>
-                <div className="px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-bold animate-pulse">
-                  Active
-                </div>
-              </div>
-              <div className="space-y-4">
-                <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
-                  <div className="h-full w-[65%] bg-primary rounded-full" />
-                </div>
-                <div className="flex justify-between text-xs font-medium text-muted-foreground">
-                  <span>Reported 2h ago</span>
-                  <span className="text-primary">Resolving soon</span>
-                </div>
-              </div>
-              <div className="mt-6 pt-6 border-t border-border/50 flex items-center justify-between">
-                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                  <ShieldCheck className="size-4 text-emerald-500" />
-                  Verified by 42 users
-                </div>
-                <div className="flex -space-x-2">
-                  <div className="size-6 rounded-full bg-emerald-100 border border-background" />
-                  <div className="size-6 rounded-full bg-blue-100 border border-background" />
-                  <div className="size-6 rounded-full bg-purple-100 border border-background" />
-                </div>
-              </div>
-            </div>
-
-            {/* Floating Card 1 - Top Right */}
-            <div
-              className="absolute z-10 w-[240px] rounded-2xl bg-card/60 border border-border/40 shadow-xl backdrop-blur-md p-4 -top-8 -right-4 transition-transform duration-700 ease-out"
-              style={{
-                transform: `translate(${mousePos.x * 0.8}px, ${mousePos.y * 0.8}px) rotate(6deg)`,
-              }}
-            >
-              <div className="flex items-center gap-3">
-                <div className="size-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500">
-                  <Droplets className="size-5" />
+          <div className="hidden lg:flex items-center justify-center">
+            <div className="relative w-full max-w-md aspect-square">
+              {/* Floating utility cards */}
+              <div className="absolute top-4 left-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 flex items-center gap-3 shadow-lg shadow-black/10 rotate-[-4deg] hover:rotate-0 transition-transform duration-300">
+                <div className="flex size-12 items-center justify-center rounded-xl bg-yellow-400/20 text-yellow-300">
+                  <Zap className="size-6" />
                 </div>
                 <div>
-                  <div className="font-semibold text-sm">Water Supply</div>
-                  <div className="text-xs text-emerald-500">Restored</div>
+                  <p className="text-sm font-semibold text-white">Electricity</p>
+                  <p className="text-xs text-white/60">142 active reports</p>
                 </div>
               </div>
-            </div>
-
-            {/* Floating Card 2 - Bottom Left */}
-            <div
-              className="absolute z-30 w-[260px] rounded-2xl bg-card/60 border border-border/40 shadow-xl backdrop-blur-md p-4 -bottom-12 -left-8 transition-transform duration-700 ease-out"
-              style={{
-                transform: `translate(${-mousePos.x * 0.6}px, ${-mousePos.y * 0.6}px) rotate(-4deg)`,
-              }}
-            >
-              <div className="flex items-center gap-3">
-                <div className="size-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-500">
-                  <Wifi className="size-5" />
+              <div className="absolute top-32 right-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 flex items-center gap-3 shadow-lg shadow-black/10 rotate-[3deg] hover:rotate-0 transition-transform duration-300">
+                <div className="flex size-12 items-center justify-center rounded-xl bg-blue-400/20 text-blue-300">
+                  <Wifi className="size-6" />
                 </div>
                 <div>
-                  <div className="font-semibold text-sm">ISP Downtime</div>
-                  <div className="text-xs text-muted-foreground">
-                    Dhanmondi, 5m ago
-                  </div>
+                  <p className="text-sm font-semibold text-white">Internet</p>
+                  <p className="text-xs text-white/60">89 active reports</p>
+                </div>
+              </div>
+              <div className="absolute bottom-32 left-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 flex items-center gap-3 shadow-lg shadow-black/10 rotate-[2deg] hover:rotate-0 transition-transform duration-300">
+                <div className="flex size-12 items-center justify-center rounded-xl bg-cyan-400/20 text-cyan-300">
+                  <Droplets className="size-6" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white">Water</p>
+                  <p className="text-xs text-white/60">67 active reports</p>
+                </div>
+              </div>
+              <div className="absolute bottom-12 right-12 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 flex items-center gap-3 shadow-lg shadow-black/10 rotate-[-2deg] hover:rotate-0 transition-transform duration-300">
+                <div className="flex size-12 items-center justify-center rounded-xl bg-orange-400/20 text-orange-300">
+                  <Flame className="size-6" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white">Gas</p>
+                  <p className="text-xs text-white/60">34 active reports</p>
+                </div>
+              </div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="flex size-20 items-center justify-center rounded-full bg-white/10 backdrop-blur-sm border border-white/20">
+                  <Clock className="size-8 text-white/80" />
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      {/* Bottom wave */}
+      <svg className="absolute bottom-0 left-0 right-0 w-full h-16 sm:h-24 text-background" viewBox="0 0 1440 100" preserveAspectRatio="none">
+        <path d="M0,100 C360,0 720,0 1080,50 C1260,75 1380,100 1440,100 L1440,100 L0,100 Z" fill="currentColor" />
+      </svg>
     </section>
   );
 }

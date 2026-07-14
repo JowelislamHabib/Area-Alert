@@ -1,83 +1,75 @@
-"use client";
-
-import { useReveal, spring } from "@/lib/useReveal";
-import { ShieldCheck, Clock, MapPin, Smartphone } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { BadgeCheck, Timer, MapPin, Smartphone } from "lucide-react";
 
 const features = [
-  { title: "Community Verified Updates", description: "Real-time outage reports verified by people in your area. Know what is happening before you head out.", icon: ShieldCheck },
-  { title: "Fast Reporting", description: "Report an outage in seconds. Select your service, area, and status.", icon: Clock },
-  { title: "Search by Area", description: "Find outages in any district across Bangladesh. Filter by service type and status.", icon: MapPin },
-  { title: "Mobile Friendly", description: "Works on every device. Report and browse on the go.", icon: Smartphone },
+  {
+    icon: BadgeCheck,
+    title: "Community Verified",
+    description:
+      "Reports confirmed by multiple users in your area. Trust what your neighbors are reporting.",
+    accent: "from-emerald-500 to-emerald-600",
+  },
+  {
+    icon: Timer,
+    title: "Lightning Fast",
+    description:
+      "Submit an outage report in under 60 seconds. Select, describe, done.",
+    accent: "from-amber-500 to-orange-500",
+  },
+  {
+    icon: MapPin,
+    title: "Hyperlocal Search",
+    description:
+      "Search by area, district, or utility type. Get the exact status of your neighborhood.",
+    accent: "from-blue-500 to-indigo-500",
+  },
+  {
+    icon: Smartphone,
+    title: "Always Accessible",
+    description:
+      "Fully responsive for phone, tablet, or desktop. Check before you leave the house.",
+    accent: "from-purple-500 to-pink-500",
+  },
 ];
 
-function FeatureCard({ feature, index }: { feature: (typeof features)[number]; index: number }) {
-  const [ref, revealed] = useReveal();
-  const Icon = feature.icon;
-
-  return (
-    <div
-      ref={ref}
-      style={{
-        opacity: revealed ? 1 : 0,
-        transform: revealed ? "translateY(0)" : "translateY(24px)",
-        filter: revealed ? "blur(0)" : "blur(4px)",
-        transition: `all 800ms ${spring} ${index * 100}ms`,
-      }}
-    >
-      <div className="h-full rounded-2xl bg-background p-8 border border-border shadow-sm transition-all duration-300 hover:shadow-md hover:border-primary/20 hover:-translate-y-1">
-        <div className="mb-6 inline-flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-          <Icon className="size-7" />
-        </div>
-        <h3 className="mb-3 text-xl font-semibold text-foreground">
-          {feature.title}
-        </h3>
-        <p className="text-muted-foreground leading-relaxed">
-          {feature.description}
-        </p>
-      </div>
-    </div>
-  );
-}
-
 export default function FeaturesSection() {
-  const [eyebrowRef, eyebrowRevealed] = useReveal();
-  const [headingRef, headingRevealed] = useReveal();
-
   return (
-    <section className="bg-background py-24 md:py-32">
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="mb-16 flex flex-col items-center text-center">
-          <div
-            ref={eyebrowRef}
-            style={{
-              opacity: eyebrowRevealed ? 1 : 0,
-              transform: eyebrowRevealed ? "translateY(0)" : "translateY(16px)",
-              transition: `all 700ms ${spring}`,
-            }}
-          >
-            <Badge variant="outline" className="mb-6">
-              Features
-            </Badge>
-          </div>
-          
-          <h2
-            ref={headingRef}
-            className="text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-5xl max-w-2xl"
-            style={{
-              opacity: headingRevealed ? 1 : 0,
-              transform: headingRevealed ? "translateY(0)" : "translateY(24px)",
-              transition: `all 800ms ${spring} 100ms`,
-            }}
-          >
-            Built to keep communities connected and informed.
+    <section className="py-24 sm:py-32 bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16 space-y-4">
+          <p className="text-sm font-semibold uppercase tracking-wider text-primary">
+            Why AreaAlert
+          </p>
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+            Built for your community
           </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Purpose-built for Bangladeshi communities to share and find utility
+            service information quickly.
+          </p>
         </div>
-
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {features.map((feature, i) => (
-            <FeatureCard key={feature.title} feature={feature} index={i} />
-          ))}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {features.map((feature) => {
+            const Icon = feature.icon;
+            return (
+              <div
+                key={feature.title}
+                className="group relative bg-card rounded-2xl border border-border/60 p-6 space-y-5 hover:shadow-lg hover:shadow-primary/5 hover:border-primary/20 transition-all duration-300"
+              >
+                <div className={`flex size-12 items-center justify-center rounded-xl bg-gradient-to-br ${feature.accent} text-white shadow-lg shadow-primary/10`}>
+                  <Icon className="size-6" />
+                </div>
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-foreground">
+                    {feature.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {feature.description}
+                  </p>
+                </div>
+                <div className="absolute bottom-0 left-6 right-6 h-0.5 bg-gradient-to-r from-transparent via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

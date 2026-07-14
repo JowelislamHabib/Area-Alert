@@ -1,87 +1,97 @@
-"use client";
-
-import { useReveal, spring } from "@/lib/useReveal";
-import { Zap, Wifi, Droplet, Flame } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
+import { Zap, Wifi, Droplets, Flame, ArrowRight } from "lucide-react";
+import { getReports } from "@/lib/actions/report";
+import { cn } from "@/lib/utils";
 
 const categories = [
-  { title: "Electricity", description: "Power outages, voltage fluctuations, and grid failures.", icon: Zap, count: "1,234", color: "text-[#F59E0B]", bg: "bg-[#FEF3C7] dark:bg-amber-950/30" },
-  { title: "Internet", description: "Broadband, fiber, and mobile network disruptions.", icon: Wifi, count: "856", color: "text-[#8B5CF6]", bg: "bg-[#EDE9FE] dark:bg-purple-950/30" },
-  { title: "Water", description: "Supply interruptions, pressure issues, and pipeline breaks.", icon: Droplet, count: "567", color: "text-[#3B82F6]", bg: "bg-[#DBEAFE] dark:bg-blue-950/30" },
-  { title: "Gas", description: "Gas line outages, pressure drops, and supply schedules.", icon: Flame, count: "342", color: "text-[#EF4444]", bg: "bg-[#FEE2E2] dark:bg-red-950/30" },
+  {
+    type: "electricity",
+    icon: Zap,
+    label: "Electricity",
+    href: "/reports?utilityType=electricity",
+    gradient: "from-amber-500 to-yellow-400",
+    light: "bg-amber-50 dark:bg-amber-950/30",
+    ring: "ring-amber-500/20",
+  },
+  {
+    type: "internet",
+    icon: Wifi,
+    label: "Internet",
+    href: "/reports?utilityType=internet",
+    gradient: "from-blue-500 to-indigo-400",
+    light: "bg-blue-50 dark:bg-blue-950/30",
+    ring: "ring-blue-500/20",
+  },
+  {
+    type: "water",
+    icon: Droplets,
+    label: "Water",
+    href: "/reports?utilityType=water",
+    gradient: "from-cyan-500 to-teal-400",
+    light: "bg-cyan-50 dark:bg-cyan-950/30",
+    ring: "ring-cyan-500/20",
+  },
+  {
+    type: "gas",
+    icon: Flame,
+    label: "Gas",
+    href: "/reports?utilityType=gas",
+    gradient: "from-orange-500 to-red-400",
+    light: "bg-orange-50 dark:bg-orange-950/30",
+    ring: "ring-orange-500/20",
+  },
 ];
 
-function CategoryCard({ category, index }: { category: (typeof categories)[number]; index: number }) {
-  const [ref, revealed] = useReveal();
-  const Icon = category.icon;
+export default async function CategoriesSection() {
+  const result = await getReports({ limit: "1000" });
+  const reports = result.success ? result.reports : [];
+  const counts: Record<string, number> = {};
+  for (const r of reports) {
+    counts[r.utilityType] = (counts[r.utilityType] || 0) + 1;
+  }
 
   return (
-    <div
-      ref={ref}
-      style={{
-        opacity: revealed ? 1 : 0,
-        transform: revealed ? "translateY(0)" : "translateY(24px)",
-        filter: revealed ? "blur(0)" : "blur(4px)",
-        transition: `all 800ms ${spring} ${index * 100}ms`,
-      }}
-    >
-      <div className="group h-full rounded-2xl bg-card border border-border p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-        <div className={`mb-6 flex size-14 items-center justify-center rounded-2xl ${category.bg} ${category.color} transition-transform group-hover:scale-110 duration-300`}>
-          <Icon className="size-6" />
-        </div>
-        <h3 className="mb-2 text-xl font-semibold text-foreground">
-          {category.title}
-        </h3>
-        <p className="mb-6 text-sm text-muted-foreground leading-relaxed">
-          {category.description}
-        </p>
-        <div className="flex items-center justify-between border-t border-border pt-4 mt-auto">
-          <span className="text-sm font-medium text-muted-foreground">Active Reports</span>
-          <span className="text-xl font-bold text-foreground">{category.count}</span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default function CategoriesSection() {
-  const [eyebrowRef, eyebrowRevealed] = useReveal();
-  const [headingRef, headingRevealed] = useReveal();
-
-  return (
-    <section className="bg-muted/30 py-24 md:py-32">
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="mb-16 flex flex-col items-center text-center">
-          <div
-            ref={eyebrowRef}
-            style={{
-              opacity: eyebrowRevealed ? 1 : 0,
-              transform: eyebrowRevealed ? "translateY(0)" : "translateY(16px)",
-              transition: `all 700ms ${spring}`,
-            }}
-          >
-            <Badge variant="outline" className="mb-6">
-              Service Categories
-            </Badge>
-          </div>
-          
-          <h2
-            ref={headingRef}
-            className="text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-5xl max-w-2xl"
-            style={{
-              opacity: headingRevealed ? 1 : 0,
-              transform: headingRevealed ? "translateY(0)" : "translateY(24px)",
-              transition: `all 800ms ${spring} 100ms`,
-            }}
-          >
-            Track outages across all major utility services.
+    <section className="py-24 sm:py-32 bg-secondary dark:bg-secondary/30">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16 space-y-4">
+          <p className="text-sm font-semibold uppercase tracking-wider text-primary">
+            Service Categories
+          </p>
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+            What&apos;s happening in your area
           </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Browse by utility type. Each category shows live community reports.
+          </p>
         </div>
-
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {categories.map((category, i) => (
-            <CategoryCard key={category.title} category={category} index={i} />
-          ))}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {categories.map((cat) => {
+            const Icon = cat.icon;
+            const count = counts[cat.type] || 0;
+            return (
+              <Link key={cat.type} href={cat.href} className="group block">
+                <div className={cn(
+                  "relative overflow-hidden rounded-2xl border border-border/60 p-6 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1",
+                  cat.light
+                )}>
+                  <div className={`flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br ${cat.gradient} text-white shadow-lg mb-5 group-hover:scale-110 transition-transform duration-300`}>
+                    <Icon className="size-7" />
+                  </div>
+                  <h3 className="font-semibold text-lg text-foreground mb-1">
+                    {cat.label}
+                  </h3>
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl font-bold text-foreground">{count}</span>
+                    <span className="text-sm text-muted-foreground">{count === 1 ? "report" : "reports"}</span>
+                  </div>
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-white/40 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 dark:from-white/5" />
+                  <div className="mt-4 flex items-center gap-1 text-sm font-medium text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    View reports <ArrowRight className="size-4" />
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>

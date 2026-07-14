@@ -1,85 +1,79 @@
-"use client";
-
-import { useReveal, spring } from "@/lib/useReveal";
-import { UserPlus, TriangleAlert, Heart } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { UserPlus, FileText, HeartHandshake } from "lucide-react";
 
 const steps = [
-  { step: 1, title: "Create an Account", description: "Sign up for free with your email or Google account. No credit card required.", icon: UserPlus },
-  { step: 2, title: "Report Utility Status", description: "Select your service type, area, and status. Add details to help your neighbors.", icon: TriangleAlert },
-  { step: 3, title: "Help Your Community", description: "Browse reports, stay informed, and contribute updates to keep everyone in the loop.", icon: Heart },
+  {
+    icon: UserPlus,
+    title: "Create an Account",
+    description:
+      "Sign up with your email or Google in under a minute. No complicated forms.",
+    step: "01",
+  },
+  {
+    icon: FileText,
+    title: "Report Utility Status",
+    description:
+      "Select your area, describe the issue, and submit. Electricity, water, gas, or internet.",
+    step: "02",
+  },
+  {
+    icon: HeartHandshake,
+    title: "Help Your Community",
+    description:
+      "Your report helps neighbors make informed decisions. Together we build a reliable map.",
+    step: "03",
+  },
 ];
 
-function StepCard({ step, index }: { step: (typeof steps)[number]; index: number }) {
-  const [ref, revealed] = useReveal();
-  const Icon = step.icon;
-
-  return (
-    <div
-      ref={ref}
-      style={{
-        opacity: revealed ? 1 : 0,
-        transform: revealed ? "translateY(0)" : "translateY(24px)",
-        filter: revealed ? "blur(0)" : "blur(4px)",
-        transition: `all 800ms ${spring} ${index * 120}ms`,
-      }}
-    >
-      <div className="flex h-full flex-col items-center text-center p-8 rounded-2xl bg-card border border-border shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-4 text-9xl font-black text-muted/30 select-none -translate-y-6 translate-x-4">
-          {step.step}
-        </div>
-        <div className="mb-6 flex size-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/20 relative z-10">
-          <Icon className="size-7" />
-        </div>
-        <h3 className="mb-3 text-xl font-semibold text-foreground relative z-10">
-          {step.title}
-        </h3>
-        <p className="text-muted-foreground leading-relaxed relative z-10">
-          {step.description}
-        </p>
-      </div>
-    </div>
-  );
-}
-
 export default function HowItWorksSection() {
-  const [eyebrowRef, eyebrowRevealed] = useReveal();
-  const [headingRef, headingRevealed] = useReveal();
-
   return (
-    <section className="bg-background py-24 md:py-32">
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="mb-16 flex flex-col items-center text-center">
-          <div
-            ref={eyebrowRef}
-            style={{
-              opacity: eyebrowRevealed ? 1 : 0,
-              transform: eyebrowRevealed ? "translateY(0)" : "translateY(16px)",
-              transition: `all 700ms ${spring}`,
-            }}
-          >
-            <Badge variant="outline" className="mb-6">
-              How It Works
-            </Badge>
-          </div>
-          
-          <h2
-            ref={headingRef}
-            className="text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-5xl max-w-2xl"
-            style={{
-              opacity: headingRevealed ? 1 : 0,
-              transform: headingRevealed ? "translateY(0)" : "translateY(24px)",
-              transition: `all 800ms ${spring} 100ms`,
-            }}
-          >
-            Three simple steps to start helping your community.
+    <section className="relative py-24 sm:py-32 bg-secondary dark:bg-secondary/30 overflow-hidden">
+      {/* Decorative gradient blur in the background */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-20 space-y-4">
+          <p className="text-sm font-semibold uppercase tracking-wider text-primary">
+            How It Works
+          </p>
+          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-foreground text-balance">
+            Three steps to get started
           </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-balance">
+            Start contributing to your community's infrastructure awareness in minutes.
+          </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-3">
-          {steps.map((step, i) => (
-            <StepCard key={step.step} step={step} index={i} />
-          ))}
+        <div className="grid md:grid-cols-3 gap-6 lg:gap-8 relative z-10">
+          {steps.map((step) => {
+            const Icon = step.icon;
+            return (
+              <div
+                key={step.title}
+                className="group relative overflow-hidden rounded-[2rem] bg-background border border-border/50 p-8 sm:p-10 hover:border-primary/30 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/5 hover:-translate-y-2"
+              >
+                {/* Huge Background Number */}
+                <div className="absolute -bottom-8 -right-4 text-[10rem] font-black leading-none text-muted/30 select-none transition-all duration-500 group-hover:text-primary/5 group-hover:-translate-y-4 group-hover:-translate-x-2 group-hover:-rotate-6 pointer-events-none">
+                  {step.step}
+                </div>
+
+                {/* Content */}
+                <div className="relative z-10">
+                  <div className="size-14 rounded-2xl bg-secondary flex items-center justify-center mb-8 text-primary border border-primary/10 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500 group-hover:scale-110 shadow-sm">
+                    <Icon className="size-7" />
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-bold text-foreground tracking-tight">
+                      {step.title}
+                    </h3>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {step.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
