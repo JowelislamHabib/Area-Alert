@@ -105,6 +105,16 @@ export default function Navbar() {
                   </DropdownMenuLabel>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
+                {user.role === "admin" && (
+                  <>
+                    <Link href="/admin">
+                      <DropdownMenuItem className="cursor-pointer">
+                        Admin Dashboard
+                      </DropdownMenuItem>
+                    </Link>
+                    <DropdownMenuSeparator />
+                  </>
+                )}
                 <DropdownMenuItem onClick={handleLogout} variant="destructive">
                   <LogOut size={16} className="mr-2" />
                   Log out
@@ -187,6 +197,13 @@ export default function Navbar() {
                       </div>
                     </div>
                   </div>
+                  {user.role === "admin" && (
+                    <Link href="/admin" className="w-full" onClick={() => setOpen(false)}>
+                      <Button variant="secondary" className="w-full mb-2">
+                        Admin Dashboard
+                      </Button>
+                    </Link>
+                  )}
                   <Button
                     variant="outline"
                     className="w-full"

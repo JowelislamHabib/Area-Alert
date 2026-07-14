@@ -27,7 +27,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import type { Report } from "@/lib/types";
 
-export function UpdateReportDialog({ report }: { report: Report }) {
+export function UpdateReportDialog({ report, asIcon }: { report: Report, asIcon?: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
@@ -67,9 +67,9 @@ export function UpdateReportDialog({ report }: { report: Report }) {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger render={<Button variant="default" size="default" className="gap-2 shadow-sm" />}>
+      <DialogTrigger render={asIcon ? <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground" title="Update Report" /> : <Button variant="default" size="default" className="gap-2 shadow-sm" />}>
         <Edit className="size-4" />
-        Update Report
+        {!asIcon && "Update Report"}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <form onSubmit={handleSubmit}>
