@@ -1,6 +1,6 @@
 import { getReports, getReportStatsData } from "@/lib/actions/report";
-import ReportCard from "@/components/pages/home/ReportCard";
-import { ReportsFilter } from "./ReportsFilter";
+import ReportCard from "@/components/reports/ReportCard";
+import { ReportsFilter } from "@/components/reports/ReportsFilter";
 import {
   TrendingUp,
   TrendingDown,

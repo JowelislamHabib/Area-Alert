@@ -19,9 +19,9 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Auth-gated routes (including /reports/my-reports and /add-report)
+  // Auth-gated routes (including /reports/my-reports and /reports/add)
   const isProtectedRoute =
-    pathname === "/reports/my-reports" || pathname === "/add-report";
+    pathname === "/reports/my-reports" || pathname === "/reports/add";
   if (isProtectedRoute && !session) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
@@ -45,7 +45,7 @@ export async function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     "/reports/my-reports",
-    "/add-report",
+    "/reports/add",
     "/admin/:path*",
     "/admin",
     "/login",

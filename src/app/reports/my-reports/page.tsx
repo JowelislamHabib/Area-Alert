@@ -65,7 +65,7 @@ export default async function MyReportsPage() {
               Manage your submitted utility outage reports
             </p>
           </div>
-          <Button className="gap-2" render={<Link href="/add-report" />} nativeButton={false}>
+          <Button className="gap-2" render={<Link href="/reports/add" />} nativeButton={false}>
             <Plus className="size-4" />
             Report New Outage
           </Button>
@@ -153,7 +153,7 @@ export default async function MyReportsPage() {
               <p className="text-sm text-muted-foreground max-w-sm mb-4">
                 You haven't submitted any utility outage reports yet.
               </p>
-              <Button variant="outline" className="gap-2" render={<Link href="/add-report" />} nativeButton={false}>
+              <Button variant="outline" className="gap-2" render={<Link href="/reports/add" />} nativeButton={false}>
                 <Plus className="size-4" />
                 Submit your first report
               </Button>

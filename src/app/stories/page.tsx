@@ -1,5 +1,5 @@
 import { FadeIn } from "@/components/ui/motion-wrapper";
-import { StoriesGrid } from "@/components/pages/stories/StoriesGrid";
+import { StoriesGrid } from "@/components/stories/StoriesGrid";
 
 export const metadata = {
   title: "Community Stories | AreaAlert",

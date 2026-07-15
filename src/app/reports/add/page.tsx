@@ -279,7 +279,7 @@ export default function AddReportPage() {
         <AuthRequired
           title="Sign in to report"
           description="You must be logged in to report an outage. This helps us prevent spam and ensure reliability."
-          redirectUrl="/add-report"
+          redirectUrl="/reports/add"
         />
       </main>
     );

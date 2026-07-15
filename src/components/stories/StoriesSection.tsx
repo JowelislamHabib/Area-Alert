@@ -3,13 +3,17 @@ import Image from "next/image";
 import { ArrowRight, Quote } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { FadeIn, SlideUp, StaggerContainer, StaggerItem } from "@/components/ui/motion-wrapper";
+import {
+  FadeIn,
+  StaggerContainer,
+  StaggerItem,
+} from "@/components/ui/motion-wrapper";
 import { STORIES } from "@/lib/data/stories";
 import { cn } from "@/lib/utils";
 
 export default function StoriesSection() {
   // Grab the 3 featured stories
-  const featuredStories = STORIES.filter(story => story.featured).slice(0, 3);
+  const featuredStories = STORIES.filter((story) => story.featured).slice(0, 3);
 
   return (
     <section className="relative py-24 sm:py-32 bg-background">
@@ -23,14 +27,15 @@ export default function StoriesSection() {
               Community Voices
             </h2>
             <p className="text-muted-foreground max-w-xl">
-              See how real people use AreaAlert to stay safe, save time, and build stronger communities.
+              See how real people use AreaAlert to stay safe, save time, and
+              build stronger communities.
             </p>
           </div>
           <Link
             href="/stories"
             className={cn(
               buttonVariants({ variant: "outline" }),
-              "font-medium self-start sm:self-auto hover:bg-primary hover:text-primary-foreground"
+              "font-medium self-start sm:self-auto hover:bg-primary hover:text-primary-foreground",
             )}
           >
             Read all stories <ArrowRight className="ml-1.5 size-4" />
@@ -44,7 +49,7 @@ export default function StoriesSection() {
               <StaggerItem key={story.id} className="h-full">
                 <Card className="h-full bg-background hover:shadow-xl transition-all duration-300 border-border/50 relative overflow-hidden group hover:-translate-y-1">
                   <Quote className="absolute top-4 right-4 h-16 w-16 text-muted/20 -z-10 group-hover:text-primary/10 transition-colors duration-300" />
-                  
+
                   <CardHeader className="pb-4">
                     <div className="flex items-center gap-4">
                       {/* Avatar */}
@@ -58,7 +63,7 @@ export default function StoriesSection() {
                           unoptimized
                         />
                       </div>
-                      
+
                       <div className="flex-1">
                         <h3 className="text-lg font-bold text-foreground leading-tight">
                           {story.persona}
@@ -74,15 +79,17 @@ export default function StoriesSection() {
                       </div>
                     </div>
                   </CardHeader>
-                  
+
                   <CardContent>
                     <div className="space-y-4">
                       {story.content.slice(0, 2).map((paragraph, i) => (
-                        <p 
-                          key={i} 
+                        <p
+                          key={i}
                           className={cn(
                             "text-muted-foreground leading-relaxed relative",
-                            i === 0 ? "text-foreground font-medium text-[15px]" : "text-sm line-clamp-3"
+                            i === 0
+                              ? "text-foreground font-medium text-[15px]"
+                              : "text-sm line-clamp-3",
                           )}
                         >
                           {paragraph}
@@ -97,11 +104,11 @@ export default function StoriesSection() {
         </StaggerContainer>
 
         <FadeIn delay={0.4} className="mt-12 text-center sm:hidden">
-          <Link 
-            href="/stories" 
+          <Link
+            href="/stories"
             className={cn(
               buttonVariants({ variant: "outline" }),
-              "hover:bg-primary hover:text-primary-foreground"
+              "hover:bg-primary hover:text-primary-foreground",
             )}
           >
             Read all stories <ArrowRight className="ml-1.5 size-4" />

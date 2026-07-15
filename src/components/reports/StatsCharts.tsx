@@ -13,7 +13,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import type { ChartData } from "./StatsSection";
+import type { ChartData } from "@/components/home/StatsSection";
 import { useReveal } from "@/lib/useReveal";
 
 interface TooltipPayload {

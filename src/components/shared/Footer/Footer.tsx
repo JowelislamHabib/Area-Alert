@@ -73,7 +73,7 @@ const exploreLinks = [
 const accountLinks = [
   { label: "Login", href: "/login" },
   { label: "Register", href: "/register" },
-  { label: "Add Report", href: "/add-report" },
+  { label: "Add Report", href: "/reports/add" },
   { label: "My Reports", href: "/reports/my-reports" },
 ];
 

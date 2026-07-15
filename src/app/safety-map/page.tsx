@@ -2,8 +2,8 @@
 
 import { useEffect, useState, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { SafetyMapHero } from "@/components/pages/safety-map/SafetyMapHero";
-import { DistrictGrid } from "@/components/pages/safety-map/DistrictGrid";
+import { SafetyMapHero } from "@/components/safety-map/SafetyMapHero";
+import { DistrictGrid } from "@/components/safety-map/DistrictGrid";
 import { Loader2, Search, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";

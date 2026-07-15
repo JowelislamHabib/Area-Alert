@@ -1,6 +1,6 @@
-import { AboutHero } from "@/components/pages/about/AboutHero";
-import { MissionVisionSection } from "@/components/pages/about/MissionVisionSection";
-import { UseCasesSection } from "@/components/pages/about/UseCasesSection";
+import { AboutHero } from "@/components/about/AboutHero";
+import { MissionVisionSection } from "@/components/about/MissionVisionSection";
+import { UseCasesSection } from "@/components/about/UseCasesSection";
 
 export const metadata = {
   title: "About AreaAlert | Community Utility Tracking",

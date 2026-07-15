@@ -1,6 +1,6 @@
 import { getReports, getReportStatsData } from "@/lib/actions/report";
 import StatCard from "./StatCard";
-import StatsCharts from "./StatsCharts";
+import StatsCharts from "@/components/reports/StatsCharts";
 import { FileText, MapPin, Grid3X3, Users } from "lucide-react";
 import { StaggerContainer, StaggerItem, FadeIn } from "@/components/ui/motion-wrapper";
 import type { Report } from "@/lib/types";

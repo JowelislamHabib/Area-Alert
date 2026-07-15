@@ -48,7 +48,7 @@ export default async function LatestReportsSection() {
                 Be the first to report a utility outage in your area and help your community.
               </p>
             </div>
-            <Link href="/add-report" className={cn(buttonVariants())}>
+            <Link href="/reports/add" className={cn(buttonVariants())}>
               Report an Outage
             </Link>
           </FadeIn>

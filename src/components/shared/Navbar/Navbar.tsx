@@ -106,7 +106,7 @@ export default function Navbar() {
           ) : user ? (
             <div className="flex items-center gap-2 pl-2">
               <Button className="font-semibold rounded-md">
-                <Link href="/add-report" className="flex items-center">
+                <Link href="/reports/add" className="flex items-center">
                   <Plus className="mr-1.5 size-4" /> Add Report
                 </Link>
               </Button>
@@ -212,7 +212,7 @@ export default function Navbar() {
         <div className="flex lg:hidden items-center gap-3">
           {user && !isPending && (
             <Button size="sm" className="font-semibold rounded-md h-8 px-3">
-              <Link href="/add-report" className="flex items-center">
+              <Link href="/reports/add" className="flex items-center">
                 <Plus className="mr-1 size-4" /> Report
               </Link>
             </Button>
@@ -327,7 +327,7 @@ export default function Navbar() {
                       onClick={() => setOpen(false)}
                     >
                       <Link
-                        href="/add-report"
+                        href="/reports/add"
                         className="flex items-center justify-center"
                       >
                         <Plus className="mr-1.5 size-4" /> Add Report

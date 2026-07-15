@@ -40,7 +40,7 @@ export default function HeroSection() {
                   Explore Reports
                 </Link>
                 <Link
-                  href="/add-report"
+                  href="/reports/add"
                   className={cn(
                     buttonVariants({ variant: "outline", size: "lg" }),
                     "bg-transparent font-semibold border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"

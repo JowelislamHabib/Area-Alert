@@ -26,7 +26,7 @@ export default function CTASection() {
             <StaggerItem>
               <div className="mt-10 flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
                 <Link
-                  href="/add-report"
+                  href="/reports/add"
                   className={cn(
                     buttonVariants({ size: "lg" }),
                     "w-full sm:w-auto font-semibold shadow-md"
