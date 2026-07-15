@@ -238,16 +238,24 @@ src/
 │   ├── admin/                    # Admin dashboard
 │   ├── reports/                  # Reports and Report detail
 │   ├── safety-map/               # Interactive outage map
-│   └── api/auth/                 # Better Auth handler
+│   ├── about/, contact/, etc.    # Static pages
+│   └── api/auth/[...all]/        # Better Auth catch-all handler
 ├── components/
-│   ├── ui/                       # shadcn/base-ui components
+│   ├── ui/                       # shadcn/base-ui components (19)
 │   ├── shared/                   # Navbar, Footer, ThemeProvider
-│   └── pages/                    # Page-specific components
+│   ├── home/, reports/, admin/   # Page-specific components
+│   └── safety-map/, about/, etc.
 ├── lib/
 │   ├── auth.ts                   # Better Auth server config
 │   ├── auth-client.ts            # Better Auth client
-│   ├── actions/report.ts         # Server actions
-│   └── types.ts                  # TypeScript definitions
+│   ├── actions/
+│   │   ├── report.ts             # Report CRUD server actions
+│   │   └── admin.ts              # Admin server actions
+│   ├── api/uploadImage.ts        # ImgBB image upload
+│   ├── getTokenServer.ts         # JWT extraction for backend calls
+│   ├── types.ts                  # TypeScript definitions
+│   └── utils.ts                  # cn() and helpers
+├── proxy.ts                      # Route protection logic (not wired up as middleware)
 └── public/
     └── data/area.json            # District/Area hierarchy
 ```
@@ -256,7 +264,7 @@ src/
 
 ## Server Actions
 
-All 8 server actions live in `src/lib/actions/report.ts`. They authenticate via Better Auth session, then proxy to the Express backend with a JWT bearer token:
+Server actions authenticate via Better Auth session, then proxy to the Express backend with a JWT bearer token:
 
 ```typescript
 // Server-side session validation
@@ -266,6 +274,8 @@ const session = await auth.api.getSession({ headers: await headers() });
 const token = await getTokenServer();
 // Passed as: Authorization: Bearer <token>
 ```
+
+### Report actions (`src/lib/actions/report.ts`)
 
 | Action               | Method | Endpoint                    | Auth |
 | -------------------- | ------ | --------------------------- | ---- |
@@ -277,6 +287,12 @@ const token = await getTokenServer();
 | `updateReportStatus` | PUT    | `/api/reports/:id/status`   | Yes  |
 | `deleteReport`       | DELETE | `/api/reports/:id`          | Yes  |
 | `updateReport`       | PATCH  | `/api/reports/:id`          | Yes  |
+
+### Admin actions (`src/lib/actions/admin.ts`)
+
+| Action              | Method | Endpoint                  | Auth  |
+| ------------------- | ------ | ------------------------- | ----- |
+| `getAdminUserStats` | GET    | `/api/admin/users-stats`  | Admin |
 
 ---
 
