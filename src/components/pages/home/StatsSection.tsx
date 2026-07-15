@@ -86,7 +86,7 @@ export default async function StatsSection() {
           <p className="text-sm font-semibold uppercase tracking-wider text-primary">
             Platform Stats
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground text-balance">
             Numbers that matter
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">

@@ -39,7 +39,7 @@ export default function FeaturesSection() {
           <p className="text-sm font-semibold uppercase tracking-wider text-primary">
             Why AreaAlert
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground text-balance">
             Built for your community
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">

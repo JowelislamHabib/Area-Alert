@@ -66,7 +66,7 @@ export default async function CategoriesSection() {
           <p className="text-sm font-semibold uppercase tracking-wider text-primary">
             Service Categories
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground text-balance">
             What&apos;s happening in your area
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">

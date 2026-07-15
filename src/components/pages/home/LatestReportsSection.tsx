@@ -18,7 +18,7 @@ export default async function LatestReportsSection() {
             <p className="text-sm font-semibold uppercase tracking-wider text-primary">
               Latest Updates
             </p>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground text-balance">
               Recent reports
             </h2>
             <p className="text-muted-foreground max-w-xl">
