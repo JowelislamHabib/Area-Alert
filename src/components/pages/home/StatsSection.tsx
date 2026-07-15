@@ -99,23 +99,27 @@ export default async function StatsSection() {
             label="Total Reports"
             value={total.toLocaleString()}
             icon={FileText}
+            accent="from-blue-500 to-indigo-500"
           />
           <StatCard
             label="Most Active District"
             value={mostActiveDistrict ? mostActiveDistrict.totalReports : "0"}
             icon={MapPin}
             description={mostActiveDistrict ? mostActiveDistrict.district : "No data yet"}
+            accent="from-purple-500 to-pink-500"
           />
           <StatCard
             label="Service Categories"
             value={4}
             icon={Grid3X3}
             description="Electricity, Internet, Water, Gas"
+            accent="from-emerald-500 to-teal-500"
           />
           <StatCard
             label="Community Members"
             value={uniqueReporters}
             icon={Users}
+            accent="from-orange-500 to-red-500"
           />
         </div>
 

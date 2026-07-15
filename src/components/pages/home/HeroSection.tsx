@@ -15,10 +15,10 @@ export default function HeroSection() {
               Community-Powered Utility Tracking
             </div>
             <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold tracking-tight text-primary-foreground text-balance leading-[1.15]">
-              Navigate Your City With <span className="text-primary-foreground/80">Confidence</span>
+              Your Voice Keeps Our <span className="text-primary-foreground/80">Community Safe</span>
             </h1>
             <p className="text-lg sm:text-xl text-primary-foreground/80 max-w-lg leading-relaxed text-balance">
-              Don't let sudden power cuts or flooded roads catch you off guard. Rely on real-time community reports to stay safe and save time.
+              When disaster strikes, we are each other's lifeline. Share real-time updates and rely on your neighbors to navigate power outages, floods, and crises together.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 pt-2">
               <Link

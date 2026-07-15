@@ -55,8 +55,8 @@ export default function CTASection() {
                    <MapPin className="size-6" />
                  </div>
                  <div>
-                   <div className="h-2.5 w-24 bg-foreground/20 rounded-full mb-2"></div>
-                   <div className="h-2 w-16 bg-foreground/10 rounded-full"></div>
+                   <div className="text-base font-bold text-foreground">64 Districts</div>
+                   <div className="text-xs font-medium text-muted-foreground">Nationwide Coverage</div>
                  </div>
                </div>
 
@@ -66,8 +66,8 @@ export default function CTASection() {
                    <BellRing className="size-6" />
                  </div>
                  <div>
-                   <div className="h-2.5 w-20 bg-foreground/20 rounded-full mb-2"></div>
-                   <div className="h-2 w-24 bg-foreground/10 rounded-full"></div>
+                   <div className="text-base font-bold text-foreground">Real-time</div>
+                   <div className="text-xs font-medium text-muted-foreground">Instant Alerts</div>
                  </div>
                </div>
                

@@ -7,6 +7,7 @@ const steps = [
     description:
       "Sign up with your email or Google in under a minute. No complicated forms.",
     step: "01",
+    accent: "from-blue-500 to-indigo-500",
   },
   {
     icon: FileText,
@@ -14,6 +15,7 @@ const steps = [
     description:
       "Select your area, describe the issue, and submit. Electricity, water, gas, or internet.",
     step: "02",
+    accent: "from-emerald-500 to-teal-500",
   },
   {
     icon: HeartHandshake,
@@ -21,6 +23,7 @@ const steps = [
     description:
       "Your report helps neighbors make informed decisions. Together we build a reliable map.",
     step: "03",
+    accent: "from-purple-500 to-pink-500",
   },
 ];
 
@@ -58,8 +61,8 @@ export default function HowItWorksSection() {
 
                 {/* Content */}
                 <div className="relative z-10">
-                  <div className="size-14 rounded-2xl bg-secondary flex items-center justify-center mb-8 text-primary border border-primary/10 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500 group-hover:scale-110 shadow-sm">
-                    <Icon className="size-7" />
+                  <div className={`flex size-12 items-center justify-center rounded-xl bg-gradient-to-br ${step.accent} text-white shadow-lg shadow-primary/10 mb-8 transition-transform duration-500 group-hover:scale-110 shrink-0`}>
+                    <Icon className="size-6" />
                   </div>
                   
                   <div className="space-y-3">

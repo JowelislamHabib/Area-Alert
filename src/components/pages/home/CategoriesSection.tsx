@@ -83,8 +83,8 @@ export default async function CategoriesSection() {
                   "relative overflow-hidden rounded-2xl border border-border/60 p-6 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1",
                   cat.light
                 )}>
-                  <div className={`flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br ${cat.gradient} text-white shadow-lg mb-5 group-hover:scale-110 transition-transform duration-300`}>
-                    <Icon className="size-7" />
+                  <div className={`flex size-12 items-center justify-center rounded-xl bg-gradient-to-br ${cat.gradient} text-white shadow-lg mb-5 group-hover:scale-110 transition-transform duration-300`}>
+                    <Icon className="size-6" />
                   </div>
                   <h3 className="font-semibold text-lg text-foreground mb-1">
                     {cat.label}
