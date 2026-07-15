@@ -223,12 +223,13 @@ function SafetyMapContent() {
           </div>
 
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="flex items-center gap-1 bg-muted/50 p-1 rounded-lg border border-border shadow-sm w-fit">
+            <div className="flex items-center gap-1 bg-muted/50 p-1 rounded-lg border border-border shadow-sm w-fit h-10">
               <Button
                 variant="ghost"
                 className={cn(
-                  "px-6",
-                  activeTab === "districts" && "bg-background shadow-sm",
+                  "px-6 h-full",
+                  activeTab === "districts" && "bg-background shadow-sm text-foreground",
+                  activeTab !== "districts" && "text-muted-foreground hover:text-foreground"
                 )}
                 onClick={() => handleTabChange("districts")}
               >
@@ -237,8 +238,9 @@ function SafetyMapContent() {
               <Button
                 variant="ghost"
                 className={cn(
-                  "px-6",
-                  activeTab === "areas" && "bg-background shadow-sm",
+                  "px-6 h-full",
+                  activeTab === "areas" && "bg-background shadow-sm text-foreground",
+                  activeTab !== "areas" && "text-muted-foreground hover:text-foreground"
                 )}
                 onClick={() => handleTabChange("areas")}
               >
@@ -251,13 +253,13 @@ function SafetyMapContent() {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
                   placeholder="Search location..."
-                  className="pl-9 bg-card border-border shadow-sm"
+                  className="pl-9 bg-card border-border shadow-sm h-10"
                   value={searchQuery}
                   onChange={(e) => handleSearchChange(e.target.value)}
                 />
               </div>
               <Select value={utilityFilter} onValueChange={handleUtilityChange}>
-                <SelectTrigger className="w-[150px] bg-card border-border shadow-sm">
+                <SelectTrigger className="w-[150px] bg-card border-border shadow-sm !h-10">
                   <div className="flex items-center gap-1">
                     <span className="text-muted-foreground font-medium">
                       Utility:
@@ -271,10 +273,11 @@ function SafetyMapContent() {
                   <SelectItem value="water">Water</SelectItem>
                   <SelectItem value="gas">Gas</SelectItem>
                   <SelectItem value="internet">Internet</SelectItem>
+                  <SelectItem value="flood">Flood</SelectItem>
                 </SelectContent>
               </Select>
               <Select value={safetyFilter} onValueChange={handleSafetyChange}>
-                <SelectTrigger className="w-[150px] bg-card border-border shadow-sm">
+                <SelectTrigger className="w-[150px] bg-card border-border shadow-sm !h-10">
                   <div className="flex items-center gap-1">
                     <span className="text-muted-foreground font-medium">
                       Safety:

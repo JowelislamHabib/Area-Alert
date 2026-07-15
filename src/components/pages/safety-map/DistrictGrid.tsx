@@ -212,10 +212,11 @@ export function DistrictGrid({
           <Button
             variant="ghost"
             size="sm"
-            className="gap-1.5 text-muted-foreground hover:text-foreground hover:bg-secondary"
+            className="text-muted-foreground hover:text-foreground hover:bg-secondary p-0"
           >
             <Link
               href={`/reports?${isDistrict ? "district" : "area"}=${encodeURIComponent(title)}`}
+              className="flex items-center gap-1.5 whitespace-nowrap px-3"
             >
               See reports <ArrowRight className="w-3.5 h-3.5" />
             </Link>
