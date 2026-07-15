@@ -1,8 +1,22 @@
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
-import { Search, ArrowRight, Zap, Wifi, Droplets, Flame, Shield, Clock, Waves } from "lucide-react";
+import {
+  Search,
+  ArrowRight,
+  Zap,
+  Wifi,
+  Droplets,
+  Flame,
+  Shield,
+  Clock,
+  Waves,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
-import { StaggerContainer, StaggerItem, FadeIn, Float } from "@/components/ui/motion-wrapper";
+import {
+  StaggerContainer,
+  StaggerItem,
+  FadeIn,
+} from "@/components/ui/motion-wrapper";
 
 export default function HeroSection() {
   return (
@@ -19,12 +33,17 @@ export default function HeroSection() {
             </StaggerItem>
             <StaggerItem>
               <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold tracking-tight text-primary-foreground text-balance leading-[1.15]">
-                Your Voice Keeps Our <span className="text-primary-foreground/80">Community Safe</span>
+                Your Voice Keeps Our{" "}
+                <span className="text-primary-foreground/80">
+                  Community Safe
+                </span>
               </h1>
             </StaggerItem>
             <StaggerItem>
               <p className="text-lg sm:text-xl text-primary-foreground/80 max-w-lg leading-relaxed text-balance">
-                When disaster strikes, we are each other's lifeline. Share real-time updates and rely on your neighbors to navigate power outages, floods, and crises together.
+                When disaster strikes, we are each other's lifeline. Share
+                real-time updates and rely on your neighbors to navigate power
+                outages, floods, and crises together.
               </p>
             </StaggerItem>
             <StaggerItem>
@@ -33,7 +52,7 @@ export default function HeroSection() {
                   href="/reports"
                   className={cn(
                     buttonVariants({ size: "lg" }),
-                    "font-semibold bg-primary-foreground text-primary hover:bg-primary-foreground/90 border-0 shadow-lg shadow-black/10"
+                    "font-semibold bg-primary-foreground text-primary hover:bg-primary-foreground/90 border-0 shadow-lg shadow-black/10",
                   )}
                 >
                   <Search className="mr-2 size-4" />
@@ -43,7 +62,7 @@ export default function HeroSection() {
                   href="/reports/add"
                   className={cn(
                     buttonVariants({ variant: "outline", size: "lg" }),
-                    "bg-transparent font-semibold border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+                    "bg-transparent font-semibold border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground",
                   )}
                 >
                   Report an Outage
@@ -52,7 +71,10 @@ export default function HeroSection() {
               </div>
             </StaggerItem>
           </StaggerContainer>
-          <FadeIn delay={0.2} className="hidden lg:flex items-center justify-center">
+          <FadeIn
+            delay={0.2}
+            className="hidden lg:flex items-center justify-center"
+          >
             <div className="relative w-full max-w-md aspect-square">
               {/* Floating utility cards */}
               <div className="absolute top-28 -left-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 flex items-center gap-3 shadow-lg shadow-black/10 rotate-[-4deg] hover:rotate-0 transition-transform duration-300">
@@ -60,7 +82,9 @@ export default function HeroSection() {
                   <Zap className="size-6" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-white">Electricity</p>
+                  <p className="text-sm font-semibold text-white">
+                    Electricity
+                  </p>
                   <p className="text-xs text-white/60">142 active reports</p>
                 </div>
               </div>
@@ -110,8 +134,15 @@ export default function HeroSection() {
         </div>
       </div>
       {/* Bottom wave */}
-      <svg className="absolute bottom-0 left-0 right-0 w-full h-16 sm:h-24 text-background" viewBox="0 0 1440 100" preserveAspectRatio="none">
-        <path d="M0,100 C360,0 720,0 1080,50 C1260,75 1380,100 1440,100 L1440,100 L0,100 Z" fill="currentColor" />
+      <svg
+        className="absolute bottom-0 left-0 right-0 w-full h-16 sm:h-24 text-background"
+        viewBox="0 0 1440 100"
+        preserveAspectRatio="none"
+      >
+        <path
+          d="M0,100 C360,0 720,0 1080,50 C1260,75 1380,100 1440,100 L1440,100 L0,100 Z"
+          fill="currentColor"
+        />
       </svg>
     </section>
   );

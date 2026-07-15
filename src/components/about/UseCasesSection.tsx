@@ -1,6 +1,6 @@
 import { Users, Laptop, Newspaper, Building2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import {
@@ -77,11 +77,11 @@ export function UseCasesSection() {
         </StaggerContainer>
 
         <SlideUp delay={0.4} className="mt-16 text-center">
-          <Link 
+          <Link
             href="/stories"
             className={cn(
               buttonVariants({ size: "lg" }),
-              "h-12 px-8 font-bold text-base inline-flex items-center"
+              "h-12 px-8 font-bold text-base inline-flex items-center",
             )}
           >
             Read Community Stories{" "}

@@ -11,7 +11,9 @@ export function ContactHero() {
             Get in Touch
           </h1>
           <p className="text-primary-foreground/80 text-base md:text-lg max-w-xl text-balance">
-            Whether you have a question about the platform, want to report a bug, or just want to say hi, our team is ready to answer all your questions.
+            Whether you have a question about the platform, want to report a
+            bug, or just want to say hi, our team is ready to answer all your
+            questions.
           </p>
         </FadeIn>
       </div>

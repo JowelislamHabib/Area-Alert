@@ -19,12 +19,10 @@ import {
   ShieldAlert,
   ShieldCheck,
   AlertTriangle,
-  Shield,
   CheckCircle2,
   FileText,
-  Activity
+  Activity,
 } from "lucide-react";
-import { getAdminReportStats } from "@/lib/actions/admin";
 import type { AdminReportStats } from "@/lib/types";
 
 export function AdminOverview() {
@@ -75,7 +73,6 @@ export function AdminOverview() {
   return (
     <SlideUp delay={0.1} className="space-y-4">
       <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-        
         {/* Safe Districts Card */}
         <Card className="bg-card/40 backdrop-blur-md border-emerald-500/20 shadow-sm relative overflow-hidden group hover:shadow-emerald-500/10 hover:border-emerald-500/40 transition-all duration-300">
           <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -91,7 +88,9 @@ export function AdminOverview() {
             <div className="text-3xl font-bold text-foreground">
               {loading ? "..." : stats.safeCount}
             </div>
-            <p className="text-xs text-emerald-600/80 dark:text-emerald-400/80 mt-1 font-medium">Fully operational</p>
+            <p className="text-xs text-emerald-600/80 dark:text-emerald-400/80 mt-1 font-medium">
+              Fully operational
+            </p>
           </CardContent>
         </Card>
 
@@ -110,7 +109,9 @@ export function AdminOverview() {
             <div className="text-3xl font-bold text-foreground">
               {loading ? "..." : stats.activeCount}
             </div>
-            <p className="text-xs text-amber-600/80 dark:text-amber-500/80 mt-1 font-medium">Caution advised</p>
+            <p className="text-xs text-amber-600/80 dark:text-amber-500/80 mt-1 font-medium">
+              Caution advised
+            </p>
           </CardContent>
         </Card>
 
@@ -129,7 +130,9 @@ export function AdminOverview() {
             <div className="text-3xl font-bold text-foreground">
               {loading ? "..." : stats.activeOutages}
             </div>
-            <p className="text-xs text-destructive/80 mt-1 font-medium">Ongoing incidents</p>
+            <p className="text-xs text-destructive/80 mt-1 font-medium">
+              Ongoing incidents
+            </p>
           </CardContent>
         </Card>
 
@@ -148,7 +151,9 @@ export function AdminOverview() {
             <div className="text-3xl font-bold text-foreground">
               {loading ? "..." : stats.resolvedOutages}
             </div>
-            <p className="text-xs text-indigo-600/80 dark:text-indigo-400/80 mt-1 font-medium">Successfully fixed</p>
+            <p className="text-xs text-indigo-600/80 dark:text-indigo-400/80 mt-1 font-medium">
+              Successfully fixed
+            </p>
           </CardContent>
         </Card>
 
@@ -167,10 +172,11 @@ export function AdminOverview() {
             <div className="text-3xl font-bold text-foreground">
               {loading ? "..." : stats.totalReports}
             </div>
-            <p className="text-xs text-purple-600/80 dark:text-purple-400/80 mt-1 font-medium">All time submitted</p>
+            <p className="text-xs text-purple-600/80 dark:text-purple-400/80 mt-1 font-medium">
+              All time submitted
+            </p>
           </CardContent>
         </Card>
-        
       </div>
 
       <div className="mt-8 rounded-xl border bg-card/50 backdrop-blur-sm shadow-sm overflow-hidden">

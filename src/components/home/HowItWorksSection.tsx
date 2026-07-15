@@ -1,5 +1,9 @@
 import { UserPlus, FileText, HeartHandshake } from "lucide-react";
-import { StaggerContainer, StaggerItem, FadeIn } from "@/components/ui/motion-wrapper";
+import {
+  StaggerContainer,
+  StaggerItem,
+  FadeIn,
+} from "@/components/ui/motion-wrapper";
 
 const steps = [
   {
@@ -43,7 +47,8 @@ export default function HowItWorksSection() {
             Three steps to get started
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-balance">
-            Start contributing to your community's infrastructure awareness in minutes.
+            Start contributing to your community's infrastructure awareness in
+            minutes.
           </p>
         </FadeIn>
 
@@ -60,10 +65,12 @@ export default function HowItWorksSection() {
 
                   {/* Content */}
                   <div className="relative z-10">
-                    <div className={`flex size-12 items-center justify-center rounded-xl bg-gradient-to-br ${step.accent} text-white shadow-lg shadow-primary/10 mb-8 transition-transform duration-500 group-hover:scale-110 shrink-0`}>
+                    <div
+                      className={`flex size-12 items-center justify-center rounded-xl bg-gradient-to-br ${step.accent} text-white shadow-lg shadow-primary/10 mb-8 transition-transform duration-500 group-hover:scale-110 shrink-0`}
+                    >
                       <Icon className="size-6" />
                     </div>
-                    
+
                     <div className="space-y-3">
                       <h3 className="text-xl font-bold text-foreground tracking-tight">
                         {step.title}

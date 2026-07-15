@@ -2,7 +2,11 @@ import { getReports, getReportStatsData } from "@/lib/actions/report";
 import StatCard from "./StatCard";
 import StatsCharts from "@/components/reports/StatsCharts";
 import { FileText, MapPin, Grid3X3, Users } from "lucide-react";
-import { StaggerContainer, StaggerItem, FadeIn } from "@/components/ui/motion-wrapper";
+import {
+  StaggerContainer,
+  StaggerItem,
+  FadeIn,
+} from "@/components/ui/motion-wrapper";
 import type { Report } from "@/lib/types";
 
 export type ChartData = {
@@ -14,7 +18,11 @@ export type ChartData = {
 function aggregateChartData(reports: Report[]): ChartData {
   const utilityCounts: Record<string, number> = {};
   const districtCounts: Record<string, number> = {};
-  const statusCounts: Record<string, number> = { active: 0, resolved: 0, pending: 0 };
+  const statusCounts: Record<string, number> = {
+    active: 0,
+    resolved: 0,
+    pending: 0,
+  };
 
   for (const r of reports) {
     utilityCounts[r.utilityType] = (utilityCounts[r.utilityType] || 0) + 1;
@@ -55,7 +63,10 @@ function aggregateChartData(reports: Report[]): ChartData {
     .map(([name, value]) => ({ name, value }))
     .sort((a, b) => b.value - a.value)
     .slice(0, 5)
-    .map((item, index) => ({ ...item, color: districtColors[index % districtColors.length] }));
+    .map((item, index) => ({
+      ...item,
+      color: districtColors[index % districtColors.length],
+    }));
 
   const statusData = [
     { name: "Active", value: statusCounts.active, color: "#ef4444" },
@@ -72,8 +83,13 @@ export default async function StatsSection() {
     getReportStatsData(),
   ]);
 
-  const reports = reportsResult.success ? (reportsResult.reports as Report[]) : [];
-  const total = typeof reportsResult.total === "number" ? reportsResult.total : reports.length;
+  const reports = reportsResult.success
+    ? (reportsResult.reports as Report[])
+    : [];
+  const total =
+    typeof reportsResult.total === "number"
+      ? reportsResult.total
+      : reports.length;
 
   const chartData = aggregateChartData(reports);
 
@@ -109,7 +125,9 @@ export default async function StatsSection() {
               label="Most Active District"
               value={mostActiveDistrict ? mostActiveDistrict.totalReports : "0"}
               icon={MapPin}
-              description={mostActiveDistrict ? mostActiveDistrict.district : "No data yet"}
+              description={
+                mostActiveDistrict ? mostActiveDistrict.district : "No data yet"
+              }
               accent="from-purple-500 to-pink-500"
             />
           </StaggerItem>

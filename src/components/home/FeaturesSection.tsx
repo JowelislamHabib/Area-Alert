@@ -1,5 +1,9 @@
 import { BadgeCheck, Timer, MapPin, Smartphone } from "lucide-react";
-import { StaggerContainer, StaggerItem, FadeIn } from "@/components/ui/motion-wrapper";
+import {
+  StaggerContainer,
+  StaggerItem,
+  FadeIn,
+} from "@/components/ui/motion-wrapper";
 
 const features = [
   {
@@ -54,7 +58,9 @@ export default function FeaturesSection() {
             return (
               <StaggerItem key={feature.title}>
                 <div className="group relative bg-card rounded-2xl border border-border/60 p-6 space-y-5 hover:shadow-lg hover:shadow-primary/5 hover:border-primary/20 transition-all duration-300 h-full">
-                  <div className={`flex size-12 items-center justify-center rounded-xl bg-gradient-to-br ${feature.accent} text-white shadow-lg shadow-primary/10`}>
+                  <div
+                    className={`flex size-12 items-center justify-center rounded-xl bg-gradient-to-br ${feature.accent} text-white shadow-lg shadow-primary/10`}
+                  >
                     <Icon className="size-6" />
                   </div>
                   <div className="space-y-2">

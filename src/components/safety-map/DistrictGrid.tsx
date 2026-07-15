@@ -46,15 +46,9 @@ export function DistrictGrid({
     return <ShieldAlert className="w-3.5 h-3.5 mr-1" />;
   };
 
-  const renderCard = (
-    title: string,
-    data: any,
-    isDistrict: boolean,
-  ) => {
+  const renderCard = (title: string, data: any, isDistrict: boolean) => {
     return (
-      <div
-        className="group relative bg-card rounded-2xl border border-border shadow-sm p-5 hover:shadow-md hover:shadow-primary/5 hover:border-primary/20 hover:-translate-y-0.5 transition-all duration-300 flex flex-col h-full"
-      >
+      <div className="group relative bg-card rounded-2xl border border-border shadow-sm p-5 hover:shadow-md hover:shadow-primary/5 hover:border-primary/20 hover:-translate-y-0.5 transition-all duration-300 flex flex-col h-full">
         {/* Header */}
         <div className="flex justify-between items-start mb-4">
           <h3 className="font-bold text-lg flex items-center gap-2 group-hover:text-primary transition-colors">
@@ -226,17 +220,16 @@ export function DistrictGrid({
   };
 
   // Generate a key based on the current stats so animation re-triggers on new data
-  const gridKey = stats.map(s => s.name).join("-");
+  const gridKey = stats.map((s) => s.name).join("-");
 
   return (
-    <StaggerContainer key={gridKey} className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-6">
+    <StaggerContainer
+      key={gridKey}
+      className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-6"
+    >
       {stats.map((item) => (
         <StaggerItem key={`${item.district}-${item.name}`} className="h-full">
-          {renderCard(
-            item.name,
-            item,
-            activeTab === "districts",
-          )}
+          {renderCard(item.name, item, activeTab === "districts")}
         </StaggerItem>
       ))}
     </StaggerContainer>

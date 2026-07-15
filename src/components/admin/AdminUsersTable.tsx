@@ -118,7 +118,7 @@ export function AdminUsersTable() {
         </div>
 
         <div className="flex items-center gap-2 w-full sm:w-auto">
-          <Select value={sortBy} onValueChange={(val) => setSortBy(val)}>
+          <Select value={sortBy} onValueChange={(val) => setSortBy(val as string)}>
             <SelectTrigger className="w-[160px] bg-background" style={{ height: '40px' }}>
               <SelectValue placeholder="Sort By" />
             </SelectTrigger>

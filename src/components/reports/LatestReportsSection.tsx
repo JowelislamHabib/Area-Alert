@@ -5,7 +5,11 @@ import ReportCard from "./ReportCard";
 import { FileText, ArrowRight } from "lucide-react";
 import type { Report } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { StaggerContainer, StaggerItem, FadeIn } from "@/components/ui/motion-wrapper";
+import {
+  StaggerContainer,
+  StaggerItem,
+  FadeIn,
+} from "@/components/ui/motion-wrapper";
 
 export default async function LatestReportsSection() {
   const result = await getReports({ limit: "8", sortBy: "newest" });
@@ -30,7 +34,7 @@ export default async function LatestReportsSection() {
             href="/reports"
             className={cn(
               buttonVariants({ variant: "outline" }),
-              "font-medium self-start sm:self-auto hover:bg-primary hover:text-primary-foreground"
+              "font-medium self-start sm:self-auto hover:bg-primary hover:text-primary-foreground",
             )}
           >
             View all reports <ArrowRight className="ml-1.5 size-4" />
@@ -43,9 +47,12 @@ export default async function LatestReportsSection() {
               <FileText className="size-10 text-muted-foreground" />
             </div>
             <div className="space-y-2">
-              <h3 className="font-semibold text-lg text-foreground">No reports yet</h3>
+              <h3 className="font-semibold text-lg text-foreground">
+                No reports yet
+              </h3>
               <p className="text-muted-foreground text-sm max-w-sm">
-                Be the first to report a utility outage in your area and help your community.
+                Be the first to report a utility outage in your area and help
+                your community.
               </p>
             </div>
             <Link href="/reports/add" className={cn(buttonVariants())}>
@@ -62,11 +69,11 @@ export default async function LatestReportsSection() {
               ))}
             </StaggerContainer>
             <div className="mt-12 text-center sm:hidden">
-              <Link 
-                href="/reports" 
+              <Link
+                href="/reports"
                 className={cn(
                   buttonVariants({ variant: "outline" }),
-                  "hover:bg-primary hover:text-primary-foreground"
+                  "hover:bg-primary hover:text-primary-foreground",
                 )}
               >
                 View all reports <ArrowRight className="ml-1.5 size-4" />

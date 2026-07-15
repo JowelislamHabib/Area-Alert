@@ -37,3 +37,21 @@ export type CreateReportInput = {
   reporterName: string;
   reporterImage?: string;
 };
+
+export type AdminReportStats = {
+  district: string;
+  area?: string;
+  name: string;
+  totalReports: number;
+  activeReports: number;
+  resolvedReports: number;
+  score: number;
+  safetyLevel: string;
+  activeUtilities: {
+    electricity: number;
+    water: number;
+    gas: number;
+    internet: number;
+    flood: number;
+  };
+};

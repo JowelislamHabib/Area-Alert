@@ -39,9 +39,16 @@ export function ContactInfo() {
                   <item.icon className="h-6 w-6" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground mb-1">{item.description}</p>
-                  <Link href={item.href} className="text-sm font-medium text-primary hover:underline">
+                  <h3 className="font-semibold text-foreground">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-1">
+                    {item.description}
+                  </p>
+                  <Link
+                    href={item.href}
+                    className="text-sm font-medium text-primary hover:underline"
+                  >
                     {item.value}
                   </Link>
                 </div>

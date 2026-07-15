@@ -8,10 +8,10 @@ interface AuthRequiredProps {
   redirectUrl?: string;
 }
 
-export function AuthRequired({ 
-  title = "Authentication Required", 
+export function AuthRequired({
+  title = "Authentication Required",
   description = "You need to be logged in to access this page.",
-  redirectUrl = "/" 
+  redirectUrl = "/",
 }: AuthRequiredProps) {
   return (
     <div className="flex flex-col items-center justify-center p-6 text-center border rounded-lg bg-card max-w-sm mx-auto shadow-sm">
@@ -23,10 +23,19 @@ export function AuthRequired({
         {description}
       </p>
       <div className="flex w-full flex-col gap-2">
-        <Button render={<Link href={`/login?redirect=${redirectUrl}`} />} nativeButton={false} className="w-full h-9">
+        <Button
+          render={<Link href={`/login?redirect=${redirectUrl}`} />}
+          nativeButton={false}
+          className="w-full h-9"
+        >
           Sign in
         </Button>
-        <Button variant="outline" render={<Link href={`/register?redirect=${redirectUrl}`} />} nativeButton={false} className="w-full h-9">
+        <Button
+          variant="outline"
+          render={<Link href={`/register?redirect=${redirectUrl}`} />}
+          nativeButton={false}
+          className="w-full h-9"
+        >
           Create account
         </Button>
       </div>

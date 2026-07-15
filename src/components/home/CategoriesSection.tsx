@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { Zap, Wifi, Droplets, Flame, ArrowRight, Waves } from "lucide-react";
-import { StaggerContainer, StaggerItem, FadeIn } from "@/components/ui/motion-wrapper";
+import {
+  StaggerContainer,
+  StaggerItem,
+  FadeIn,
+} from "@/components/ui/motion-wrapper";
 import { getReports } from "@/lib/actions/report";
 import { cn } from "@/lib/utils";
 
@@ -81,19 +85,27 @@ export default async function CategoriesSection() {
             return (
               <StaggerItem key={cat.type}>
                 <Link href={cat.href} className="group block h-full">
-                  <div className={cn(
-                    "relative overflow-hidden rounded-2xl border border-border/60 p-6 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1 h-full",
-                    cat.light
-                  )}>
-                    <div className={`flex size-12 items-center justify-center rounded-xl bg-gradient-to-br ${cat.gradient} text-white shadow-lg mb-5 group-hover:scale-110 transition-transform duration-300`}>
+                  <div
+                    className={cn(
+                      "relative overflow-hidden rounded-2xl border border-border/60 p-6 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1 h-full",
+                      cat.light,
+                    )}
+                  >
+                    <div
+                      className={`flex size-12 items-center justify-center rounded-xl bg-gradient-to-br ${cat.gradient} text-white shadow-lg mb-5 group-hover:scale-110 transition-transform duration-300`}
+                    >
                       <Icon className="size-6" />
                     </div>
                     <h3 className="font-semibold text-lg text-foreground mb-1">
                       {cat.label}
                     </h3>
                     <div className="flex items-center gap-2">
-                      <span className="text-2xl font-bold text-foreground">{count}</span>
-                      <span className="text-sm text-muted-foreground">{count === 1 ? "report" : "reports"}</span>
+                      <span className="text-2xl font-bold text-foreground">
+                        {count}
+                      </span>
+                      <span className="text-sm text-muted-foreground">
+                        {count === 1 ? "report" : "reports"}
+                      </span>
                     </div>
                     <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-white/40 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 dark:from-white/5" />
                     <div className="mt-4 flex items-center gap-1 text-sm font-medium text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300">

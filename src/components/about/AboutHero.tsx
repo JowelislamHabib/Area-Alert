@@ -11,7 +11,9 @@ export function AboutHero() {
             About AreaAlert
           </h1>
           <p className="text-primary-foreground/80 text-base md:text-lg max-w-xl text-balance">
-            We are building a more connected and informed Bangladesh by providing a platform for citizens to report and track essential utility services in their neighborhoods.
+            We are building a more connected and informed Bangladesh by
+            providing a platform for citizens to report and track essential
+            utility services in their neighborhoods.
           </p>
         </FadeIn>
       </div>

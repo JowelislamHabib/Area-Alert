@@ -4,7 +4,6 @@ import { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { FadeIn, SlideUp } from "@/components/ui/motion-wrapper";
 import { Quote } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -15,7 +14,7 @@ export function StoriesGrid() {
   const [visibleCount, setVisibleCount] = useState(8);
 
   const filteredStories = STORIES.filter(
-    (story) => activeCategory === "All" || story.category === activeCategory
+    (story) => activeCategory === "All" || story.category === activeCategory,
   );
 
   const displayedStories = filteredStories.slice(0, visibleCount);
@@ -48,23 +47,27 @@ export function StoriesGrid() {
       </FadeIn>
 
       {/* Masonry Grid */}
-      <div 
+      <div
         key={`${activeCategory}-${visibleCount}`} // Force re-render animation when list changes
         className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6"
       >
         {displayedStories.map((story, index) => {
           const Icon = story.icon;
-          
+
           return (
-            <SlideUp key={story.id} delay={index * 0.05} className="break-inside-avoid">
-              <Card 
+            <SlideUp
+              key={story.id}
+              delay={index * 0.05}
+              className="break-inside-avoid"
+            >
+              <Card
                 className={cn(
                   "bg-background hover:shadow-xl transition-all duration-300 border-border/50 relative overflow-hidden group hover:-translate-y-1",
-                  story.featured ? "border-primary/20 bg-primary/5" : ""
+                  story.featured ? "border-primary/20 bg-primary/5" : "",
                 )}
               >
                 <Quote className="absolute top-4 right-4 h-16 w-16 text-muted/20 -z-10 group-hover:text-primary/10 transition-colors duration-300" />
-                
+
                 <CardHeader className="pb-4">
                   <div className="flex items-center gap-4">
                     {/* Avatar */}
@@ -78,7 +81,7 @@ export function StoriesGrid() {
                         unoptimized
                       />
                     </div>
-                    
+
                     <div className="flex-1">
                       <h3 className="text-lg font-bold text-foreground leading-tight">
                         {story.persona}
@@ -89,21 +92,26 @@ export function StoriesGrid() {
                     </div>
 
                     {/* Small category icon badge */}
-                    <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-secondary/80 text-muted-foreground" title={story.category}>
+                    <div
+                      className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-secondary/80 text-muted-foreground"
+                      title={story.category}
+                    >
                       <Icon className="h-4 w-4" />
                     </div>
                   </div>
                 </CardHeader>
-                
+
                 <CardContent>
                   <div className="space-y-4">
                     {story.content.map((paragraph, i) => (
-                      <p 
-                        key={i} 
+                      <p
+                        key={i}
                         className={cn(
                           "text-muted-foreground leading-relaxed relative",
                           // Make the first paragraph act as a pull-quote
-                          i === 0 ? "text-foreground font-medium text-[15px]" : "text-sm"
+                          i === 0
+                            ? "text-foreground font-medium text-[15px]"
+                            : "text-sm",
                         )}
                       >
                         {paragraph}
