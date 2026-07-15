@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Zap, Wifi, Droplets, Flame, ArrowRight, Waves } from "lucide-react";
 import { StaggerContainer, StaggerItem, FadeIn } from "@/components/ui/motion-wrapper";
 import { getReports } from "@/lib/actions/report";
