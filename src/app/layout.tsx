@@ -19,8 +19,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AreaAlert",
-  description: "Community Utility Outage & Service Status Platform",
+  title: {
+    default: "AreaAlert - Community Utility Outage & Service Status Platform",
+    template: "%s | AreaAlert",
+  },
+  description:
+    "AreaAlert empowers communities across Bangladesh to share real-time local updates—from utility outages to waterlogging and road safety. Stay informed, make better decisions, and help your neighborhood stay safe.",
   icons: {
     icon: "/areaalert-favicon.png",
   },
