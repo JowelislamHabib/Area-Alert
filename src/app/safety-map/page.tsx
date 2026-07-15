@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { FadeIn } from "@/components/ui/motion-wrapper";
 
 export interface AreaStats {
   name: string;
@@ -197,7 +198,7 @@ function SafetyMapContent() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Legend & Tabs container */}
-        <div className="flex flex-col gap-6 mb-8">
+        <FadeIn delay={0.1} className="flex flex-col gap-6 mb-8">
           <div className="bg-card border border-border rounded-xl p-4 flex items-center gap-6 overflow-x-auto shadow-sm">
             <span className="font-semibold text-sm whitespace-nowrap">
               Safety Score:
@@ -312,7 +313,7 @@ function SafetyMapContent() {
               </div>
             </div>
           )}
-        </div>
+        </FadeIn>
 
         {loading && stats.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20">
@@ -344,7 +345,7 @@ function SafetyMapContent() {
             </div>
 
             {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-4 mt-10">
+              <FadeIn delay={0.3} className="flex items-center justify-center gap-4 mt-10">
                 <Button
                   variant="outline"
                   onClick={() => handlePageChange(Math.max(1, page - 1))}
@@ -366,7 +367,7 @@ function SafetyMapContent() {
                 >
                   Next <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
-              </div>
+              </FadeIn>
             )}
           </>
         )}

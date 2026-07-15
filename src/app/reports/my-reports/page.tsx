@@ -22,6 +22,7 @@ import {
   Plus,
 } from "lucide-react";
 import { DeleteReportButton } from "./DeleteReportButton";
+import { FadeIn, SlideUp, StaggerContainer, StaggerItem } from "@/components/ui/motion-wrapper";
 
 const UTILITY_ICONS = {
   electricity: { icon: Zap, color: "text-amber-500", bg: "bg-amber-500/10" },
@@ -55,7 +56,7 @@ export default async function MyReportsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         
         {/* Header Section */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <FadeIn className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold tracking-tight mb-1">
               My Reports
@@ -68,61 +69,70 @@ export default async function MyReportsPage() {
             <Plus className="size-4" />
             Report New Outage
           </Button>
-        </div>
+        </FadeIn>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Total Reports
-              </CardTitle>
-              <FileText className="size-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{totalReports}</div>
-            </CardContent>
-          </Card>
+        <StaggerContainer delay={0.1} className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <StaggerItem>
+            <Card className="h-full">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Total Reports
+                </CardTitle>
+                <FileText className="size-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{totalReports}</div>
+              </CardContent>
+            </Card>
+          </StaggerItem>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Active Outages
-              </CardTitle>
-              <Activity className="size-4 text-destructive" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{activeReports}</div>
-            </CardContent>
-          </Card>
+          <StaggerItem>
+            <Card className="h-full">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Active Outages
+                </CardTitle>
+                <Activity className="size-4 text-destructive" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{activeReports}</div>
+              </CardContent>
+            </Card>
+          </StaggerItem>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Resolved Issues
-              </CardTitle>
-              <CheckCircle className="size-4 text-emerald-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{resolvedReports}</div>
-            </CardContent>
-          </Card>
+          <StaggerItem>
+            <Card className="h-full">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Resolved Issues
+                </CardTitle>
+                <CheckCircle className="size-4 text-emerald-500" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{resolvedReports}</div>
+              </CardContent>
+            </Card>
+          </StaggerItem>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Upvotes
-              </CardTitle>
-              <ThumbsUp className="size-4 text-purple-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{totalUpvotes}</div>
-            </CardContent>
-          </Card>
-        </div>
+          <StaggerItem>
+            <Card className="h-full">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Upvotes
+                </CardTitle>
+                <ThumbsUp className="size-4 text-purple-500" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{totalUpvotes}</div>
+              </CardContent>
+            </Card>
+          </StaggerItem>
+        </StaggerContainer>
 
         {/* Reports Table/List */}
-        <Card className="overflow-hidden">
+        <SlideUp delay={0.2}>
+          <Card className="overflow-hidden">
           <div className="p-4 border-b bg-muted/20">
             <h2 className="text-base font-semibold flex items-center gap-2">
               <MapPin className="size-4 text-primary" />
@@ -221,7 +231,8 @@ export default async function MyReportsPage() {
               </table>
             </div>
           )}
-        </Card>
+          </Card>
+        </SlideUp>
       </div>
     </main>
   );

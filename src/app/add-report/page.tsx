@@ -46,6 +46,7 @@ import {
   Waves,
 } from "lucide-react";
 import { AuthRequired } from "@/components/shared/AuthRequired";
+import { FadeIn, SlideUp } from "@/components/ui/motion-wrapper";
 import { useRouter } from "next/navigation";
 import { useActionState, useState } from "react";
 import { toast } from "sonner";
@@ -289,21 +290,21 @@ export default function AddReportPage() {
       {/* Hero Header */}
       <div className="bg-primary text-primary-foreground">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12">
-          <div className="max-w-4xl">
+          <FadeIn className="max-w-4xl">
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">
               Report an Outage
             </h1>
             <p className="text-primary-foreground/80 text-base md:text-lg max-w-xl">
               Help your community by sharing what's happening.
             </p>
-          </div>
+          </FadeIn>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
         <form action={submitAction} className="space-y-8" noValidate>
           {/* STEP 1: UTILITY SELECTION */}
-          <section className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <SlideUp className="space-y-4">
             <h2 className="text-xl font-semibold flex items-center gap-2">
               <span className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary text-sm">
                 1
@@ -388,10 +389,10 @@ export default function AddReportPage() {
                 </Card>
               </div>
             )}
-          </section>
+          </SlideUp>
 
           {/* STEP 2: LOCATION */}
-          <section className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100 fill-mode-both">
+          <SlideUp delay={0.1} className="space-y-4">
             <h2 className="text-xl font-semibold flex items-center gap-2">
               <span className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary text-sm">
                 2
@@ -548,10 +549,10 @@ export default function AddReportPage() {
                 </div>
               </CardContent>
             </Card>
-          </section>
+          </SlideUp>
 
           {/* STEP 3: DETAILS & TIMING */}
-          <section className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200 fill-mode-both">
+          <SlideUp delay={0.2} className="space-y-4">
             <h2 className="text-xl font-semibold flex items-center gap-2">
               <span className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary text-sm">
                 3
@@ -707,10 +708,10 @@ export default function AddReportPage() {
                 </div>
               </CardContent>
             </Card>
-          </section>
+          </SlideUp>
 
           {/* STEP 4: MEDIA UPLOAD */}
-          <section className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300 fill-mode-both">
+          <SlideUp delay={0.3} className="space-y-4">
             <h2 className="text-xl font-semibold flex items-center gap-2">
               <span className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary text-sm">
                 4
@@ -874,7 +875,7 @@ export default function AddReportPage() {
                 )}
               </CardContent>
             </Card>
-          </section>
+          </SlideUp>
 
           <input type="hidden" name="reporterId" value={session.user.id} />
           <input
@@ -882,8 +883,7 @@ export default function AddReportPage() {
             name="reporterName"
             value={session.user.name || "Anonymous"}
           />
-
-          <div className="pt-4 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-500 fill-mode-both">
+          <SlideUp delay={0.4} className="pt-4">
             {submitError && (
               <div className="mb-4 rounded-lg bg-destructive/15 p-4 text-sm text-destructive font-medium border border-destructive/20 text-center">
                 {submitError}
@@ -907,7 +907,7 @@ export default function AddReportPage() {
             <p className="text-center text-xs text-muted-foreground mt-4">
               Your report will be immediately visible to others in your area.
             </p>
-          </div>
+          </SlideUp>
         </form>
       </div>
     </main>

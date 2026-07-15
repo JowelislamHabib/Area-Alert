@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { FadeIn } from "@/components/ui/motion-wrapper";
 
 export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -29,7 +30,8 @@ export function ContactForm() {
   };
 
   return (
-    <Card className="shadow-lg">
+    <FadeIn delay={0.3}>
+      <Card className="shadow-lg">
       <CardHeader>
         <CardTitle className="text-2xl">Send a Message</CardTitle>
         <CardDescription>
@@ -89,6 +91,7 @@ export function ContactForm() {
           </Button>
         </form>
       </CardContent>
-    </Card>
+      </Card>
+    </FadeIn>
   );
 }

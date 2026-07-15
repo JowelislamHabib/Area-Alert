@@ -1,4 +1,5 @@
 import { Shield } from "lucide-react";
+import { FadeIn, SlideUp } from "@/components/ui/motion-wrapper";
 
 export default function PrivacyPage() {
   return (
@@ -6,7 +7,7 @@ export default function PrivacyPage() {
       {/* Hero Header */}
       <div className="bg-primary text-primary-foreground">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12">
-          <div className="max-w-4xl">
+          <FadeIn className="max-w-4xl">
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-3 flex items-center gap-3">
               <Shield className="w-8 h-8 opacity-90" />
               Privacy Policy
@@ -14,11 +15,11 @@ export default function PrivacyPage() {
             <p className="text-primary-foreground/80 text-base md:text-lg max-w-xl">
               How we collect, use, and protect your personal data.
             </p>
-          </div>
+          </FadeIn>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+      <SlideUp delay={0.2} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
         <div className="bg-card border border-border rounded-[var(--radius)] p-8 shadow-sm">
           <div className="max-w-4xl">
             <div className="space-y-8">
@@ -58,7 +59,7 @@ export default function PrivacyPage() {
             </div>
           </div>
         </div>
-      </div>
+      </SlideUp>
     </main>
   );
 }

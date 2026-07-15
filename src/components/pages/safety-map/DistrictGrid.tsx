@@ -13,6 +13,7 @@ import {
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { StaggerContainer, StaggerItem } from "@/components/ui/motion-wrapper";
 
 interface DistrictGridProps {
   stats: any[];
@@ -46,15 +47,13 @@ export function DistrictGrid({
   };
 
   const renderCard = (
-    key: string,
     title: string,
     data: any,
     isDistrict: boolean,
   ) => {
     return (
       <div
-        key={key}
-        className="group relative bg-card rounded-2xl border border-border shadow-sm p-5 hover:shadow-md hover:shadow-primary/5 hover:border-primary/20 hover:-translate-y-0.5 transition-all duration-300 flex flex-col"
+        className="group relative bg-card rounded-2xl border border-border shadow-sm p-5 hover:shadow-md hover:shadow-primary/5 hover:border-primary/20 hover:-translate-y-0.5 transition-all duration-300 flex flex-col h-full"
       >
         {/* Header */}
         <div className="flex justify-between items-start mb-4">
@@ -226,16 +225,20 @@ export function DistrictGrid({
     );
   };
 
+  // Generate a key based on the current stats so animation re-triggers on new data
+  const gridKey = stats.map(s => s.name).join("-");
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-6">
-      {stats.map((item) =>
-        renderCard(
-          `${item.district}-${item.name}`,
-          item.name,
-          item,
-          activeTab === "districts",
-        ),
-      )}
-    </div>
+    <StaggerContainer key={gridKey} className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-6">
+      {stats.map((item) => (
+        <StaggerItem key={`${item.district}-${item.name}`} className="h-full">
+          {renderCard(
+            item.name,
+            item,
+            activeTab === "districts",
+          )}
+        </StaggerItem>
+      ))}
+    </StaggerContainer>
   );
 }

@@ -11,6 +11,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useActionState, useState } from "react";
 import { toast } from "sonner";
+import { SlideUp } from "@/components/ui/motion-wrapper";
 
 type PasswordRule = {
   key: string;
@@ -125,7 +126,7 @@ function RegisterForm() {
   return (
     <main className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-8 bg-muted/20">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="w-full bg-background rounded-[var(--radius)] md:rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row border border-border/50">
+        <SlideUp delay={0.1} className="w-full bg-background rounded-[var(--radius)] md:rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row border border-border/50">
           
           {/* Left Panel: Emotional Value Prop */}
           <div className="w-full md:w-3/5 bg-primary p-8 md:p-12 lg:p-14 text-primary-foreground flex flex-col justify-between relative overflow-hidden">
@@ -396,7 +397,7 @@ function RegisterForm() {
               </form>
             </div>
           </div>
-        </div>
+        </SlideUp>
       </div>
     </main>
   );
