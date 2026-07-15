@@ -1,7 +1,5 @@
-# AreaAlert
-
 <p align="center">
-  <img src="public/areaalert-logo.png" alt="AreaAlert Logo" width="120" />
+  <img src="public/areaalert-logo.png" alt="AreaAlert Logo" width="220" />
 </p>
 
 <p align="center">
@@ -9,7 +7,7 @@
 </p>
 
 <p align="center">
-  <a href="https://area-alert-opal.vercel.app">
+  <a href="https://area-alert-bd.vercel.app">
     <img src="https://img.shields.io/badge/Live_Demo-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" />
   </a>
   <img src="https://img.shields.io/badge/Next.js_16-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js 16" />
@@ -84,77 +82,96 @@ In Bangladesh, utility outages are frequent and unpredictable. Residents waste h
 
 ## Tech Stack
 
-| Category           | Technology                  |
-| ------------------ | --------------------------- |
-| **Framework**      | Next.js 16 (App Router)     |
-| **UI Library**     | React 19                    |
-| **Language**       | TypeScript 5                |
-| **Styling**        | Tailwind CSS v4             |
-| **UI Components**  | shadcn/ui (base-nova style) |
-| **Authentication** | Better Auth                 |
-| **Database**       | MongoDB                     |
-| **Deployment**     | Vercel                      |
-| **Icons**          | Lucide React                |
-| **Charts**         | Recharts                    |
-| **Animations**     | Framer Motion               |
-| **Form Handling**  | React Server Actions        |
+| Category       | Technology                             |
+| -------------- | -------------------------------------- |
+| **Frontend**   | Next.js 16 (App Router), React 19      |
+| **Backend**    | Express 5, TypeScript                  |
+| **Database**   | MongoDB (native driver, no Mongoose)   |
+| **Auth**       | Better Auth (frontend), JWKS (backend) |
+| **Build**      | esbuild (backend), Next.js (frontend)  |
+| **Styling**    | Tailwind CSS v4, shadcn/ui             |
+| **Deployment** | Vercel (both frontend and backend)     |
+| **Icons**      | Lucide React                           |
+| **Charts**     | Recharts                               |
+| **Animations** | Framer Motion                          |
 
 ---
 
 ## Architecture
 
+The system runs as two separate Vercel deployments communicating over HTTP:
+
 ```
-┌─────────────────────────────────────────────────────────┐
-│                    FRONTEND (Next.js)                    │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │  App Router   │  │   Auth Flow  │  │  UI Layer    │  │
-│  │  (Pages)      │  │  (Better     │  │  (shadcn/ui) │  │
-│  │               │  │   Auth)      │  │              │  │
-│  └──────┬───────┘  └──────┬───────┘  └──────────────┘  │
-│         │                 │                             │
-│  ┌──────▼─────────────────▼──────┐                     │
-│  │      Server Actions Layer      │                     │
-│  │   (Authentication + JWT)       │                     │
-│  └──────────────┬────────────────┘                     │
-└─────────────────┼───────────────────────────────────────┘
-                  │
-                  ▼
-┌─────────────────────────────────────────────────────────┐
-│                 EXTERNAL BACKEND API                    │
-│            (Report CRUD & Business Logic)               │
-└─────────────────────────────────────────────────────────┘
++-------------------------------------------------------------------+
+|                       FRONTEND (Next.js 16)                       |
+|                                                                   |
+|   +--------------+   +--------------+   +--------------+          |
+|   |  App Router  |   |  Auth Flow   |   |   UI Layer   |          |
+|   |   (Pages)    |   |(Better Auth) |   | (shadcn/ui)  |          |
+|   +------+-------+   +------+-------+   +--------------+          |
+|          |                  |                                     |
+|          |              (MongoDB)                                 |
+|          |                  |                                     |
+|   +------v------------------v------+                              |
+|   |      Server Actions Layer      |                              |
+|   |     (Authentication + JWT)     |                              |
+|   +----------------+---------------+                              |
++--------------------+----------------------------------------------+
+                     |
+                     | JWT token
+                     +--> Authorization: Bearer <token>
+                     |
+                     v
++-------------------------------------------------------------------+
+|                       EXTERNAL BACKEND API                        |
+|                         (Express 5 API)                           |
+|                 (Report CRUD & Business Logic)                    |
+|                                                                   |
+|                            (MongoDB)                              |
++-------------------------------------------------------------------+
 ```
 
-### Two-Tier Design
+### How Auth Works Across the Boundary
 
-- **Frontend** handles UI, authentication, and user sessions via Better Auth
-- **Backend** manages report data, business logic, and external integrations
-- Server Actions proxy requests between the two with JWT authorization
+The frontend owns authentication via Better Auth (connected directly to MongoDB). When server actions need to call the backend, they extract a JWT from the session and pass it in the `Authorization` header. The backend verifies the JWT by fetching the JWKS endpoint from the frontend (`${CLIENT_URL}/api/auth/jwks`) — it never handles passwords or sessions directly.
+
+### Backend Details
+
+- **Express 5** (beta) with TypeScript
+- **MongoDB native driver** — no ORM, direct collection access
+- **esbuild** bundles to a single `api/index.js` for Vercel serverless
+- **Role-based access**: `verifyToken` (JWT validation), `verifyReporter` (user or admin), `verifyAdmin` (admin only)
+- **Safety stats endpoint** uses MongoDB aggregation pipeline to compute per-district/area safety scores
 
 ---
 
 ## Getting Started
 
+This project has two repositories:
+
+- **Frontend**: `area-alert` (this repo) — Next.js 16
+- **Backend**: `area-alert-backend` — Express 5 API server
+
+Both must be running for full functionality.
+
 ### Prerequisites
 
 - Node.js 18+
-- MongoDB database
-- External backend API running at `NEXT_PUBLIC_BASE_URL`
+- MongoDB database (shared between frontend and backend)
+- Backend running at `http://localhost:8000`
 
-### Installation
+### Frontend Setup
 
 ```bash
-git clone https://github.com/yourusername/area-alert.git
+git clone https://github.com/JowelislamHabib/area-alert.git
 cd area-alert
 npm install
 ```
 
-### Environment Setup
-
 Create a `.env.local` file:
 
 ```env
-# MongoDB
+# MongoDB (for Better Auth)
 MONGODB_URI=your_mongodb_connection_string
 
 # Better Auth
@@ -165,14 +182,12 @@ BETTER_AUTH_URL=http://localhost:3000
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
 
-# External Backend
+# Backend API
 NEXT_PUBLIC_BASE_URL=http://localhost:8000
 
-# Image Upload
+# Image Upload (ImgBB)
 NEXT_PUBLIC_IMAGE_UPLOAD_API=your_imgbb_api_key
 ```
-
-### Development
 
 ```bash
 npm run dev
@@ -180,11 +195,36 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+### Backend Setup
+
+```bash
+git clone https://github.com/JowelislamHabib/area-alert-backend.git
+cd area-alert-backend
+npm install
+```
+
+Create a `.env` file:
+
+```env
+MONGODB_URI=your_mongodb_connection_string
+PORT=8000
+CLIENT_URL=http://localhost:3000
+```
+
+```bash
+npm run dev
+```
+
+Backend runs on [http://localhost:8000](http://localhost:8000).
+
 ### Production
 
 ```bash
-npm run build
-npm run start
+# Frontend
+npm run build && npm run start
+
+# Backend
+npm run build && npm start
 ```
 
 ---
@@ -216,7 +256,7 @@ src/
 
 ## Server Actions
 
-All server actions authenticate via session, then proxy to the external backend:
+All 8 server actions live in `src/lib/actions/report.ts`. They authenticate via Better Auth session, then proxy to the Express backend with a JWT bearer token:
 
 ```typescript
 // Server-side session validation
@@ -227,14 +267,16 @@ const token = await getTokenServer();
 // Passed as: Authorization: Bearer <token>
 ```
 
-| Action               | Method | Endpoint                  | Auth |
-| -------------------- | ------ | ------------------------- | ---- |
-| `createReport`       | POST   | `/api/reports`            | Yes  |
-| `getReports`         | GET    | `/api/reports`            | No   |
-| `voteReport`         | POST   | `/api/reports/:id/vote`   | Yes  |
-| `updateReportStatus` | PUT    | `/api/reports/:id/status` | Yes  |
-| `deleteReport`       | DELETE | `/api/reports/:id`        | Yes  |
-| `updateReport`       | PATCH  | `/api/reports/:id`        | Yes  |
+| Action               | Method | Endpoint                    | Auth |
+| -------------------- | ------ | --------------------------- | ---- |
+| `createReport`       | POST   | `/api/reports`              | Yes  |
+| `getReports`         | GET    | `/api/reports`              | No   |
+| `getReportById`      | GET    | `/api/reports/:id`          | No   |
+| `getReportStatsData` | GET    | `/api/reports/safety-stats` | No   |
+| `voteReport`         | POST   | `/api/reports/:id/vote`     | Yes  |
+| `updateReportStatus` | PUT    | `/api/reports/:id/status`   | Yes  |
+| `deleteReport`       | DELETE | `/api/reports/:id`          | Yes  |
+| `updateReport`       | PATCH  | `/api/reports/:id`          | Yes  |
 
 ---
 
@@ -282,6 +324,6 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) for detai
 
 **Jowel Islam Habib**
 
-- GitHub: [@yourusername](https://github.com/JowelislamHabib)
-- LinkedIn: [Your Name](https://www.linkedin.com/in/jowelislamhabib/)
-- Email: your.email@example.com
+- GitHub: [@JowelislamHabib](https://github.com/JowelislamHabib)
+- LinkedIn: [Jowel Islam Habib](https://www.linkedin.com/in/jowelislamhabib/)
+- Email: [Jowel@Bintofajjal.com](mailto:Jowel@Bintofajjal.com)
