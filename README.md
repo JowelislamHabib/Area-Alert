@@ -150,7 +150,7 @@ The frontend owns authentication via Better Auth (connected directly to MongoDB)
 This project has two repositories:
 
 - **Frontend**: `area-alert` (this repo) — Next.js 16
-- **Backend**: `area-alert-backend` — Express 5 API server
+- **Backend**: `area-alert-backend` ([Area-Alert-Backend](https://github.com/JowelislamHabib/Area-Alert-Backend)) — Express 5 API server
 
 Both must be running for full functionality.
 
