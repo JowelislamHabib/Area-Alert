@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Shield, AlertTriangle } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -12,28 +11,40 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { SlideUp } from "@/components/ui/motion-wrapper";
 import { Button } from "@/components/ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
-import { MapPin, ShieldAlert, ShieldCheck } from "lucide-react";
+import {
+  MapPin,
+  ShieldAlert,
+  ShieldCheck,
+  AlertTriangle,
+  Shield,
+  CheckCircle2,
+  FileText,
+  Activity
+} from "lucide-react";
+import { getAdminReportStats } from "@/lib/actions/admin";
+import type { AdminReportStats } from "@/lib/types";
 
 export function AdminOverview() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const initialPage = parseInt(searchParams.get("overviewPage") || "1", 10);
+  const page = parseInt(searchParams.get("page") || "1");
+  const [statsData, setStatsData] = useState<AdminReportStats[]>([]);
   const [stats, setStats] = useState({
     safeCount: 0,
     activeCount: 0,
     activeOutages: 0,
+    resolvedOutages: 0,
+    totalReports: 0,
   });
   const [loading, setLoading] = useState(true);
-  const [statsData, setStatsData] = useState<any[]>([]);
-  const [page, setPage] = useState(initialPage);
   const [totalPages, setTotalPages] = useState(1);
 
   const updatePage = (newPage: number) => {
-    setPage(newPage);
     const params = new URLSearchParams(searchParams.toString());
-    params.set("overviewPage", newPage.toString());
+    params.set("page", newPage.toString());
     router.replace(`?${params.toString()}`, { scroll: false });
   };
 
@@ -62,47 +73,104 @@ export function AdminOverview() {
   }, [page]);
 
   return (
-    <div className="space-y-4">
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+    <SlideUp delay={0.1} className="space-y-4">
+      <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+        
+        {/* Safe Districts Card */}
+        <Card className="bg-card/40 backdrop-blur-md border-emerald-500/20 shadow-sm relative overflow-hidden group hover:shadow-emerald-500/10 hover:border-emerald-500/40 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative z-10">
+            <CardTitle className="text-sm font-medium text-emerald-700 dark:text-emerald-400">
               Safe Districts
             </CardTitle>
-            <Shield className="h-4 w-4 text-muted-foreground" />
+            <div className="p-2 bg-emerald-100/50 dark:bg-emerald-900/30 rounded-lg group-hover:scale-110 transition-transform duration-300">
+              <ShieldCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
+          <CardContent className="relative z-10">
+            <div className="text-3xl font-bold text-foreground">
               {loading ? "..." : stats.safeCount}
             </div>
+            <p className="text-xs text-emerald-600/80 dark:text-emerald-400/80 mt-1 font-medium">Fully operational</p>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+
+        {/* Affected Districts Card */}
+        <Card className="bg-card/40 backdrop-blur-md border-amber-500/20 shadow-sm relative overflow-hidden group hover:shadow-amber-500/10 hover:border-amber-500/40 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative z-10">
+            <CardTitle className="text-sm font-medium text-amber-700 dark:text-amber-500">
               Affected Districts
             </CardTitle>
-            <AlertTriangle className="h-4 w-4 text-muted-foreground" />
+            <div className="p-2 bg-amber-100/50 dark:bg-amber-900/30 rounded-lg group-hover:scale-110 transition-transform duration-300">
+              <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-500" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
+          <CardContent className="relative z-10">
+            <div className="text-3xl font-bold text-foreground">
               {loading ? "..." : stats.activeCount}
             </div>
+            <p className="text-xs text-amber-600/80 dark:text-amber-500/80 mt-1 font-medium">Caution advised</p>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total Active Outages
+
+        {/* Active Outages Card */}
+        <Card className="bg-card/40 backdrop-blur-md border-destructive/20 shadow-sm relative overflow-hidden group hover:shadow-destructive/10 hover:border-destructive/40 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-destructive/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative z-10">
+            <CardTitle className="text-sm font-medium text-destructive">
+              Active Outages
             </CardTitle>
-            <AlertTriangle className="h-4 w-4 text-destructive" />
+            <div className="p-2 bg-destructive/10 dark:bg-destructive/20 rounded-lg group-hover:scale-110 transition-transform duration-300">
+              <Activity className="h-4 w-4 text-destructive" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
+          <CardContent className="relative z-10">
+            <div className="text-3xl font-bold text-foreground">
               {loading ? "..." : stats.activeOutages}
             </div>
+            <p className="text-xs text-destructive/80 mt-1 font-medium">Ongoing incidents</p>
           </CardContent>
         </Card>
+
+        {/* Resolved Outages Card */}
+        <Card className="bg-card/40 backdrop-blur-md border-indigo-500/20 shadow-sm relative overflow-hidden group hover:shadow-indigo-500/10 hover:border-indigo-500/40 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative z-10">
+            <CardTitle className="text-sm font-medium text-indigo-700 dark:text-indigo-400">
+              Resolved Reports
+            </CardTitle>
+            <div className="p-2 bg-indigo-100/50 dark:bg-indigo-900/30 rounded-lg group-hover:scale-110 transition-transform duration-300">
+              <CheckCircle2 className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+            </div>
+          </CardHeader>
+          <CardContent className="relative z-10">
+            <div className="text-3xl font-bold text-foreground">
+              {loading ? "..." : stats.resolvedOutages}
+            </div>
+            <p className="text-xs text-indigo-600/80 dark:text-indigo-400/80 mt-1 font-medium">Successfully fixed</p>
+          </CardContent>
+        </Card>
+
+        {/* Total Reports Card */}
+        <Card className="bg-card/40 backdrop-blur-md border-purple-500/20 shadow-sm relative overflow-hidden group hover:shadow-purple-500/10 hover:border-purple-500/40 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative z-10">
+            <CardTitle className="text-sm font-medium text-purple-700 dark:text-purple-400">
+              Total Reports
+            </CardTitle>
+            <div className="p-2 bg-purple-100/50 dark:bg-purple-900/30 rounded-lg group-hover:scale-110 transition-transform duration-300">
+              <FileText className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+            </div>
+          </CardHeader>
+          <CardContent className="relative z-10">
+            <div className="text-3xl font-bold text-foreground">
+              {loading ? "..." : stats.totalReports}
+            </div>
+            <p className="text-xs text-purple-600/80 dark:text-purple-400/80 mt-1 font-medium">All time submitted</p>
+          </CardContent>
+        </Card>
+        
       </div>
 
       <div className="mt-8 rounded-xl border bg-card/50 backdrop-blur-sm shadow-sm overflow-hidden">
@@ -122,7 +190,7 @@ export function AdminOverview() {
                 <TableHead className="text-right font-semibold text-foreground">
                   Score
                 </TableHead>
-                <TableHead className="font-semibold text-foreground">
+                <TableHead className="text-right font-semibold text-foreground">
                   Safety Level
                 </TableHead>
               </TableRow>
@@ -172,7 +240,7 @@ export function AdminOverview() {
                         /100
                       </span>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="text-right">
                       {s.safetyLevel === "Safe" ? (
                         <Badge
                           variant="outline"
@@ -230,6 +298,6 @@ export function AdminOverview() {
           </div>
         </div>
       </div>
-    </div>
+    </SlideUp>
   );
 }

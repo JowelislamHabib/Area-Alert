@@ -7,15 +7,51 @@ import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { getReports, deleteReport } from "@/lib/actions/report";
 import { toast } from "sonner";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { UpdateReportDialog } from "@/app/reports/[id]/UpdateReportDialog";
+import { SlideUp } from "@/components/ui/motion-wrapper";
 import type { Report } from "@/lib/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { 
   AlertCircle,
   Activity,
   CheckCircle2,
-  Trash2
+  Trash2,
+  Zap,
+  Wifi,
+  Droplets,
+  Flame,
+  Waves
 } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+const utilityStyles: Record<string, { icon: typeof Zap; color: string; bg: string }> = {
+  electricity: {
+    icon: Zap,
+    color: "text-amber-600 dark:text-amber-400",
+    bg: "bg-amber-500/10",
+  },
+  internet: {
+    icon: Wifi,
+    color: "text-blue-600 dark:text-blue-400",
+    bg: "bg-blue-500/10",
+  },
+  water: {
+    icon: Droplets,
+    color: "text-cyan-600 dark:text-cyan-400",
+    bg: "bg-cyan-500/10",
+  },
+  gas: {
+    icon: Flame,
+    color: "text-orange-600 dark:text-orange-400",
+    bg: "bg-orange-500/10",
+  },
+  flood: {
+    icon: Waves,
+    color: "text-cyan-600 dark:text-cyan-400",
+    bg: "bg-cyan-500/10",
+  },
+};
 
 export function AdminReportsTable() {
   const router = useRouter();
@@ -62,7 +98,7 @@ export function AdminReportsTable() {
   };
 
   return (
-    <div className="rounded-xl border bg-card/50 backdrop-blur-sm shadow-sm overflow-hidden">
+    <SlideUp delay={0.1} className="rounded-xl border bg-card/50 backdrop-blur-sm shadow-sm overflow-hidden">
       <div className="overflow-x-auto">
         <Table>
           <TableHeader className="bg-muted/50">
@@ -81,12 +117,20 @@ export function AdminReportsTable() {
             ) : reports.length === 0 ? (
               <TableRow><TableCell colSpan={6} className="h-32 text-center text-muted-foreground">No reports found</TableCell></TableRow>
             ) : (
-              reports.map(report => (
+              reports.map(report => {
+                const ui = utilityStyles[report.utilityType?.toLowerCase()] || {
+                  icon: Activity,
+                  color: "text-primary",
+                  bg: "bg-primary/10",
+                };
+                const Icon = ui.icon;
+                
+                return (
                 <TableRow key={report._id} className="hover:bg-muted/40 transition-colors group">
                   <TableCell className="font-medium">
                     <div className="flex items-center gap-2">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
-                        <Activity className="h-4 w-4 text-primary" />
+                      <div className={cn("flex h-8 w-8 items-center justify-center rounded-full", ui.bg)}>
+                        <Icon className={cn("h-4 w-4", ui.color)} />
                       </div>
                       <span className="capitalize">{report.utilityType}</span>
                     </div>
@@ -117,20 +161,25 @@ export function AdminReportsTable() {
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">
                       <UpdateReportDialog report={report} asIcon />
-                      <Button 
-                        variant="ghost"
-                        size="icon"
-                        title="Delete Report"
-                        onClick={() => handleDelete(report._id)}
-                        className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                        <span className="sr-only">Delete Report</span>
-                      </Button>
+                      <Tooltip>
+                        <TooltipTrigger render={
+                          <Button 
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDelete(report._id)}
+                            className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+                          />
+                        }>
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Delete Report</span>
+                        </TooltipTrigger>
+                        <TooltipContent>Delete Report</TooltipContent>
+                      </Tooltip>
                     </div>
                   </TableCell>
                 </TableRow>
-              ))
+              );
+            })
             )}
           </TableBody>
         </Table>
@@ -160,6 +209,6 @@ export function AdminReportsTable() {
           </Button>
         </div>
       </div>
-    </div>
+    </SlideUp>
   );
 }

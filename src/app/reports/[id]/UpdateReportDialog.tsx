@@ -11,6 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -67,10 +68,22 @@ export function UpdateReportDialog({ report, asIcon }: { report: Report, asIcon?
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger render={asIcon ? <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground" title="Update Report" /> : <Button variant="default" size="default" className="gap-2 shadow-sm" />}>
-        <Edit className="size-4" />
-        {!asIcon && "Update Report"}
-      </DialogTrigger>
+      {asIcon ? (
+        <Tooltip>
+          <TooltipTrigger render={
+            <DialogTrigger render={<Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground" />} />
+          }>
+            <Edit className="size-4" />
+            <span className="sr-only">Update Report</span>
+          </TooltipTrigger>
+          <TooltipContent>Update Report</TooltipContent>
+        </Tooltip>
+      ) : (
+        <DialogTrigger render={<Button variant="default" size="default" className="gap-2 shadow-sm" />}>
+          <Edit className="size-4" />
+          Update Report
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-[500px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
