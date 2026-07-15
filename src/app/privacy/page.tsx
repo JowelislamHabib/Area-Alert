@@ -1,6 +1,6 @@
-import { ShieldAlert } from "lucide-react";
+import { Shield } from "lucide-react";
 
-export default function TermsPage() {
+export default function PrivacyPage() {
   return (
     <main className="min-h-[calc(100vh-3.5rem)] bg-muted/30 pb-16">
       {/* Hero Header */}
@@ -8,11 +8,11 @@ export default function TermsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12">
           <div className="max-w-4xl">
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-3 flex items-center gap-3">
-              <ShieldAlert className="w-8 h-8 opacity-90" />
-              Terms of Service
+              <Shield className="w-8 h-8 opacity-90" />
+              Privacy Policy
             </h1>
             <p className="text-primary-foreground/80 text-base md:text-lg max-w-xl">
-              Please read these terms carefully before using AreaAlert.
+              How we collect, use, and protect your personal data.
             </p>
           </div>
         </div>
@@ -23,30 +23,30 @@ export default function TermsPage() {
           <div className="max-w-4xl">
             <div className="space-y-8">
               <section>
-                <h2 className="text-2xl font-bold text-foreground mb-4">1. Acceptance of Terms</h2>
+                <h2 className="text-2xl font-bold text-foreground mb-4">1. Information We Collect</h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  By accessing and using AreaAlert, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing this site.
+                  We collect information you provide when creating an account, such as your email address, name, and profile picture. We also collect data from the utility reports you submit, which includes location data, timestamps, and utility types.
                 </p>
               </section>
               
               <section>
-                <h2 className="text-2xl font-bold text-foreground mb-4">2. Community Guidelines</h2>
+                <h2 className="text-2xl font-bold text-foreground mb-4">2. How We Use Your Data</h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  When submitting reports, you agree to provide accurate and truthful information. False reporting, spam, or abusive behavior may result in immediate account suspension or termination. AreaAlert relies on the integrity of its community members.
+                  Your data is used to provide and improve the AreaAlert service. Utility report data is made public to help the community stay informed, but we do not share your personal email or authentication data with third parties.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-foreground mb-4">3. Privacy Policy</h2>
+                <h2 className="text-2xl font-bold text-foreground mb-4">3. Data Security</h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  Your use of AreaAlert is also governed by our Privacy Policy, which outlines how we collect and use your data. Please review our Privacy Policy to understand our practices.
+                  We implement industry-standard security measures to protect your personal information from unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the Internet is 100% secure.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-foreground mb-4">4. Limitation of Liability</h2>
+                <h2 className="text-2xl font-bold text-foreground mb-4">4. Your Rights</h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  AreaAlert provides crowd-sourced utility data "as is". We are not responsible for the accuracy of reports or any decisions made based on this information. In no event shall AreaAlert or its suppliers be liable for any damages arising out of the use or inability to use the materials on the platform.
+                  You have the right to access, update, or delete your personal information at any time through your account dashboard. If you wish to completely remove your account and associated data, please contact our support team.
                 </p>
               </section>
 
