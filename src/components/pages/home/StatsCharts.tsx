@@ -14,6 +14,7 @@ import {
   Legend,
 } from "recharts";
 import type { ChartData } from "./StatsSection";
+import { useReveal } from "@/lib/useReveal";
 
 interface TooltipPayload {
   name: string;
@@ -98,111 +99,128 @@ export default function StatsCharts({
   chartData: ChartData;
   hasData: boolean;
 }) {
+  const [ref, revealed] = useReveal();
+
   if (!hasData) return null;
 
   return (
-    <div className="grid md:grid-cols-3 gap-5 mt-12">
+    <div ref={ref} className="grid md:grid-cols-3 gap-5 mt-12">
       {/* Utility Pie */}
       <ChartCard title="Reports by Utility">
-        <ResponsiveContainer width="100%" height={260}>
-          <PieChart>
-            <LinearGradientDefs data={chartData.utilityData} prefix="util" />
-            <Pie
-              data={chartData.utilityData}
-              cx="50%"
-              cy="45%"
-              innerRadius={50}
-              outerRadius={85}
-              paddingAngle={5}
-              dataKey="value"
-              stroke="none"
-              animationBegin={0}
-              animationDuration={800}
-            >
-              {chartData.utilityData.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={`url(#grad-util-${index})`}
-                  stroke="none"
-                />
-              ))}
-            </Pie>
-            <Tooltip content={<PieTooltip />} cursor={{ fill: "transparent" }} />
-            <Legend
-              verticalAlign="bottom"
-              height={40}
-              content={<CustomLegend />}
-            />
-          </PieChart>
-        </ResponsiveContainer>
+        {revealed ? (
+          <ResponsiveContainer width="100%" height={260}>
+            <PieChart>
+              <LinearGradientDefs data={chartData.utilityData} prefix="util" />
+              <Pie
+                data={chartData.utilityData}
+                cx="50%"
+                cy="45%"
+                innerRadius={50}
+                outerRadius={85}
+                paddingAngle={5}
+                dataKey="value"
+                stroke="none"
+                animationBegin={0}
+                animationDuration={1000}
+                isAnimationActive={true}
+              >
+                {chartData.utilityData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={`url(#grad-util-${index})`}
+                    stroke="none"
+                  />
+                ))}
+              </Pie>
+              <Tooltip content={<PieTooltip />} cursor={{ fill: "transparent" }} />
+              <Legend
+                verticalAlign="bottom"
+                height={40}
+                content={<CustomLegend />}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        ) : (
+          <div style={{ height: 260 }} />
+        )}
       </ChartCard>
 
       {/* District Bar */}
       <ChartCard title="Top Districts">
-        <ResponsiveContainer width="100%" height={260}>
-          <BarChart data={chartData.districtData} margin={{ top: 5, right: 5, bottom: 5, left: -15 }}>
-            <LinearGradientDefs data={chartData.districtData} prefix="dist" />
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-            <XAxis
-              dataKey="name"
-              tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
-              axisLine={{ stroke: "var(--border)" }}
-              tickLine={false}
-            />
-            <YAxis
-              tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <Tooltip content={<GlassTooltip />} cursor={{ fill: "transparent" }} />
-            <Bar
-              dataKey="value"
-              radius={[8, 8, 0, 0]}
-              barSize={32}
-              animationBegin={0}
-              animationDuration={800}
-            >
-              {chartData.districtData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={`url(#grad-dist-${index})`} stroke="none" />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
+        {revealed ? (
+          <ResponsiveContainer width="100%" height={260}>
+            <BarChart data={chartData.districtData} margin={{ top: 5, right: 5, bottom: 5, left: -15 }}>
+              <LinearGradientDefs data={chartData.districtData} prefix="dist" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+              <XAxis
+                dataKey="name"
+                tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+                axisLine={{ stroke: "var(--border)" }}
+                tickLine={false}
+              />
+              <YAxis
+                tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <Tooltip content={<GlassTooltip />} cursor={{ fill: "transparent" }} />
+              <Bar
+                dataKey="value"
+                radius={[8, 8, 0, 0]}
+                barSize={32}
+                animationBegin={0}
+                animationDuration={1000}
+                isAnimationActive={true}
+              >
+                {chartData.districtData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={`url(#grad-dist-${index})`} stroke="none" />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        ) : (
+          <div style={{ height: 260 }} />
+        )}
       </ChartCard>
 
       {/* Status Pie */}
       <ChartCard title="Status Overview">
-        <ResponsiveContainer width="100%" height={260}>
-          <PieChart>
-            <LinearGradientDefs data={chartData.statusData} prefix="status" />
-            <Pie
-              data={chartData.statusData}
-              cx="50%"
-              cy="45%"
-              innerRadius={50}
-              outerRadius={85}
-              paddingAngle={5}
-              dataKey="value"
-              stroke="none"
-              animationBegin={0}
-              animationDuration={800}
-            >
-              {chartData.statusData.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={`url(#grad-status-${index})`}
-                  stroke="none"
-                />
-              ))}
-            </Pie>
-            <Tooltip content={<PieTooltip />} cursor={{ fill: "transparent" }} />
-            <Legend
-              verticalAlign="bottom"
-              height={40}
-              content={<CustomLegend />}
-            />
-          </PieChart>
-        </ResponsiveContainer>
+        {revealed ? (
+          <ResponsiveContainer width="100%" height={260}>
+            <PieChart>
+              <LinearGradientDefs data={chartData.statusData} prefix="status" />
+              <Pie
+                data={chartData.statusData}
+                cx="50%"
+                cy="45%"
+                innerRadius={50}
+                outerRadius={85}
+                paddingAngle={5}
+                dataKey="value"
+                stroke="none"
+                animationBegin={0}
+                animationDuration={1000}
+                isAnimationActive={true}
+              >
+                {chartData.statusData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={`url(#grad-status-${index})`}
+                    stroke="none"
+                  />
+                ))}
+              </Pie>
+              <Tooltip content={<PieTooltip />} cursor={{ fill: "transparent" }} />
+              <Legend
+                verticalAlign="bottom"
+                height={40}
+                content={<CustomLegend />}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        ) : (
+          <div style={{ height: 260 }} />
+        )}
       </ChartCard>
     </div>
   );

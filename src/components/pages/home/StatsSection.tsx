@@ -2,6 +2,7 @@ import { getReports, getReportStatsData } from "@/lib/actions/report";
 import StatCard from "./StatCard";
 import StatsCharts from "./StatsCharts";
 import { FileText, MapPin, Grid3X3, Users } from "lucide-react";
+import { StaggerContainer, StaggerItem, FadeIn } from "@/components/ui/motion-wrapper";
 import type { Report } from "@/lib/types";
 
 export type ChartData = {
@@ -82,7 +83,7 @@ export default async function StatsSection() {
   return (
     <section className="relative py-24 sm:py-32 bg-secondary dark:bg-secondary/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16 space-y-4">
+        <FadeIn className="text-center mb-16 space-y-4">
           <p className="text-sm font-semibold uppercase tracking-wider text-primary">
             Platform Stats
           </p>
@@ -92,36 +93,44 @@ export default async function StatsSection() {
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             See how the community is growing and which areas need attention.
           </p>
-        </div>
+        </FadeIn>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          <StatCard
-            label="Total Reports"
-            value={total.toLocaleString()}
-            icon={FileText}
-            accent="from-blue-500 to-indigo-500"
-          />
-          <StatCard
-            label="Most Active District"
-            value={mostActiveDistrict ? mostActiveDistrict.totalReports : "0"}
-            icon={MapPin}
-            description={mostActiveDistrict ? mostActiveDistrict.district : "No data yet"}
-            accent="from-purple-500 to-pink-500"
-          />
-          <StatCard
-            label="Service Categories"
-            value={4}
-            icon={Grid3X3}
-            description="Electricity, Internet, Water, Gas"
-            accent="from-emerald-500 to-teal-500"
-          />
-          <StatCard
-            label="Community Members"
-            value={uniqueReporters}
-            icon={Users}
-            accent="from-orange-500 to-red-500"
-          />
-        </div>
+        <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <StaggerItem className="h-full">
+            <StatCard
+              label="Total Reports"
+              value={total.toLocaleString()}
+              icon={FileText}
+              accent="from-blue-500 to-indigo-500"
+            />
+          </StaggerItem>
+          <StaggerItem className="h-full">
+            <StatCard
+              label="Most Active District"
+              value={mostActiveDistrict ? mostActiveDistrict.totalReports : "0"}
+              icon={MapPin}
+              description={mostActiveDistrict ? mostActiveDistrict.district : "No data yet"}
+              accent="from-purple-500 to-pink-500"
+            />
+          </StaggerItem>
+          <StaggerItem className="h-full">
+            <StatCard
+              label="Service Categories"
+              value={5}
+              icon={Grid3X3}
+              description="Electricity, Internet, Water, Gas, Flood"
+              accent="from-emerald-500 to-teal-500"
+            />
+          </StaggerItem>
+          <StaggerItem className="h-full">
+            <StatCard
+              label="Community Members"
+              value={uniqueReporters}
+              icon={Users}
+              accent="from-orange-500 to-red-500"
+            />
+          </StaggerItem>
+        </StaggerContainer>
 
         <StatsCharts chartData={chartData} hasData={reports.length > 0} />
       </div>

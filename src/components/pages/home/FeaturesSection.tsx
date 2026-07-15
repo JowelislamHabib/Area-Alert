@@ -1,4 +1,5 @@
 import { BadgeCheck, Timer, MapPin, Smartphone } from "lucide-react";
+import { StaggerContainer, StaggerItem, FadeIn } from "@/components/ui/motion-wrapper";
 
 const features = [
   {
@@ -35,7 +36,7 @@ export default function FeaturesSection() {
   return (
     <section className="py-24 sm:py-32 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16 space-y-4">
+        <FadeIn className="text-center mb-16 space-y-4">
           <p className="text-sm font-semibold uppercase tracking-wider text-primary">
             Why AreaAlert
           </p>
@@ -46,31 +47,30 @@ export default function FeaturesSection() {
             Purpose-built for Bangladeshi communities to share and find utility
             service information quickly.
           </p>
-        </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        </FadeIn>
+        <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((feature) => {
             const Icon = feature.icon;
             return (
-              <div
-                key={feature.title}
-                className="group relative bg-card rounded-2xl border border-border/60 p-6 space-y-5 hover:shadow-lg hover:shadow-primary/5 hover:border-primary/20 transition-all duration-300"
-              >
-                <div className={`flex size-12 items-center justify-center rounded-xl bg-gradient-to-br ${feature.accent} text-white shadow-lg shadow-primary/10`}>
-                  <Icon className="size-6" />
+              <StaggerItem key={feature.title}>
+                <div className="group relative bg-card rounded-2xl border border-border/60 p-6 space-y-5 hover:shadow-lg hover:shadow-primary/5 hover:border-primary/20 transition-all duration-300 h-full">
+                  <div className={`flex size-12 items-center justify-center rounded-xl bg-gradient-to-br ${feature.accent} text-white shadow-lg shadow-primary/10`}>
+                    <Icon className="size-6" />
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="font-semibold text-foreground">
+                      {feature.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {feature.description}
+                    </p>
+                  </div>
+                  <div className="absolute bottom-0 left-6 right-6 h-0.5 bg-gradient-to-r from-transparent via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
-                <div className="space-y-2">
-                  <h3 className="font-semibold text-foreground">
-                    {feature.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {feature.description}
-                  </p>
-                </div>
-                <div className="absolute bottom-0 left-6 right-6 h-0.5 bg-gradient-to-r from-transparent via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </div>
+              </StaggerItem>
             );
           })}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );

@@ -1,6 +1,22 @@
 import Link from "next/link";
-import { Zap, Wifi, Droplets, Flame, MapPin, ArrowUp, CheckCircle, ThumbsDown, ShieldCheck, User, Waves, HelpCircle } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Zap,
+  Wifi,
+  Droplets,
+  Flame,
+  ArrowUp,
+  CheckCircle,
+  ThumbsDown,
+  ShieldCheck,
+  User,
+  Waves,
+  HelpCircle,
+} from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import type { Report } from "@/lib/types";
 import { formatDistanceToNow } from "date-fns";
 
@@ -12,7 +28,10 @@ const utilityIcons = {
   flood: Waves,
 } as const;
 
-const utilityStyles: Record<string, { icon: typeof Zap; color: string; bg: string; label: string }> = {
+const utilityStyles: Record<
+  string,
+  { icon: typeof Zap; color: string; bg: string; label: string }
+> = {
   electricity: {
     icon: Zap,
     color: "text-amber-600 dark:text-amber-400",
@@ -45,10 +64,25 @@ const utilityStyles: Record<string, { icon: typeof Zap; color: string; bg: strin
   },
 };
 
-const STATUS_STYLES: Record<string, { dot: string; badge: string; label: string }> = {
-  active: { dot: "bg-red-500", badge: "bg-red-500/10 text-red-600 dark:text-red-400", label: "Active" },
-  resolved: { dot: "bg-emerald-500", badge: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400", label: "Resolved" },
-  pending: { dot: "bg-yellow-500", badge: "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400", label: "Pending" },
+const STATUS_STYLES: Record<
+  string,
+  { dot: string; badge: string; label: string }
+> = {
+  active: {
+    dot: "bg-red-500",
+    badge: "bg-red-500/10 text-red-600 dark:text-red-400",
+    label: "Active",
+  },
+  resolved: {
+    dot: "bg-emerald-500",
+    badge: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+    label: "Resolved",
+  },
+  pending: {
+    dot: "bg-yellow-500",
+    badge: "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400",
+    label: "Pending",
+  },
 };
 
 export default function ReportCard({ report }: { report: Report }) {
@@ -58,7 +92,9 @@ export default function ReportCard({ report }: { report: Report }) {
   const upvotesCount = report.upvotes?.length || 0;
   const resolvedVotesCount = report.resolvedVotes?.length || 0;
   const downvotesCount = report.downvotes?.length || 0;
-  const timeAgo = formatDistanceToNow(new Date(report.createdAt), { addSuffix: true });
+  const timeAgo = formatDistanceToNow(new Date(report.createdAt), {
+    addSuffix: true,
+  });
 
   return (
     <Link href={`/reports/${report._id}`} className="block h-full">
@@ -66,10 +102,14 @@ export default function ReportCard({ report }: { report: Report }) {
         <div className="p-5 flex-1 flex flex-col">
           {/* Header: icon + status */}
           <div className="flex items-start justify-between mb-4">
-            <div className={`flex size-10 items-center justify-center rounded-xl ${ui.bg} ${ui.color}`}>
+            <div
+              className={`flex size-10 items-center justify-center rounded-xl ${ui.bg} ${ui.color}`}
+            >
               <Icon className="size-5" />
             </div>
-            <div className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${status.badge}`}>
+            <div
+              className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${status.badge}`}
+            >
               <span className={`size-1.5 rounded-full ${status.dot}`} />
               {status.label}
             </div>
@@ -120,22 +160,31 @@ export default function ReportCard({ report }: { report: Report }) {
               <div className="flex items-center gap-2 min-w-0 mr-2">
                 <div className="flex items-center text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 truncate">
                   <ShieldCheck className="size-3.5 mr-1 shrink-0" />
-                  <span className="truncate">Verified by {upvotesCount} {upvotesCount === 1 ? "user" : "users"}</span>
+                  <span className="truncate">
+                    Verified by {upvotesCount}{" "}
+                    {upvotesCount === 1 ? "user" : "users"}
+                  </span>
                 </div>
                 {/* Stacked avatars */}
                 <div className="flex -space-x-1.5 shrink-0">
-                  {report.upvotes.slice(0, 3).map((userId: string, i: number) => {
-                    const colors = ["bg-primary/20 text-primary", "bg-blue-500/20 text-blue-500", "bg-purple-500/20 text-purple-500"];
-                    return (
-                      <div
-                        key={userId}
-                        className={`size-5 rounded-full border-2 border-background flex items-center justify-center ${colors[i % 3]}`}
-                        style={{ zIndex: 3 - i }}
-                      >
-                        <User className="size-2.5" />
-                      </div>
-                    );
-                  })}
+                  {report.upvotes
+                    .slice(0, 3)
+                    .map((userId: string, i: number) => {
+                      const colors = [
+                        "bg-primary/20 text-primary",
+                        "bg-blue-500/20 text-blue-500",
+                        "bg-purple-500/20 text-purple-500",
+                      ];
+                      return (
+                        <div
+                          key={userId}
+                          className={`size-5 rounded-full border-2 border-background flex items-center justify-center ${colors[i % 3]}`}
+                          style={{ zIndex: 3 - i }}
+                        >
+                          <User className="size-2.5" />
+                        </div>
+                      );
+                    })}
                 </div>
               </div>
             ) : (

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ChevronDown, HelpCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SlideUp, FadeIn } from "@/components/ui/motion-wrapper";
 
 const faqs = [
   {
@@ -43,7 +44,7 @@ export default function FAQSection() {
     <section className="relative py-24 sm:py-32 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-16">
-          <div className="lg:col-span-5 text-left space-y-6">
+          <FadeIn className="lg:col-span-5 text-left space-y-6">
             <div className="inline-flex items-center gap-2 rounded-[var(--radius)] border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary">
               <HelpCircle className="size-4" />
               FAQ
@@ -54,49 +55,50 @@ export default function FAQSection() {
             <p className="text-lg text-muted-foreground text-balance">
               Everything you need to know about AreaAlert. Can't find the answer you're looking for? Reach out to our community.
             </p>
-          </div>
+          </FadeIn>
 
           <div className="lg:col-span-7 space-y-3">
             {faqs.map((faq, index) => {
               const isOpen = openIndex === index;
               return (
-                <div
-                  key={index}
-                  className={cn(
-                    "rounded-[var(--radius)] border overflow-hidden transition-all duration-300",
-                    isOpen
-                      ? "border-primary/20 bg-card shadow-lg shadow-primary/5"
-                      : "border-border/60 bg-card hover:border-border"
-                  )}
-                >
-                  <button
-                    onClick={() => toggle(index)}
-                    className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
-                  >
-                    <span className={cn(
-                      "font-semibold text-base transition-colors",
-                      isOpen ? "text-primary" : "text-foreground"
-                    )}>
-                      {faq.question}
-                    </span>
-                    <ChevronDown
-                      className={cn(
-                        "size-5 shrink-0 text-muted-foreground transition-transform duration-300",
-                        isOpen && "rotate-180 text-primary"
-                      )}
-                    />
-                  </button>
+                <SlideUp key={index} delay={index * 0.1}>
                   <div
                     className={cn(
-                      "overflow-hidden transition-all duration-300 ease-in-out",
-                      isOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
+                      "rounded-[var(--radius)] border overflow-hidden transition-all duration-300",
+                      isOpen
+                        ? "border-primary/20 bg-card shadow-lg shadow-primary/5"
+                        : "border-border/60 bg-card hover:border-border"
                     )}
                   >
-                    <p className="px-6 pb-5 text-sm text-muted-foreground leading-relaxed border-t border-border/50 pt-4">
-                      {faq.answer}
-                    </p>
+                    <button
+                      onClick={() => toggle(index)}
+                      className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
+                    >
+                      <span className={cn(
+                        "font-semibold text-base transition-colors",
+                        isOpen ? "text-primary" : "text-foreground"
+                      )}>
+                        {faq.question}
+                      </span>
+                      <ChevronDown
+                        className={cn(
+                          "size-5 shrink-0 text-muted-foreground transition-transform duration-300",
+                          isOpen && "rotate-180 text-primary"
+                        )}
+                      />
+                    </button>
+                    <div
+                      className={cn(
+                        "overflow-hidden transition-all duration-300 ease-in-out",
+                        isOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
+                      )}
+                    >
+                      <p className="px-6 pb-5 text-sm text-muted-foreground leading-relaxed border-t border-border/50 pt-4">
+                        {faq.answer}
+                      </p>
+                    </div>
                   </div>
-                </div>
+                </SlideUp>
               );
             })}
           </div>
