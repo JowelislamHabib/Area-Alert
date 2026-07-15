@@ -298,14 +298,13 @@ export default async function ReportsPage({
                           {/* Footer: verified + time */}
                           <div className="flex items-center justify-between pt-3 border-t border-border/50">
                             {upvotesCount > 0 ? (
-                              <div className="flex items-center gap-2">
-                                <div className="flex items-center text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
-                                  <ShieldCheck className="size-3.5 mr-1" />
-                                  Verified by {upvotesCount}{" "}
-                                  {upvotesCount === 1 ? "user" : "users"}
+                              <div className="flex items-center gap-2 min-w-0 mr-2">
+                                <div className="flex items-center text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 truncate">
+                                  <ShieldCheck className="size-3.5 mr-1 shrink-0" />
+                                  <span className="truncate">Verified by {upvotesCount} {upvotesCount === 1 ? "user" : "users"}</span>
                                 </div>
                                 {/* Stacked avatars */}
-                                <div className="flex -space-x-1.5">
+                                <div className="flex -space-x-1.5 shrink-0">
                                   {report.upvotes
                                     .slice(0, 3)
                                     .map((userId: string, i: number) => {
@@ -327,12 +326,12 @@ export default async function ReportsPage({
                                 </div>
                               </div>
                             ) : (
-                              <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
-                                <HelpCircle className="size-3.5" />
-                                Help us verify this
+                              <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground truncate mr-2">
+                                <HelpCircle className="size-3.5 shrink-0" />
+                                <span className="truncate">Help us verify this</span>
                               </span>
                             )}
-                            <span className="text-[11px] text-muted-foreground">
+                            <span className="text-[11px] text-muted-foreground shrink-0">
                               {timeAgo}
                             </span>
                           </div>

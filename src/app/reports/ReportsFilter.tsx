@@ -76,10 +76,16 @@ export function ReportsFilter({
   const currentStatus = localFilters.status;
   const currentPreset = localFilters.datePreset;
 
-  const date = ((localFilters.startDate || localFilters.endDate) && currentPreset === "custom") ? {
-    from: localFilters.startDate ? new Date(localFilters.startDate) : undefined,
-    to: localFilters.endDate ? new Date(localFilters.endDate) : undefined,
-  } : undefined;
+  const date =
+    (localFilters.startDate || localFilters.endDate) &&
+    currentPreset === "custom"
+      ? {
+          from: localFilters.startDate
+            ? new Date(localFilters.startDate)
+            : undefined,
+          to: localFilters.endDate ? new Date(localFilters.endDate) : undefined,
+        }
+      : undefined;
 
   const districts = areaData.map((d) => d.district);
   const selectedDistrictData = areaData.find(
@@ -87,18 +93,15 @@ export function ReportsFilter({
   );
   const areas = selectedDistrictData ? selectedDistrictData.areas : [];
 
-  const updateParam = useCallback(
-    (name: string, value: string) => {
-      setLocalFilters((prev) => {
-        const next = { ...prev, [name]: value };
-        if (name === "district" && value !== prev.district) {
-          next.area = "";
-        }
-        return next;
-      });
-    },
-    [],
-  );
+  const updateParam = useCallback((name: string, value: string) => {
+    setLocalFilters((prev) => {
+      const next = { ...prev, [name]: value };
+      if (name === "district" && value !== prev.district) {
+        next.area = "";
+      }
+      return next;
+    });
+  }, []);
 
   const handleDatePreset = (preset: "all" | "today" | "custom") => {
     setLocalFilters((prev) => {
@@ -134,7 +137,11 @@ export function ReportsFilter({
   const applyFilters = () => {
     const params = new URLSearchParams(searchParams.toString());
     Object.entries(localFilters).forEach(([key, value]) => {
-      if (value && !(key === "sortBy" && value === "newest") && !(key === "datePreset" && value === "all")) {
+      if (
+        value &&
+        !(key === "sortBy" && value === "newest") &&
+        !(key === "datePreset" && value === "all")
+      ) {
         params.set(key, value);
       } else {
         params.delete(key);
@@ -150,7 +157,16 @@ export function ReportsFilter({
 
   const clearFilters = () => {
     const params = new URLSearchParams(searchParams.toString());
-    ["district", "area", "utilityType", "status", "sortBy", "datePreset", "startDate", "endDate"].forEach(k => params.delete(k));
+    [
+      "district",
+      "area",
+      "utilityType",
+      "status",
+      "sortBy",
+      "datePreset",
+      "startDate",
+      "endDate",
+    ].forEach((k) => params.delete(k));
     router.push(`/reports?${params.toString()}`);
     setIsOpen(false);
   };
@@ -456,7 +472,7 @@ export function ReportsFilter({
                         ? date.to
                           ? `${format(date.from, "LLL dd, y")} - ${format(date.to, "LLL dd, y")}`
                           : format(date.from, "LLL dd, y")
-                        : "Pick a Date Range"}
+                        : "Date Range"}
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
@@ -549,7 +565,10 @@ export function ReportsFilter({
                 <FilterX className="size-4 mr-2" /> Clear Filters
               </Button>
             )}
-            <Button onClick={applyFilters} className="bg-[#0f6b4b] hover:bg-[#0f6b4b]/90 text-white">
+            <Button
+              onClick={applyFilters}
+              className="bg-[#0f6b4b] hover:bg-[#0f6b4b]/90 text-white"
+            >
               Apply Filters
             </Button>
           </div>
