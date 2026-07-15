@@ -34,27 +34,6 @@ export default function Loading() {
             />
           </div>
         </div>
-
-        {/* Text area */}
-        <div className="flex flex-col items-center gap-3">
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground/90 bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
-            Loading AreaAlert
-          </h2>
-          <div className="flex items-center gap-1.5 mt-1">
-            <span
-              className="h-2 w-2 rounded-full bg-primary/80 animate-bounce"
-              style={{ animationDelay: "0ms" }}
-            />
-            <span
-              className="h-2 w-2 rounded-full bg-primary/80 animate-bounce"
-              style={{ animationDelay: "150ms" }}
-            />
-            <span
-              className="h-2 w-2 rounded-full bg-primary/80 animate-bounce"
-              style={{ animationDelay: "300ms" }}
-            />
-          </div>
-        </div>
       </div>
     </div>
   );
