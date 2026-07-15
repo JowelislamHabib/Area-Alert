@@ -12,7 +12,7 @@ export default function ContactPage() {
     <div className="flex min-h-screen flex-col">
       <ContactHero />
       
-      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-24">
         <div className="grid w-full gap-8 md:grid-cols-2 items-start">
           <ContactInfo />
           <ContactForm />
