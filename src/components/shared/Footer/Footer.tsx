@@ -66,6 +66,7 @@ const exploreLinks = [
   { label: "Home", href: "/" },
   { label: "Explore Reports", href: "/reports" },
   { label: "Safety Map", href: "/safety-map" },
+  { label: "Stories", href: "/stories" },
   { label: "About Us", href: "/about" },
 ];
 

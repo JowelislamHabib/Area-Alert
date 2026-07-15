@@ -41,8 +41,11 @@ export default function FAQSection() {
   };
 
   return (
-    <section className="relative py-24 sm:py-32 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative py-24 sm:py-32 bg-secondary dark:bg-secondary/30 overflow-hidden">
+      {/* Decorative gradient blur in the background */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[400px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-16">
           <FadeIn className="lg:col-span-5 text-left space-y-6">
             <div className="inline-flex items-center gap-2 rounded-[var(--radius)] border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary">

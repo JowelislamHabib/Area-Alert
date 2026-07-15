@@ -30,7 +30,7 @@ export default async function LatestReportsSection() {
             href="/reports"
             className={cn(
               buttonVariants({ variant: "outline" }),
-              "font-medium self-start sm:self-auto"
+              "font-medium self-start sm:self-auto hover:bg-primary hover:text-primary-foreground"
             )}
           >
             View all reports <ArrowRight className="ml-1.5 size-4" />
@@ -62,7 +62,13 @@ export default async function LatestReportsSection() {
               ))}
             </StaggerContainer>
             <div className="mt-12 text-center sm:hidden">
-              <Link href="/reports" className={cn(buttonVariants({ variant: "outline" }))}>
+              <Link 
+                href="/reports" 
+                className={cn(
+                  buttonVariants({ variant: "outline" }),
+                  "hover:bg-primary hover:text-primary-foreground"
+                )}
+              >
                 View all reports <ArrowRight className="ml-1.5 size-4" />
               </Link>
             </div>

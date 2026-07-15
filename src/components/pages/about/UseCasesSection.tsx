@@ -1,6 +1,9 @@
 import { Users, Laptop, Newspaper, Building2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { StaggerContainer, StaggerItem, FadeIn } from "@/components/ui/motion-wrapper";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { StaggerContainer, StaggerItem, FadeIn, SlideUp } from "@/components/ui/motion-wrapper";
+import { ArrowRight } from "lucide-react";
 
 export function UseCasesSection() {
   const useCases = [
@@ -58,6 +61,14 @@ export function UseCasesSection() {
             </StaggerItem>
           ))}
         </StaggerContainer>
+
+        <SlideUp delay={0.4} className="mt-16 text-center">
+          <Button size="lg" className="h-12 px-8 font-bold text-base" asChild>
+            <Link href="/stories">
+              Read Community Stories <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
+          </Button>
+        </SlideUp>
       </div>
     </section>
   );

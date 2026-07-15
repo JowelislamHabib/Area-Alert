@@ -37,6 +37,7 @@ const navLinks = [
   { label: "Explore Reports", href: "/reports" },
   { label: "Safety Map", href: "/safety-map" },
   { label: "About", href: "/about" },
+  { label: "Stories", href: "/stories" },
   { label: "Contact", href: "/contact" },
 ];
 
