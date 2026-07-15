@@ -12,6 +12,7 @@ import { PaginationControls } from "./PaginationControls";
 import fs from "fs";
 import path from "path";
 import type { Report } from "@/lib/types";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/components/ui/motion-wrapper";
 
 function getAreaData() {
   const filePath = path.join(process.cwd(), "public", "data", "area.json");
@@ -40,88 +41,98 @@ export default async function ReportsPage({
       <div className="bg-primary text-primary-foreground">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12">
           <div className="max-w-4xl">
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-3 flex items-center gap-3">
-              <FileText className="w-8 h-8 opacity-90" />
-              Explore Reports
-            </h1>
-            <p className="text-primary-foreground/80 text-base md:text-lg mb-8 max-w-xl">
-              Browse and filter community utility outage reports across
-              Bangladesh
-            </p>
+            <FadeIn>
+              <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-3 flex items-center gap-3">
+                <FileText className="w-8 h-8 opacity-90" />
+                Explore Reports
+              </h1>
+              <p className="text-primary-foreground/80 text-base md:text-lg mb-8 max-w-xl">
+                Browse and filter community utility outage reports across
+                Bangladesh
+              </p>
+            </FadeIn>
 
             {stats && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                <div className="bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors border border-primary-foreground/20 rounded-lg px-3 py-2.5 flex flex-col justify-center gap-1 overflow-hidden">
-                  <div className="flex items-center text-[11px] font-medium text-primary-foreground/80 uppercase tracking-wider">
-                    <TrendingUp className="w-3 h-3 mr-1.5 text-red-400 shrink-0" />
-                    <span className="truncate">Most reported district</span>
+              <StaggerContainer delay={0.2} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <StaggerItem className="h-full">
+                  <div className="bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors border border-primary-foreground/20 rounded-lg px-3 py-2.5 flex flex-col justify-center gap-1 overflow-hidden h-full">
+                    <div className="flex items-center text-[11px] font-medium text-primary-foreground/80 uppercase tracking-wider">
+                      <TrendingUp className="w-3 h-3 mr-1.5 text-red-400 shrink-0" />
+                      <span className="truncate">Most reported district</span>
+                    </div>
+                    <div className="flex items-baseline gap-1.5 truncate">
+                      <strong className="text-sm truncate">
+                        {stats.mostReportedDistrict?.district || "N/A"}
+                      </strong>
+                      <span className="text-xs text-primary-foreground/60 font-medium shrink-0">
+                        ({stats.mostReportedDistrict?.totalReports || 0})
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex items-baseline gap-1.5 truncate">
-                    <strong className="text-sm truncate">
-                      {stats.mostReportedDistrict?.district || "N/A"}
-                    </strong>
-                    <span className="text-xs text-primary-foreground/60 font-medium shrink-0">
-                      ({stats.mostReportedDistrict?.totalReports || 0})
-                    </span>
-                  </div>
-                </div>
+                </StaggerItem>
 
-                <div className="bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors border border-primary-foreground/20 rounded-lg px-3 py-2.5 flex flex-col justify-center gap-1 overflow-hidden">
-                  <div className="flex items-center text-[11px] font-medium text-primary-foreground/80 uppercase tracking-wider">
-                    <TrendingDown className="w-3 h-3 mr-1.5 text-emerald-400 shrink-0" />
-                    <span className="truncate">Safest district</span>
+                <StaggerItem className="h-full">
+                  <div className="bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors border border-primary-foreground/20 rounded-lg px-3 py-2.5 flex flex-col justify-center gap-1 overflow-hidden h-full">
+                    <div className="flex items-center text-[11px] font-medium text-primary-foreground/80 uppercase tracking-wider">
+                      <TrendingDown className="w-3 h-3 mr-1.5 text-emerald-400 shrink-0" />
+                      <span className="truncate">Safest district</span>
+                    </div>
+                    <div className="flex items-baseline gap-1.5 truncate">
+                      <strong className="text-sm truncate">
+                        {stats.lowestReportedDistrict?.district || "N/A"}
+                      </strong>
+                      <span className="text-xs text-primary-foreground/60 font-medium shrink-0">
+                        ({stats.lowestReportedDistrict?.totalReports || 0})
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex items-baseline gap-1.5 truncate">
-                    <strong className="text-sm truncate">
-                      {stats.lowestReportedDistrict?.district || "N/A"}
-                    </strong>
-                    <span className="text-xs text-primary-foreground/60 font-medium shrink-0">
-                      ({stats.lowestReportedDistrict?.totalReports || 0})
-                    </span>
-                  </div>
-                </div>
+                </StaggerItem>
 
-                <div className="bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors border border-primary-foreground/20 rounded-lg px-3 py-2.5 flex flex-col justify-center gap-1 overflow-hidden">
-                  <div className="flex items-center text-[11px] font-medium text-primary-foreground/80 uppercase tracking-wider">
-                    <MapPin className="w-3 h-3 mr-1.5 text-orange-400 shrink-0" />
-                    <span className="truncate">Most reported area</span>
+                <StaggerItem className="h-full">
+                  <div className="bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors border border-primary-foreground/20 rounded-lg px-3 py-2.5 flex flex-col justify-center gap-1 overflow-hidden h-full">
+                    <div className="flex items-center text-[11px] font-medium text-primary-foreground/80 uppercase tracking-wider">
+                      <MapPin className="w-3 h-3 mr-1.5 text-orange-400 shrink-0" />
+                      <span className="truncate">Most reported area</span>
+                    </div>
+                    <div className="flex items-baseline gap-1.5 truncate">
+                      <strong className="text-sm truncate">
+                        {stats.mostReportedArea?.area || "N/A"}
+                      </strong>
+                      <span className="text-xs text-primary-foreground/60 font-medium shrink-0">
+                        ({stats.mostReportedArea?.totalReports || 0})
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex items-baseline gap-1.5 truncate">
-                    <strong className="text-sm truncate">
-                      {stats.mostReportedArea?.area || "N/A"}
-                    </strong>
-                    <span className="text-xs text-primary-foreground/60 font-medium shrink-0">
-                      ({stats.mostReportedArea?.totalReports || 0})
-                    </span>
-                  </div>
-                </div>
+                </StaggerItem>
 
-                <div className="bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors border border-primary-foreground/20 rounded-lg px-3 py-2.5 flex flex-col justify-center gap-1 overflow-hidden">
-                  <div className="flex items-center text-[11px] font-medium text-primary-foreground/80 uppercase tracking-wider">
-                    <TrendingDown className="w-3 h-3 mr-1.5 text-blue-400 shrink-0" />
-                    <span className="truncate">Safest area</span>
+                <StaggerItem className="h-full">
+                  <div className="bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors border border-primary-foreground/20 rounded-lg px-3 py-2.5 flex flex-col justify-center gap-1 overflow-hidden h-full">
+                    <div className="flex items-center text-[11px] font-medium text-primary-foreground/80 uppercase tracking-wider">
+                      <TrendingDown className="w-3 h-3 mr-1.5 text-blue-400 shrink-0" />
+                      <span className="truncate">Safest area</span>
+                    </div>
+                    <div className="flex items-baseline gap-1.5 truncate">
+                      <strong className="text-sm truncate">
+                        {stats.lowestReportedArea?.area || "N/A"}
+                      </strong>
+                      <span className="text-xs text-primary-foreground/60 font-medium shrink-0">
+                        ({stats.lowestReportedArea?.totalReports || 0})
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex items-baseline gap-1.5 truncate">
-                    <strong className="text-sm truncate">
-                      {stats.lowestReportedArea?.area || "N/A"}
-                    </strong>
-                    <span className="text-xs text-primary-foreground/60 font-medium shrink-0">
-                      ({stats.lowestReportedArea?.totalReports || 0})
-                    </span>
-                  </div>
-                </div>
-              </div>
+                </StaggerItem>
+              </StaggerContainer>
             )}
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 mt-8">
-        <div>
+        <FadeIn delay={0.1}>
           <ReportsFilter areaData={areaData}>
             <SearchInput />
           </ReportsFilter>
-        </div>
+        </FadeIn>
 
         <div className="flex flex-col gap-8 items-start">
           {/* Main Feed */}
@@ -137,19 +148,23 @@ export default async function ReportsPage({
                 <p>Try adjusting your filters to see more results.</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+              <StaggerContainer key={currentPage} delay={0.2} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                 {reports?.map((report: Report) => (
-                  <ReportCard key={report._id} report={report} />
+                  <StaggerItem key={report._id} className="h-full">
+                    <ReportCard report={report} />
+                  </StaggerItem>
                 ))}
-              </div>
+              </StaggerContainer>
             )}
 
             {/* Pagination Controls */}
             {reports && reports.length > 0 && (
-              <PaginationControls
-                currentPage={currentPage}
-                totalPages={totalPages}
-              />
+              <FadeIn delay={0.3}>
+                <PaginationControls
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                />
+              </FadeIn>
             )}
           </div>
         </div>
