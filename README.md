@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/areaalert-logo.png" alt="AreaAlert Logo" width="220" />
+  <img src="public/areaalert-logo.png" alt="AreaAlert Logo" width="420" />
 </p>
 
 <p align="center">
@@ -14,6 +14,7 @@
   <img src="https://img.shields.io/badge/React_19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19" />
   <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
+</p>
 </p>
 
 ---
