@@ -62,7 +62,7 @@ function LoginForm() {
       }
 
       toast.success("Logged in successfully");
-      router.push(callbackUrl);
+      window.location.href = callbackUrl;
       return null;
     },
     null,
